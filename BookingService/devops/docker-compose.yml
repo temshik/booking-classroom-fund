@@ -1,0 +1,28 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.4'
+
+services:
+  mssql-server:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+        ACCEPT_EULA: "Y"
+        SA_PASSWORD: "QQQzzz_7584424"
+        MSSQL_PID: "Express"
+    ports:
+        - "1433:1433" 
+  bookingservice.api:
+    container_name:  bookingserviceapi
+    build:
+      context: ./..
+      dockerfile: ./src/BookingService.Api/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DatabaseServer: "mssql-server"
+      DatabasePort: "1433"
+      DatabaseUser: "sa"
+      DatabasePassword: "QQQzzz_7584424"
+      DatabaseName: "workspaceBooking"
+    ports:
+      - "7000:80"
+      - "7001:443"
