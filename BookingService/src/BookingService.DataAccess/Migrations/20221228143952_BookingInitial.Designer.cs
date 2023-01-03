@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingService.DataAccess.Migrations
 {
     [DbContext(typeof(BookingContext))]
-    [Migration("20221220113446_InintialBooking")]
-    partial class InintialBooking
+    [Migration("20221228143952_BookingInitial")]
+    partial class BookingInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,6 +37,9 @@ namespace BookingService.DataAccess.Migrations
 
                     b.Property<int>("GroupNumber")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsWorkspaceAvailable")
+                        .HasColumnType("bit");
 
                     b.Property<DateTimeOffset>("StartBookingTime")
                         .HasColumnType("datetimeoffset");

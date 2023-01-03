@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookingService.DataAccess.Migrations
 {
-    public partial class InintialBooking : Migration
+    public partial class BookingInitial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,6 +17,7 @@ namespace BookingService.DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     WorkspaceId = table.Column<int>(type: "int", nullable: false),
+                    IsWorkspaceAvailable = table.Column<bool>(type: "bit", nullable: false),
                     DayOfWeek = table.Column<int>(type: "int", nullable: false),
                     StartBookingTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     GroupNumber = table.Column<int>(type: "int", nullable: false)
