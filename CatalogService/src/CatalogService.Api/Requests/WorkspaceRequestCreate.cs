@@ -1,5 +1,4 @@
-﻿using CatalogService.BusinessLogic.DTOs;
-using CatalogService.DataAccess.Models;
+﻿using CatalogService.DataAccess.Models;
 
 namespace CatalogService.Api.Requests
 {

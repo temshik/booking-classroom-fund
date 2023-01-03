@@ -2,11 +2,9 @@
 using CatalogService.Api.Requests;
 using CatalogService.Api.Validators;
 using CatalogService.BusinessLogic.Services;
-using CatalogService.BusinessLogic.Services.SyncDataService.Http;
 using CatalogService.DataAccess;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace CatalogService.Api.AppDependenciesConfiguration
 {
@@ -44,7 +42,7 @@ namespace CatalogService.Api.AppDependenciesConfiguration
         /// <returns>A <see cref="IServiceCollection"/></returns>
         public static IServiceCollection ConfigureService(this IServiceCollection services)
         {
-            services               
+            services
                 .AddScoped<IWorkspaceService, WorkspaceService>()
                 .AddScoped<ICategoryService, CategoryService>();
 

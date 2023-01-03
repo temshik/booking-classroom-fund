@@ -8,11 +8,11 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["src/CatalogService.Api/CatalogService.Api.csproj", "src/CatalogService.Api/"]
-COPY ["src/CatalogService.Contracts/CatalogService.Contracts.csproj", "src/CatalogService.Contracts/"]
+COPY ["src/RabbitMQ.Producer/RabbitMQ.Producer.csproj", "src/RabbitMQ.Producer/"]
+COPY ["src/EventBus.Messages/EventBus.Messages.csproj", "src/EventBus.Messages/"]
 COPY ["src/CatalogService.DatabaseMigratoe/CatalogService.DatabaseMigratoe.csproj", "src/CatalogService.DatabaseMigratoe/"]
 COPY ["src/CatalogService.DataAccess/CatalogService.DataAccess.csproj", "src/CatalogService.DataAccess/"]
 COPY ["src/CatalogService.BusinessLogic/CatalogService.BusinessLogic.csproj", "src/CatalogService.BusinessLogic/"]
-COPY ["src/RabbitMQ.Producer/RabbitMQ.Producer.csproj", "src/RabbitMQ.Producer/"]
 RUN dotnet restore "src/CatalogService.Api/CatalogService.Api.csproj"
 COPY . .
 WORKDIR "/src/src/CatalogService.Api"

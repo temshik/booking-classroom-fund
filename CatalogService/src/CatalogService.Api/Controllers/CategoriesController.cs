@@ -2,7 +2,6 @@ using AutoMapper;
 using CatalogService.Api.Requests;
 using CatalogService.BusinessLogic.DTOs;
 using CatalogService.BusinessLogic.Services;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CatalogService.Api.Controllers
@@ -44,7 +43,7 @@ namespace CatalogService.Api.Controllers
 
             if (result == null)
             {
-                return BadRequest(); 
+                return BadRequest();
             }
 
             return Ok(result);
