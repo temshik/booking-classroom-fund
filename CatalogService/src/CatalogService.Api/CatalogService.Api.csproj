@@ -33,11 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\RabbitMQ.Producer\RabbitMQ.Producer.csproj" />
     <ProjectReference Include="..\CatalogService.BusinessLogic\CatalogService.BusinessLogic.csproj" />
     <ProjectReference Include="..\CatalogService.DatabaseMigratoe\CatalogService.DatabaseMigratoe.csproj" />
     <ProjectReference Include="..\EventBus.Messages\EventBus.Messages.csproj" />
-    <ProjectReference Include="..\RabbitMQ.Producer\RabbitMQ.Producer.csproj" />
   </ItemGroup>
 
 </Project>
