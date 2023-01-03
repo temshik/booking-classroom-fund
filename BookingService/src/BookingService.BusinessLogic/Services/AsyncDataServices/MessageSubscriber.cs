@@ -31,11 +31,10 @@ namespace BookingService.BusinessLogic.Services.AsyncDataServices
         {
             var factory = new ConnectionFactory()
             {
-                HostName = _configuration["RabbitMQSettings:RabbitMQHost"],
-                /*Port = int.Parse(_configuration["RabbitMQSettings:RabbitMQPort"]),
-                UserName = _configuration["RabbitMQSettings:RabbitMQUser"],
-                Password = _configuration["RabbitMQSettings:RabbitMQPassword"],
-                VirtualHost = _configuration["RabbitMQSettings:RabbitMQVirtualHost"]*/
+                HostName = _configuration["RabbitMQHost"] ?? "rabbitmq",
+                Port = int.Parse(_configuration["RabbitMQPort"] ?? "5672"),
+                UserName = _configuration["RabbitMQUser"] ?? "user",
+                Password = _configuration["RabbitMQPassword"] ?? "mypass",
             };
             try
             {
