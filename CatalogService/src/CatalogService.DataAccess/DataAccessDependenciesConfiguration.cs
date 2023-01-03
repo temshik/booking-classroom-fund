@@ -1,8 +1,8 @@
-﻿using CatalogService.DataAccess.Models;
+﻿using CatalogService.DataAccess.Interceptors;
+using CatalogService.DataAccess.Models;
 using CatalogService.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace CatalogService.DataAccess
 {
@@ -28,6 +28,8 @@ namespace CatalogService.DataAccess
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IWorkspaceRepository, WorkspaceRepository>();
             services.AddScoped<ISaveChangesRepository, SaveChangesRepository>();
+
+            services.AddSingleton<UpdateEntitiesInterceptor>();
 
             return services;
         }

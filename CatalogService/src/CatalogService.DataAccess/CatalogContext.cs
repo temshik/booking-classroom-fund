@@ -1,6 +1,8 @@
 ﻿using CatalogService.DataAccess.Configurations;
+using CatalogService.DataAccess.Interceptors;
 using CatalogService.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
+using RabbitMQ.Producer.AsyncDataService;
 
 namespace CatalogService.DataAccess
 {
@@ -9,6 +11,8 @@ namespace CatalogService.DataAccess
     /// </summary>
     public class CatalogContext : DbContext
     {
+        private readonly IMessageProducer _messageProducer;
+
         /// <summary>
         /// Adding a Database set for the categories.
         /// </summary>
@@ -23,9 +27,10 @@ namespace CatalogService.DataAccess
         ///  Initializes a new instance of the <see cref="CatalogContext"/> class.
         /// </summary>
         /// <param name="options">The database context optrions.</param>
-        public CatalogContext(DbContextOptions<CatalogContext> options) : base(options)
+        public CatalogContext(DbContextOptions<CatalogContext> options,
+            IMessageProducer messageProducer) : base(options)
         {
-
+            _messageProducer = messageProducer;
         }
 
         /// <summary>
@@ -40,5 +45,12 @@ namespace CatalogService.DataAccess
             modelBuilder.ApplyConfiguration(new WorkspaceConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
         }
+
+        /// <summary>
+        /// Method to wire interceptor to DbContext.
+        /// </summary>
+        /// <param name="options">The dbcontext options builder</param>
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        => options.AddInterceptors(new UpdateEntitiesInterceptor(_messageProducer));
     }
 }
