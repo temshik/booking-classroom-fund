@@ -103,9 +103,9 @@ namespace BookingService.Api.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetBookings(List<int> workspaceId, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetBookingsByWorkspace(int workspaceId, CancellationToken cancellationToken)
         {
-            var list = await _bookService.GetBookingsAsync(workspaceId, cancellationToken);
+            var list = await _bookService.GetBookingsByWorkspaceAsync(workspaceId, cancellationToken);
 
             if (list == null)
             {
@@ -125,9 +125,9 @@ namespace BookingService.Api.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetBookingsPaged(int userId,  CancellationToken cancellationToken)
+        public async Task<IActionResult> GetBookingsByUser(int userId,  CancellationToken cancellationToken)
         {
-            var list = await _bookService.GetBookingsPagedAsync(userId, cancellationToken);
+            var list = await _bookService.GetBookingsByUserAsync(userId, cancellationToken);
 
             if (list == null)
             {

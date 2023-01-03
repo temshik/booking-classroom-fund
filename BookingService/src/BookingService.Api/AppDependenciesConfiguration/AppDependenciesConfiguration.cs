@@ -16,8 +16,8 @@
 
             builder.Services
                 .AddServices(configuration)
-                .AddMappings()
-                .ConfigureServices();
+                .ConfigureServices()
+                .AddMappings();
 
             return builder;
         }
