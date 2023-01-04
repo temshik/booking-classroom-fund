@@ -2,136 +2,146 @@
   "Routes": [
     //Catalog API
     //Categories
+    //CreateCategory
     {
       "DownstreamPathTemplate": "/api/Categories/CreateCategory",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "8001"
+          "Port": "8000"
         }
       ],
       "UpstreamPathTemplate": "/Categories/CreateCategory",
       "UpstreamHttpMethod": [ "POST" ]
     },
+    //DeleteCategory/{id}
     {
-      "DownstreamPathTemplate": "/api/Categories/DeleteCategory",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/Categories/DeleteCategory/{id}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "8001"
+          "Port": "8000"
         }
       ],
-      "UpstreamPathTemplate": "/Categories/DeleteCategory",
+      "UpstreamPathTemplate": "/Categories/DeleteCategory/{id}",
       "UpstreamHttpMethod": [ "DELETE" ]
     },
+    //GetCategories
     {
       "DownstreamPathTemplate": "/api/Categories/GetCategories",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "8001"
+          "Port": "8000"
         }
       ],
       "UpstreamPathTemplate": "/Categories/GetCategories",
       "UpstreamHttpMethod": [ "GET" ]
     },
+    //UpdateCategory
     {
       "DownstreamPathTemplate": "/api/Categories/UpdateCategory",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "8001"
+          "Port": "8000"
         }
       ],
       "UpstreamPathTemplate": "/Categories/UpdateCategory",
       "UpstreamHttpMethod": [ "PUT" ]
     },
     //Workspacies
+    //GetWorkspaces/{id}
     {
       "DownstreamPathTemplate": "/api/Workspacies/GetWorkspaces/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "8001"
+          "Port": "8000"
         }
       ],
       "UpstreamPathTemplate": "/Workspacies/GetWorkspaces/{id}",
       "UpstreamHttpMethod": [ "GET" ]
     },
+    //Get/{number}
     {
       "DownstreamPathTemplate": "/api/Workspacies/Get/{number}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "8001"
+          "Port": "8000"
         }
       ],
       "UpstreamPathTemplate": "/Workspacies/Get/{number}",
       "UpstreamHttpMethod": [ "GET" ]
     },
+    //CreateWorkspace
     {
       "DownstreamPathTemplate": "/api/Workspacies/CreateWorkspace",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "8001"
+          "Port": "8000"
         }
       ],
       "UpstreamPathTemplate": "/Workspacies/CreateWorkspace",
       "UpstreamHttpMethod": [ "POST" ]
     },
+    //UpdateWorkspace
     {
       "DownstreamPathTemplate": "/api/Workspacies/UpdateWorkspace",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "8001"
+          "Port": "8000"
         }
       ],
       "UpstreamPathTemplate": "/Workspacies/UpdateWorkspace",
       "UpstreamHttpMethod": [ "PUT" ]
     },
+    //DeleteWorkspace
     {
       "DownstreamPathTemplate": "/api/Workspacies/DeleteWorkspace",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "8001"
+          "Port": "8000"
         }
       ],
       "UpstreamPathTemplate": "/Workspacies/DeleteWorkspace",
       "UpstreamHttpMethod": [ "DELETE" ]
     },
+    //LockWorkspace/{workspaceId}/{eventType}
     {
-      "DownstreamPathTemplate": "/api/Workspacies/LockWorkspace/{workspaceId}/{workspaceNumber}/{isAvailable}",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/Workspacies/LockWorkspace/{workspaceId}/{eventType}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "8001"
+          "Port": "8000"
         }
       ],
-      "UpstreamPathTemplate": "/Workspacies/LockWorkspace/{workspaceId}/{workspaceNumber}/{isAvailable}",
+      "UpstreamPathTemplate": "/Workspacies/LockWorkspace/{workspaceId}/{eventType}",
       "UpstreamHttpMethod": [ "POST" ]
     },
     //Identity API
     //Authorization
     {
       "DownstreamPathTemplate": "/api/Authorization/Authorize",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "9001"
+          "Port": "9000"
         }
       ],
       "UpstreamPathTemplate": "/Authorization/Authorize",
@@ -139,11 +149,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Authorization/RefreshToken/{refreshToken}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "9001"
+          "Port": "9000"
         }
       ],
       "UpstreamPathTemplate": "/Authorization/RefreshToken/{refreshToken}",
@@ -151,11 +161,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Authorization/GetUserClaim/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "9001"
+          "Port": "9000"
         }
       ],
       "UpstreamPathTemplate": "/Authorization/GetUserClaim/{id}",
@@ -164,11 +174,11 @@
     //Users
     {
       "DownstreamPathTemplate": "/api/Users/CreateUser/{role}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "9001"
+          "Port": "9000"
         }
       ],
       "UpstreamPathTemplate": "/Users/CreateUser/{role}",
@@ -176,11 +186,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Users/Logout",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "9001"
+          "Port": "9000"
         }
       ],
       "UpstreamPathTemplate": "/Users/Logout",
@@ -188,11 +198,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Users/UpdateUser/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "9001"
+          "Port": "9000"
         }
       ],
       "UpstreamPathTemplate": "/Users/UpdateUser/{id}",
@@ -200,11 +210,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Users/DeleteUser/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "9001"
+          "Port": "9000"
         }
       ],
       "UpstreamPathTemplate": "/Users/DeleteUser/{id}",
@@ -212,11 +222,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Users/UpdateUserClaims/{id}/{claims}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "9001"
+          "Port": "9000"
         }
       ],
       "UpstreamPathTemplate": "/Users/UpdateUserClaims/{id}/{claims}",
@@ -224,11 +234,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Users/UpdatePassword/{id}/{newPassword}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "9001"
+          "Port": "9000"
         }
       ],
       "UpstreamPathTemplate": "/Users/UpdatePassword/{id}/{newPassword}",
@@ -236,11 +246,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Users/ResetPassword/{id}/{newPassword}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "9001"
+          "Port": "9000"
         }
       ],
       "UpstreamPathTemplate": "/Users/ResetPassword/{id}/{newPassword}",
@@ -248,79 +258,84 @@
     },
     {
       "DownstreamPathTemplate": "/api/Users/GetRoles",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "9001"
+          "Port": "9000"
         }
       ],
       "UpstreamPathTemplate": "/Users/GetRoles",
       "UpstreamHttpMethod": [ "GET" ]
     },
     //Booking API
+    //CreateBooking
     {
       "DownstreamPathTemplate": "/api/Bookings/CreateBooking",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "7001"
+          "Port": "7000"
         }
       ],
       "UpstreamPathTemplate": "/Bookings/CreateBooking",
       "UpstreamHttpMethod": [ "POST" ]
     },
+    //UpdateBooking
     {
-      "DownstreamPathTemplate": "/api/Bookings/UpdateBooking/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/Bookings/UpdateBooking",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "7001"
+          "Port": "7000"
         }
       ],
-      "UpstreamPathTemplate": "/Bookings/UpdateBooking/{id}",
+      "UpstreamPathTemplate": "/Bookings/UpdateBooking",
       "UpstreamHttpMethod": [ "PUT" ]
     },
+    //DeleteBooking
     {
       "DownstreamPathTemplate": "/api/Bookings/DeleteBooking",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "7001"
+          "Port": "7000"
         }
       ],
       "UpstreamPathTemplate": "/Bookings/DeleteBooking",
       "UpstreamHttpMethod": [ "DELETE" ]
     },
+    //GetBookingsByWorkspace/{workspaceId}
     {
-      "DownstreamPathTemplate": "/api/Bookings/GetBookings/{workspaceId}",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/Bookings/GetBookingsByWorkspace/{workspaceId}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "7001"
+          "Port": "7000"
         }
       ],
-      "UpstreamPathTemplate": "/Bookings/GetBookings/{workspaceId}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamPathTemplate": "/Bookings/GetBookingsByWorkspace/{workspaceId}",
+      "UpstreamHttpMethod": [ "PUT" ]
     },
+    //GetBookingsByUser/{userId}
     {
-      "DownstreamPathTemplate": "/api/Bookings/GetBookingsPaged/{userId}",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/Bookings/GetBookingsByUser/{userId}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "7001"
+          "Port": "7000"
         }
       ],
-      "UpstreamPathTemplate": "/Bookings/GetBookingsPaged/{userId}",
+      "UpstreamPathTemplate": "/Bookings/GetBookingsByUser/{userId}",
       "UpstreamHttpMethod": [ "GET" ]
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:5001"
+    "BaseUrl": "http://localhost:5000"
   }
 }
