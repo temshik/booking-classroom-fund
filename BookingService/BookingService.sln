@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devops", "devops", "{0F9E6E15-A396-4481-BD9C-A1BF5B80B91A}"
 	ProjectSection(SolutionItems) = preProject
 		devops\docker-compose.yml = devops\docker-compose.yml
+		devops\Dockerfile = devops\Dockerfile
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingService.Api", "src\BookingService.Api\BookingService.Api.csproj", "{4FFEA27D-5A08-4344-9640-A2DD49C2D176}"
