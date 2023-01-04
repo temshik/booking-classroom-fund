@@ -18,11 +18,10 @@ namespace RabbitMQ.Producer.AsyncDataService
             _logger = logger;
             _configuration = configuration;
 
-            //var rabbitHostName = Environment.GetEnvironmentVariable("RABBIT_HOSTNAME");
-            var host = _configuration["RabbitMQHost"] ?? "rabbitmq";
-            var port = _configuration["RabbitMQPort"] ?? "5672";
-            var username = _configuration["RabbitMQUser"] ?? "user";
-            var password = _configuration["RabbitMQPassword"] ?? "mypass";
+            var host = _configuration["RabbitMQHost"] ?? "";
+            var port = _configuration["RabbitMQPort"] ?? "";
+            var username = _configuration["RabbitMQUser"] ?? "";
+            var password = _configuration["RabbitMQPassword"] ?? "";
             var factory = new ConnectionFactory()
             {
                 Uri = new Uri($"amqp://{username}:{password}@{host}:{port}")

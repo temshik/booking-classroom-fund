@@ -14,6 +14,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devops", "devops", "{6878B25B-76C0-4C66-A523-D5CC1FB2901D}"
 	ProjectSection(SolutionItems) = preProject
 		devops\docker-compose.yml = devops\docker-compose.yml
+		devops\rabbitmq\Dockerfile = devops\rabbitmq\Dockerfile
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBus.Messages", "src\EventBus.Messages\EventBus.Messages.csproj", "{4EB7CEB4-59F4-4B79-B006-40B62F6F51F4}"
