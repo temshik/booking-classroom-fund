@@ -38,7 +38,7 @@ namespace IdentityService.BusinessLogic.DTOs.SeedPrefilingsData
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             SecurityStamp = Guid.NewGuid().ToString("D"),
-            PasswordHash = new PasswordHasher<User>().HashPassword(UserAdmin,"secret"),
+            PasswordHash = new PasswordHasher<User>().HashPassword(UserAdmin,"QQQzzz_7584424"),
         };
     }
 }

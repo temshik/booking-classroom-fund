@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using IdentityService.Api.Requests;
 using IdentityService.BusinessLogic.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityService.Api.Controllers
@@ -12,13 +13,13 @@ namespace IdentityService.Api.Controllers
     [Route("api/[controller]")]
     public class AuthorizationController : ControllerBase
     {
-        private readonly IAuthorizationService _authorization;
+        private readonly IAuthorizeService _authorization;
 
         /// <summary>
         /// Initialzez a new instance of the <see cref="AuthorizationController" /> class.
         /// </summary>
         /// <param name="authorization">Authorization service</param>
-        public AuthorizationController(IAuthorizationService authorization)
+        public AuthorizationController(IAuthorizeService authorization)
         {
             _authorization = authorization;
         }
@@ -57,6 +58,7 @@ namespace IdentityService.Api.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
         public async Task<IActionResult> RefreshToken(string refreshToken, CancellationToken cancellationToken)
         {
             var newToken = await _authorization.RefreshTokenAsync(refreshToken, cancellationToken);
@@ -78,6 +80,7 @@ namespace IdentityService.Api.Controllers
         [HttpGet("[action]/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
         public async Task<IActionResult> GetUserClaim(int id, CancellationToken cancellationToken)
         {
             var claims = _authorization.GetUserClaimsAsync(id, cancellationToken);
