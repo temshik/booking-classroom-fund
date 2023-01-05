@@ -1,4 +1,5 @@
-﻿using Ocelot.DependencyInjection;
+﻿using ApiGateway.Api.AppDependenciesConfiguration;
+using Ocelot.DependencyInjection;
 
 namespace ApiGateway.AppDependenciesConfiguration
 {
@@ -15,10 +16,11 @@ namespace ApiGateway.AppDependenciesConfiguration
         public static WebApplicationBuilder ConfigureDependencies(this WebApplicationBuilder builder)
         {
             var configuration = builder.Configuration;
-            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
+            builder.Services.AddConfigureJWT(builder);
             builder.Services.AddOcelot(configuration);
-            //configuration.AddJsonFile($"ocelot.{builder.Environment.EnvironmentName}.json", true, true);
+
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             configuration.SetBasePath(builder.Environment.ContentRootPath);
             builder.Host.ConfigureAppConfiguration(config => config.AddJsonFile($"ocelot.{env}.json", true, true));
 
