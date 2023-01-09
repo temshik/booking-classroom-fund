@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using IdentityService.Api.Requests;
 using IdentityService.BusinessLogic.DTOs;
+using IdentityService.BusinessLogic.DTOs.SeedPrefilingsDatas;
 using IdentityService.BusinessLogic.Services;
 using IdentityService.DataAccess.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -42,10 +42,10 @@ namespace IdentityService.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateUser([FromBody] UserRequestCreate userRequest, string role, CancellationToken token)
+        public async Task<IActionResult> CreateUser([FromBody] UserRequestCreate userRequest, PrefilingRoleData role, CancellationToken token)
         {
             var userMapped = _mapper.Map<UserDTO>(userRequest);
-            var result = await _userService.CreateUserAsync(userMapped, userRequest.Password, role);
+            var result = await _userService.CreateUserAsync(userMapped, userRequest.Password, role.ToString());
 
             if (result == false)
             {
@@ -63,9 +63,9 @@ namespace IdentityService.Api.Controllers
         /// <returns>User id if the user is logged out or 
         /// null if he is not logged out</returns>
         [Route("[action]")]
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPost]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Logout(CancellationToken token)
         {
             await _userService.LogoutAsync();
@@ -80,11 +80,11 @@ namespace IdentityService.Api.Controllers
         /// <param name="userRequest">Data of the user we want to update</param>
         /// <param name="token">Cancellation token</param>
         /// <returns>Updated user</returns>
-        [Route("[action]/{id}")]
+        [Route("[action]")]
         [HttpPut]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = "Dispacher,Employee")]
         public async Task<IActionResult> UpdateUser([FromBody] UserRequestUpdate userRequest, CancellationToken token)
         {
             var userMapped = _mapper.Map<UserDTO>(userRequest);
@@ -104,23 +104,23 @@ namespace IdentityService.Api.Controllers
         /// <param name="id">Specific user id</param>
         /// <param name="token">Cancellation token</param>
         /// <returns>Updated list of users</returns>
-        [Route("[action]/{id}")]
+        [Route("[action]")]
         [HttpDelete]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = "Dispacher,Employee")]
-        public async Task<IActionResult> DeleteUser(int id, UserRequestUpdate userRequest, CancellationToken token)
+        public async Task<IActionResult> DeleteUser([FromBody] PasswordRequestReset userRequest, CancellationToken token)
         {
-            var userMapped = _mapper.Map<UserDTO>(userRequest);
-            userMapped.Id = id;
+            var userMapped = _mapper.Map<PasswordDTO>(userRequest);
+
             var userwaited = await _userService.DeleteUserAsync(userMapped);
 
-            if (userwaited == null)
+            if (userwaited == false)
             {
                 return BadRequest();
             }
 
-            return Ok(userRequest);
+            return Ok();
         }
 
         /// <summary>
@@ -129,14 +129,13 @@ namespace IdentityService.Api.Controllers
         /// <param name="id">Specific user id</param>
         /// <param name="token">Cancellation token</param>
         /// <returns>Updated user claims</returns>
-        [Route("[action]/{id}/{claims}")]
+        [Route("[action]/{claims}")]
         [HttpPut]
+        [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [Authorize]
-        public async Task<IActionResult> UpdateUserClaims(int id, [FromBody] UserRequestUpdate userRequest, [FromRoute] List<Claim> claims, CancellationToken token)
+        public async Task<IActionResult> UpdateUserClaims([FromBody] UserRequestUpdate userRequest, [FromRoute] List<Claim> claims, CancellationToken token)
         {
             var userMapped = _mapper.Map<UserDTO>(userRequest);
-            userMapped.Id = id;
             var userClaims = _mapper.Map<List<UserClaim>>(claims);
             userMapped.Claims = userClaims;
 
@@ -152,14 +151,14 @@ namespace IdentityService.Api.Controllers
         /// <param name="newPassword">New user password</param>
         /// <param name="token">Cancellation token</param>
         /// <returns>Id of the user who updated the password</returns>
-        [Route("[action]/{id}/{newPassword}")]
+        [Route("[action]")]
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize]
-        public async Task<IActionResult> UpdatePassword([FromBody] UserRequestUpdate userRequest, string newPassword, CancellationToken token)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdatePassword([FromBody] PasswordRequestUpdate userRequest, CancellationToken token)
         {
-            var userMapped = _mapper.Map<UserDTO>(userRequest);
-            var result = await _userService.UpdateUserPasswordAsync(userMapped, userRequest.Password, newPassword);
+            var userMapped = _mapper.Map<PasswordDTO>(userRequest);
+            var result = await _userService.UpdateUserPasswordAsync(userMapped);
 
             if (result == false)
             {
@@ -175,16 +174,15 @@ namespace IdentityService.Api.Controllers
         /// <param name="id">Specific user id</param>
         /// <param name="token">Cancellation token</param>
         /// <returns>Id of the user who reset the password</returns>
-        [Route("[action]/{id}/{newPassword}")]
+        [Route("[action]")]
         [HttpPut]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ValidateAntiForgeryToken]
-        [Authorize]
-        public async Task<IActionResult> ResetPassword([FromBody] UserRequestUpdate userRequest, string newPassword, CancellationToken token)
+        public async Task<IActionResult> ResetPassword([FromBody] PasswordRequestReset userRequest)
         {
-            var userMapped = _mapper.Map<UserDTO>(userRequest);
-            var result = await _userService.ResetUserPasswordAsync(userMapped, token.ToString(), newPassword);
+            var userMapped = _mapper.Map<PasswordDTO>(userRequest);
+            var result = await _userService.ResetUserPasswordAsync(userMapped);
 
             if (result == false)
             {
@@ -201,9 +199,9 @@ namespace IdentityService.Api.Controllers
         /// <returns>List of Roles</returns>
         [Route("[action]")]
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = "Dispacher,Employee")]
         public async Task<IActionResult> GetRoles(CancellationToken token)
         {
             var roleList = await _userService.GetRolesAsync(token);

@@ -1,9 +1,9 @@
-﻿namespace IdentityService.Api.Requests
+﻿namespace IdentityService.BusinessLogic.DTOs
 {
     /// <summary>
-    /// The password for update request
+    /// Data transfer object for password
     /// </summary>
-    public class PasswordRequestUpdate
+    public class PasswordDTO
     {
         /// <summary>
         /// The email of the user

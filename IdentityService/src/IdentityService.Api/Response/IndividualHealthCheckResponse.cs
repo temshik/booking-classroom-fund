@@ -7,7 +7,7 @@
         public string Component { get; set; }
 
         public string Description { get; set; }
-        
+
         public string Components { get; internal set; }
     }
 

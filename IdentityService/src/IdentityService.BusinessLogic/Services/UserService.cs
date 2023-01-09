@@ -20,6 +20,7 @@ namespace IdentityService.BusinessLogic.Services
         private readonly RoleManager<Role> _roleManager;
         private readonly ILogger<UserService> _logger;
         private readonly IUserClaimRepository _repository;
+        private readonly IRefreshTokenRepository _refreshRepository;
         private readonly ISaveChangesRepository _saveChangesRepository;
 
         /// <summary>
@@ -34,6 +35,7 @@ namespace IdentityService.BusinessLogic.Services
             IMapper mapper,
             ILogger<UserService> logger,
             IUserClaimRepository repository,
+            IRefreshTokenRepository refreshRepository,
             ISaveChangesRepository saveChangesRepository)
         {
             _signInManager = signInManager;
@@ -42,6 +44,7 @@ namespace IdentityService.BusinessLogic.Services
             _mapper = mapper;
             _logger = logger;
             _repository = repository;
+            _refreshRepository = refreshRepository;
             _saveChangesRepository = saveChangesRepository;
         }
 
@@ -71,6 +74,7 @@ namespace IdentityService.BusinessLogic.Services
                 if (userLooked == null)
                 {
                     userMapped.SecurityStamp = Guid.NewGuid().ToString();
+                    userMapped.RegistrationDate = DateTimeOffset.Now;
                     var result = await _userManager.CreateAsync(userMapped, password);
                     if (await _roleManager.RoleExistsAsync(roleName) == true)
                     {
@@ -93,26 +97,31 @@ namespace IdentityService.BusinessLogic.Services
         /// </summary>
         /// <param name="user">The user that we want to delete</param>
         /// <returns>User</returns>
-        public async Task<UserDTO> DeleteUserAsync(UserDTO user)
+        public async Task<bool> DeleteUserAsync(PasswordDTO user)
         {
-            var userMapped = _mapper.Map<User>(user);
-
             using (_userManager)
             {
-                var userLooked = await _userManager.FindByEmailAsync(userMapped.Email);
+                var userLooked = await _userManager.FindByEmailAsync(user.Email);
+                var isOldPasswordCorrect = await _userManager.CheckPasswordAsync(userLooked, user.NewPassword);
 
-                if (userLooked != null)
+                if (userLooked != null && isOldPasswordCorrect)
                 {
-                    var result = await _userManager.DeleteAsync(userMapped);
+                    var token = await _refreshRepository.GetSavedRefreshTokensByUserIdAsync(userLooked.Id);
+                    if (token != null)
+                    {
+                        _refreshRepository.Delete(token);
+                    }
+
+                    var result = await _userManager.DeleteAsync(userLooked);
+
+                    return result.Succeeded;
                 }
                 else
                 {
                     _logger.LogError("Error occured while deleting the user");
 
-                    throw new NotFoundException("The user was not found");
+                    throw new NotFoundException("The user was not found or non correct password");
                 }
-
-                return user;
             }
         }
 
@@ -123,7 +132,7 @@ namespace IdentityService.BusinessLogic.Services
         /// <param name="token">The token that will be reset</param>
         /// <param name="newPassword">The new user's password</param>
         /// <returns>Boolean value by result of the task</returns>
-        public async Task<bool> ResetUserPasswordAsync(UserDTO user, string token, string newPassword)
+        public async Task<bool> ResetUserPasswordAsync(PasswordDTO user)
         {
             using (_userManager)
             {
@@ -131,7 +140,8 @@ namespace IdentityService.BusinessLogic.Services
 
                 if (userLooked != null)
                 {
-                    var result = await _userManager.ResetPasswordAsync(userLooked, token, newPassword);
+                    string resetToken = await _userManager.GeneratePasswordResetTokenAsync(userLooked);
+                    var result = await _userManager.ResetPasswordAsync(userLooked, resetToken, user.NewPassword);
 
                     return result.Succeeded;
                 }
@@ -151,19 +161,17 @@ namespace IdentityService.BusinessLogic.Services
         /// <param name="oldPassword">The old password of the user</param>
         /// <param name="newPassword">The new password of the user</param>
         /// <returns>Boolean value by result of the task</returns>
-        public async Task<bool> UpdateUserPasswordAsync(UserDTO user, string oldPassword, string newPassword)
+        public async Task<bool> UpdateUserPasswordAsync(PasswordDTO user)
         {
-            var userMapped = _mapper.Map<User>(user);
-
             using (_userManager)
             {
+                var userLooked = await _userManager.FindByEmailAsync(user.Email);
+                var userMapped = _mapper.Map<User>(userLooked);
+                var isOldPasswordCorrect = await _userManager.CheckPasswordAsync(userMapped, user.OldPassword);
 
-                var userLooked = await _userManager.FindByEmailAsync(userMapped.Email);
-                var isOldPasswordCorrect = await _userManager.CheckPasswordAsync(userMapped, oldPassword);
-
-                if (userLooked != null || isOldPasswordCorrect)
+                if (userLooked != null && isOldPasswordCorrect)
                 {
-                    var result = await _userManager.ChangePasswordAsync(userMapped, oldPassword, newPassword);
+                    var result = await _userManager.ChangePasswordAsync(userMapped, user.OldPassword, user.NewPassword);
 
                     return result.Succeeded;
                 }
@@ -171,7 +179,7 @@ namespace IdentityService.BusinessLogic.Services
                 {
                     _logger.LogError("The user was not found or the old password is not correct while updating the user password");
 
-                    throw new NotFoundException("The user was not found or the password was not correct");
+                    throw new NotFoundException("The user was not found or not-correct password");
                 }
             }
         }
@@ -188,14 +196,14 @@ namespace IdentityService.BusinessLogic.Services
             using (_userManager)
             {
                 var userLooked = await _userManager.FindByEmailAsync(userMapped.Email);
-
                 if (userLooked != null)
                 {
                     userLooked.FirstName = userMapped.FirstName;
                     userLooked.LastName = userMapped.LastName;
-                    userLooked.Email = userMapped.Email;
+                    userLooked.UserName = userMapped.UserName;
+                    userLooked.SecurityStamp = Guid.NewGuid().ToString();
 
-                    var result = await _userManager.UpdateAsync(userMapped);
+                    var result = await _userManager.UpdateAsync(userLooked);
 
                     return result.Succeeded;
                 }
@@ -229,7 +237,7 @@ namespace IdentityService.BusinessLogic.Services
 
                         await _saveChangesRepository.SaveChangesAsync(cancellationToken);
                     }
-                    else 
+                    else
                     {
                         _logger.LogError("The claims aren't found");
                     }
@@ -246,12 +254,12 @@ namespace IdentityService.BusinessLogic.Services
         /// <summary>
         /// Function to get the roles from the database.
         /// </summary>
-        /// <returns>A List of <see cref="RoleDTO"/>.</returns>
+        /// <returns>A List of <see cref="PasswordDTO"/>.</returns>
         public async Task<List<Role>> GetRolesAsync(CancellationToken cancellationToken)
         {
             var listResult = await _roleManager.Roles.ToListAsync(cancellationToken);
 
-            if(listResult == null)
+            if (listResult == null)
             {
                 _logger.LogError("Roles dosen't exist");
 
