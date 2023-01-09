@@ -57,7 +57,7 @@ namespace IdentityService.Api.AppDependenciesConfiguration
         public static IServiceCollection AddMappings(this IServiceCollection services)
         {
             services
-                .AddAutoMapper(typeof(UserProfile), typeof(ClaimProfile));
+                .AddAutoMapper(typeof(UserProfile), typeof(ClaimProfile), typeof(PasswordProfile));
 
             return services;
         }
@@ -72,7 +72,9 @@ namespace IdentityService.Api.AppDependenciesConfiguration
             services
                 .AddScoped<IValidator<UserRequestCreate>, UserRequestCreateValidator>()
                 .AddScoped<IValidator<UserRequestUpdate>, UserRequestUpdateValidator>()
-                .AddScoped<IValidator<UserRequestLogin>, UserRequestLoginValidator>();
+                .AddScoped<IValidator<UserRequestLogin>, UserRequestLoginValidator>()
+                .AddScoped<IValidator<PasswordRequestUpdate>, PasswordRequestUpdateValidator>()
+                .AddScoped<IValidator<PasswordRequestReset>, PasswordRequestResetValidator>();
 
             return services;
         }

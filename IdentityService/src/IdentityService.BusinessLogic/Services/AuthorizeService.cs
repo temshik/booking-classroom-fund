@@ -20,6 +20,7 @@ namespace IdentityService.BusinessLogic.Services
     {
         private readonly IConfiguration _settings;
         private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly IRefreshTokenRepository _repository;
         private readonly IUserClaimRepository _userClaimRepository;
         private readonly ILogger<AuthorizeService> _logger;
@@ -31,6 +32,7 @@ namespace IdentityService.BusinessLogic.Services
         /// <param name="userManager"></param>
         public AuthorizeService(IConfiguration settings,
             UserManager<User> userManager,
+            SignInManager<User> signInManager,
             IRefreshTokenRepository refreshRepository,
             IUserClaimRepository claimRepository,
             ILogger<AuthorizeService> logger,
@@ -38,6 +40,7 @@ namespace IdentityService.BusinessLogic.Services
         {
             _settings = settings;
             _userManager = userManager;
+            _signInManager = signInManager;
             _repository = refreshRepository;
             _userClaimRepository = claimRepository;
             _logger = logger;
@@ -50,32 +53,45 @@ namespace IdentityService.BusinessLogic.Services
         /// <param name="user">The user that we want to authorize</param>
         /// <param name="password">The password of the user</param>
         /// <returns>Token</returns>
-        public async Task<TokenDTO> AuthorizeAsync(string email, string password, CancellationToken cancellationToken)
+        public async Task<TokenDTO> AuthorizeAsync(string email, string password, bool rememberMe, CancellationToken cancellationToken)
         {
             var user = await ValidateUserAsync(email, password);
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var refreshToken = GenerateRefreshToken();
-            var securityTokenDescriptor  = await GenerateTokenAsync(user);
-            var token = tokenHandler.CreateToken(securityTokenDescriptor);
-            var JwtToken = tokenHandler.WriteToken(token);
-                  
-            _repository.Add(new UserRefreshToken
-            {
-                CreationDate = DateTimeOffset.Now,
-                LifeRefreshTokenInMinutes = Convert.ToInt32(_settings.GetSection("JwtSettings")["LifeTimeRefresh"]),
-                RefreshToken = refreshToken,
-                UserId = user.Id
-            });
+            var refreshtoken = _repository.GetSavedRefreshTokensByUserIdAsync(user.Id);
 
-            await _saveChangesRepository.SaveChangesAsync(cancellationToken);
-            _logger.LogInformation($"Saving the changes to the databse");
-
-            return new TokenDTO
+            if (refreshtoken != null)
             {
-                RefreshToken = refreshToken,
-                TokenLifeTimeInMinutes = Convert.ToInt32(_settings.GetSection("JwtSettings")["LifeTimeRefresh"]),
-                AccessToken = JwtToken,
-            };            
+                var result = await RefreshTokenAsync(refreshtoken.Result.RefreshToken, cancellationToken);
+
+                return result;
+            }
+            else
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var refreshToken = GenerateRefreshToken();
+                var securityTokenDescriptor = await GenerateTokenAsync(user);
+                var token = tokenHandler.CreateToken(securityTokenDescriptor);
+                var JwtToken = tokenHandler.WriteToken(token);
+
+                _repository.Add(new UserRefreshToken
+                {
+                    CreationDate = DateTimeOffset.Now,
+                    LifeRefreshTokenInMinutes = Convert.ToInt32(_settings.GetSection("JwtSettings")["LifeTimeRefresh"]),
+                    RefreshToken = refreshToken,
+                    UserId = user.Id
+                });
+
+                await _saveChangesRepository.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation($"Saving the changes to the databse");
+
+                await _signInManager.PasswordSignInAsync(email, password, rememberMe, false);
+
+                return new TokenDTO
+                {
+                    RefreshToken = refreshToken,
+                    TokenLifeTimeInMinutes = Convert.ToInt32(_settings.GetSection("JwtSettings")["LifeTimeRefresh"]),
+                    AccessToken = JwtToken,
+                };
+            }
         }
 
         /// <summary>
@@ -167,7 +183,7 @@ namespace IdentityService.BusinessLogic.Services
             {
                 _logger.LogError("The user wasn't found or check your password with email");
 
-                throw new NotFoundException("The user was not found");
+                throw new NotFoundException("The user was not found or non-correct password");
             }
 
             return userLooked;
@@ -189,7 +205,7 @@ namespace IdentityService.BusinessLogic.Services
                 throw new NotFoundException("Refresh token not found");
             }
 
-            var user = await _userManager.FindByEmailAsync(tokenLooked.User.Email);
+            var user = await _userManager.FindByIdAsync(tokenLooked.UserId.ToString());
 
             if (user == null)
             {
@@ -199,17 +215,18 @@ namespace IdentityService.BusinessLogic.Services
             }
 
             var refreshTokenToSave = GenerateRefreshToken();
+
             tokenLooked.RefreshToken = refreshTokenToSave;
             tokenLooked.CreationDate = DateTimeOffset.Now;
 
-            _repository.Update(tokenLooked);
+            _repository.Update(tokenLooked, cancellationToken);
             await _saveChangesRepository.SaveChangesAsync(cancellationToken);
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var securityTokenDescriptor = await GenerateTokenAsync(user);
 
             return new TokenDTO
-            {            
+            {
                 AccessToken = tokenHandler.WriteToken(tokenHandler.CreateToken(securityTokenDescriptor)),
                 RefreshToken = refreshTokenToSave,
                 TokenLifeTimeInMinutes = Convert.ToInt32(_settings["JwtSettings:LifeTimeRefresh"]),

@@ -42,7 +42,7 @@ namespace IdentityService.DataAccess.Repository
         /// </summary>
         /// <param name="refreshToken">The user refresh token</param>
         /// <returns>A <see cref="Task"/></returns>
-        public void Update(UserRefreshToken refreshToken)
+        public void Update(UserRefreshToken refreshToken, CancellationToken cancellationToken)
         {
             _userRefreshToken.Update(refreshToken);
 
@@ -56,9 +56,33 @@ namespace IdentityService.DataAccess.Repository
         /// <returns>A task that contains a <see cref="UserRefreshToken"/></returns>
         public Task<UserRefreshToken> GetSavedRefreshTokensAsync(string tokenRefresh, CancellationToken cancellationToken)
         {
-            return _userRefreshToken.Include(i => i.User)
+            return _userRefreshToken
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.RefreshToken == tokenRefresh, cancellationToken);
+        }
+
+        /// <summary>
+        /// Function to delete the user refresh token 
+        /// </summary>
+        /// <param name="refreshToken">The user refresh token</param>
+        /// <returns>A <see cref="Task"/></returns>
+        public void Delete(UserRefreshToken refreshToken)
+        {
+            _userRefreshToken.Remove(refreshToken);
+
+            _logger.LogInformation("Deleted the refresh token");
+        }
+
+        /// <summary>
+        /// Function To Get The refresh Token
+        /// </summary>
+        /// <param name="userId">The user id for refrsesh token that we want to get</param>
+        /// <returns>A task that contains a <see cref="UserRefreshToken"/></returns>
+        public Task<UserRefreshToken> GetSavedRefreshTokensByUserIdAsync(int userId)
+        {
+            return _userRefreshToken
+               .AsNoTracking()
+               .FirstOrDefaultAsync(x => x.UserId == userId);
         }
     }
 }
