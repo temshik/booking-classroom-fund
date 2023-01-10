@@ -4,6 +4,7 @@ using CatalogService.BusinessLogic.DTOs;
 using CatalogService.BusinessLogic.Services;
 using EventBus.Messages.Events;
 using EventBus.Messages.Events.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RabbitMQ.Producer.AsyncDataService;
 
@@ -42,6 +43,7 @@ namespace CatalogService.Api.Controllers
         /// <returns>Desired workspace.</returns>
         [Route("[action]/{id}")]
         [HttpGet]
+        [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetWorkspaces(int id, CancellationToken cancellationToken)
@@ -64,6 +66,7 @@ namespace CatalogService.Api.Controllers
         /// <returns>Desired workspace.</returns>
         [Route("[action]/{number}")]
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Get(string number, CancellationToken cancellationToken)
@@ -85,6 +88,7 @@ namespace CatalogService.Api.Controllers
         /// <returns>New workspace.</returns>
         [Route("[action]")]
         [HttpPost]
+        [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateWorkspace([FromBody] WorkspaceRequestCreate workspaceRequest, CancellationToken cancellationToken)
         {
@@ -98,7 +102,9 @@ namespace CatalogService.Api.Controllers
         /// </summary>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Updated workspace.</returns>
-        [HttpPut("[action]")]
+        [Route("[action]")]
+        [HttpPut]
+        [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateWorkspace([FromBody] WorkspaceRequestUpdate workspaceRequest, CancellationToken cancellationToken)
         {
@@ -119,6 +125,7 @@ namespace CatalogService.Api.Controllers
         /// <returns>Updated list of workspaces.</returns>
         [Route("[action]")]
         [HttpDelete]
+        [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteWorkspace([FromBody] WorkspaceRequestUpdate workspaceRequest, CancellationToken cancellationToken)
         {
@@ -134,6 +141,7 @@ namespace CatalogService.Api.Controllers
 
         [Route("[action]/{workspaceId}/{eventType}")]
         [HttpPost]
+        [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> LockWorkspace(int workspaceId, EventType eventType, CancellationToken cancellationToken)

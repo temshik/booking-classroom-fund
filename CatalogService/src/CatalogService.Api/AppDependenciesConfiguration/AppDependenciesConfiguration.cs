@@ -18,6 +18,7 @@ namespace CatalogService.Api.AppDependenciesConfiguration
 
             builder.Services
                 .AddServices(configuration)
+                .AddConfigureJWT(builder)
                 .AddSerilogServices(configuration)
                 .ConfigureValidationApplication()
                 .AddMessageBusWithRabbitMq()

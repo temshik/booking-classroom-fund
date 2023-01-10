@@ -31,6 +31,8 @@ app.UseSerilogRequestLogging(configure =>
     configure.MessageTemplate = "HTTP {RequestMethod} {RequestPath} ({UserId}) responded {StatusCode} in {Elapsed:0.0000}ms";
 });
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
