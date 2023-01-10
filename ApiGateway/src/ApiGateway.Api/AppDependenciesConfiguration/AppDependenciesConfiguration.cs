@@ -17,7 +17,7 @@ namespace ApiGateway.AppDependenciesConfiguration
         {
             var configuration = builder.Configuration;
 
-            builder.Services.AddConfigureJWT(builder);
+            //builder.Services.AddConfigureJWT(builder);
             builder.Services.AddOcelot(configuration);
 
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
