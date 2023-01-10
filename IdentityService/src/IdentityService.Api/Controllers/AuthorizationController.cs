@@ -53,13 +53,13 @@ namespace IdentityService.Api.Controllers
         /// <param name="id">Specific user id</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        [Route("[action]/{refreshToken}")]
-        [HttpGet]
+        [Route("[action]")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> RefreshToken(string refreshToken, CancellationToken cancellationToken)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshToken, CancellationToken cancellationToken)
         {
-            var newToken = await _authorization.RefreshTokenAsync(refreshToken, cancellationToken);
+            var newToken = await _authorization.RefreshTokenAsync(refreshToken.RefreshToken, cancellationToken);
 
             if (newToken == null)
             {

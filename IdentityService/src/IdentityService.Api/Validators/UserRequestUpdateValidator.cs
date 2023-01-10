@@ -22,10 +22,6 @@ namespace IdentityService.Api.Validators
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .MustNameBeValid();
 
-            RuleFor(x => x.UserName)
-                .Cascade(CascadeMode.StopOnFirstFailure)
-                .MustNameBeValid();
-
             RuleFor(x => x.Email)
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .MustEmailBeValid();

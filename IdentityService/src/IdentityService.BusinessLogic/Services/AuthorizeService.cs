@@ -56,42 +56,44 @@ namespace IdentityService.BusinessLogic.Services
         public async Task<TokenDTO> AuthorizeAsync(string email, string password, bool rememberMe, CancellationToken cancellationToken)
         {
             var user = await ValidateUserAsync(email, password);
-            var refreshtoken = _repository.GetSavedRefreshTokensByUserIdAsync(user.Id);
+            var refreshtoken = await _repository.GetSavedRefreshTokensByUserIdAsync(user.Id);              
+            
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var refreshToken = GenerateRefreshToken();
+            var securityTokenDescriptor = await GenerateTokenAsync(user);
+            var token = tokenHandler.CreateToken(securityTokenDescriptor);
+            var JwtToken = tokenHandler.WriteToken(token);
 
             if (refreshtoken != null)
             {
-                var result = await RefreshTokenAsync(refreshtoken.Result.RefreshToken, cancellationToken);
+                refreshtoken.RefreshToken = refreshToken;
+                refreshtoken.CreationDate = DateTimeOffset.UtcNow;
 
-                return result;
+                _repository.Update(refreshtoken, cancellationToken);
             }
             else
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var refreshToken = GenerateRefreshToken();
-                var securityTokenDescriptor = await GenerateTokenAsync(user);
-                var token = tokenHandler.CreateToken(securityTokenDescriptor);
-                var JwtToken = tokenHandler.WriteToken(token);
-
                 _repository.Add(new UserRefreshToken
                 {
                     CreationDate = DateTimeOffset.Now,
-                    LifeRefreshTokenInMinutes = Convert.ToInt32(_settings.GetSection("JwtSettings")["LifeTimeRefresh"]),
+                    LifeRefreshTokenInMinutes = Convert.ToInt32(_settings.GetSection("JwtSettings")["LifeTimeRefresh"])+2,
                     RefreshToken = refreshToken,
                     UserId = user.Id
                 });
-
-                await _saveChangesRepository.SaveChangesAsync(cancellationToken);
-                _logger.LogInformation($"Saving the changes to the databse");
-
-                await _signInManager.PasswordSignInAsync(email, password, rememberMe, false);
-
-                return new TokenDTO
-                {
-                    RefreshToken = refreshToken,
-                    TokenLifeTimeInMinutes = Convert.ToInt32(_settings.GetSection("JwtSettings")["LifeTimeRefresh"]),
-                    AccessToken = JwtToken,
-                };
             }
+
+            await _saveChangesRepository.SaveChangesAsync(cancellationToken);
+            _logger.LogInformation($"Saving the changes to the databse");
+
+            await _signInManager.PasswordSignInAsync(email, password, rememberMe, false);
+
+            return new TokenDTO
+            {
+                RefreshToken = refreshToken,
+                TokenLifeTimeInMinutes = Convert.ToInt32(_settings.GetSection("JwtSettings")["LifeTimeRefresh"]),
+                AccessToken = JwtToken,
+            };
+            
         }
 
         /// <summary>
@@ -202,7 +204,7 @@ namespace IdentityService.BusinessLogic.Services
             {
                 _logger.LogError("Error occured while processing the request");
 
-                throw new NotFoundException("Refresh token not found");
+                throw new NotFoundException("Refresh token not found or refresh token life time is end");
             }
 
             var user = await _userManager.FindByIdAsync(tokenLooked.UserId.ToString());
@@ -217,7 +219,7 @@ namespace IdentityService.BusinessLogic.Services
             var refreshTokenToSave = GenerateRefreshToken();
 
             tokenLooked.RefreshToken = refreshTokenToSave;
-            tokenLooked.CreationDate = DateTimeOffset.Now;
+            tokenLooked.CreationDate = DateTimeOffset.UtcNow;
 
             _repository.Update(tokenLooked, cancellationToken);
             await _saveChangesRepository.SaveChangesAsync(cancellationToken);

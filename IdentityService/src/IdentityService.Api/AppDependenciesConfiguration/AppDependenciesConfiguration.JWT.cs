@@ -18,6 +18,7 @@ namespace IdentityService.Api.AppDependenciesConfiguration
         {
             var configuration = builder.Configuration;
 
+            var authenticationProviderKey = "TestKey";
             var jwtConfig = configuration.GetSection("JwtSettings");
             var secretKey = jwtConfig["secretKey"];
 
@@ -27,7 +28,7 @@ namespace IdentityService.Api.AppDependenciesConfiguration
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(options =>
+            .AddJwtBearer(authenticationProviderKey, options =>
             {
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters

@@ -1,6 +1,9 @@
 ﻿using IdentityService.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace IdentityService.DataAccess.Repository
 {
@@ -56,9 +59,13 @@ namespace IdentityService.DataAccess.Repository
         /// <returns>A task that contains a <see cref="UserRefreshToken"/></returns>
         public Task<UserRefreshToken> GetSavedRefreshTokensAsync(string tokenRefresh, CancellationToken cancellationToken)
         {
-            return _userRefreshToken
+            var result = _userRefreshToken
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.RefreshToken == tokenRefresh, cancellationToken);
+
+            _logger.LogInformation("Get the refresh token from db by refresh token");
+
+            return result;
         }
 
         /// <summary>
@@ -80,9 +87,13 @@ namespace IdentityService.DataAccess.Repository
         /// <returns>A task that contains a <see cref="UserRefreshToken"/></returns>
         public Task<UserRefreshToken> GetSavedRefreshTokensByUserIdAsync(int userId)
         {
-            return _userRefreshToken
+            var result = _userRefreshToken
                .AsNoTracking()
                .FirstOrDefaultAsync(x => x.UserId == userId);
+
+            _logger.LogInformation("Get the refresh token by Id");
+
+            return result;
         }
     }
 }

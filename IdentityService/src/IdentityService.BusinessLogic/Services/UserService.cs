@@ -200,7 +200,6 @@ namespace IdentityService.BusinessLogic.Services
                 {
                     userLooked.FirstName = userMapped.FirstName;
                     userLooked.LastName = userMapped.LastName;
-                    userLooked.UserName = userMapped.UserName;
                     userLooked.SecurityStamp = Guid.NewGuid().ToString();
 
                     var result = await _userManager.UpdateAsync(userLooked);
