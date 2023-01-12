@@ -179,11 +179,7 @@
         }
       ],
       "UpstreamPathTemplate": "/Users/GetRoles",
-      "UpstreamHttpMethod": [ "GET" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
-        "AllowedScopes": []
-      }
+      "UpstreamHttpMethod": [ "GET" ]
       },
       //Booking API
       {
