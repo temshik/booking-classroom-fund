@@ -1,5 +1,4 @@
-﻿using ApiGateway.Api.AppDependenciesConfiguration;
-using Ocelot.DependencyInjection;
+﻿using Ocelot.DependencyInjection;
 
 namespace ApiGateway.AppDependenciesConfiguration
 {
@@ -17,7 +16,6 @@ namespace ApiGateway.AppDependenciesConfiguration
         {
             var configuration = builder.Configuration;
 
-            //builder.Services.AddConfigureJWT(builder);
             builder.Services.AddOcelot(configuration);
 
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
