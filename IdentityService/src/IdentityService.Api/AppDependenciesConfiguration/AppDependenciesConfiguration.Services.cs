@@ -44,7 +44,7 @@ namespace IdentityService.Api.AppDependenciesConfiguration
         {
             services
                 .AddScoped<IUserService, UserService>()
-                .AddScoped<IAuthorizeService, AuthorizeService>();
+                .AddScoped<IAuthorizationService, AuthorizationService>();
 
             return services;
         }

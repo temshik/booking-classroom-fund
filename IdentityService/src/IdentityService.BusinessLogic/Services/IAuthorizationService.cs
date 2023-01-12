@@ -6,7 +6,7 @@ namespace IdentityService.BusinessLogic.Services
     /// <summary>
     /// Interface for Autorization operations
     /// </summary>
-    public interface IAuthorizeService
+    public interface IAuthorizationService
     {
         /// <summary>
         /// The user gets token after authorization

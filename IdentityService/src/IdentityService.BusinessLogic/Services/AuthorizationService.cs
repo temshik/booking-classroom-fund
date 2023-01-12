@@ -16,24 +16,24 @@ namespace IdentityService.BusinessLogic.Services
     /// <summary>
     /// Serice for base authorization operations
     /// </summary>
-    public class AuthorizeService : IAuthorizeService
+    public class AuthorizationService : IAuthorizationService
     {
         private readonly IConfiguration _settings;
         private readonly UserManager<User> _userManager;
         private readonly IRefreshTokenRepository _repository;
         private readonly IUserClaimRepository _userClaimRepository;
-        private readonly ILogger<AuthorizeService> _logger;
+        private readonly ILogger<AuthorizationService> _logger;
         private readonly ISaveChangesRepository _saveChangesRepository;
 
         /// <summary>
-        /// Initializes a new instance of <see cref="AuthorizeService"/>
+        /// Initializes a new instance of <see cref="AuthorizationService"/>
         /// </summary>
         /// <param name="userManager"></param>
-        public AuthorizeService(IConfiguration settings,
+        public AuthorizationService(IConfiguration settings,
             UserManager<User> userManager,
             IRefreshTokenRepository refreshRepository,
             IUserClaimRepository claimRepository,
-            ILogger<AuthorizeService> logger,
+            ILogger<AuthorizationService> logger,
             ISaveChangesRepository saveChangesRepository)
         {
             _settings = settings;

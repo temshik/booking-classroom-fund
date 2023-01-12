@@ -4,7 +4,6 @@ using IdentityService.Api.Requests;
 using IdentityService.BusinessLogic.DTOs;
 using IdentityService.BusinessLogic.Services;
 using IdentityService.DataAccess.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -65,7 +64,6 @@ namespace IdentityService.Api.Controllers
         [Route("[action]")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [Authorize]
         public async Task<IActionResult> Logout(CancellationToken token)
         {
             await _userService.LogoutAsync();
@@ -84,7 +82,6 @@ namespace IdentityService.Api.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = "Dispacher,Employee")]
         public async Task<IActionResult> UpdateUser([FromBody] UserRequestUpdate userRequest, CancellationToken token)
         {
             var userMapped = _mapper.Map<UserDTO>(userRequest);
@@ -108,7 +105,6 @@ namespace IdentityService.Api.Controllers
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = "Dispacher,Employee")]
         public async Task<IActionResult> DeleteUser(int id, UserRequestUpdate userRequest, CancellationToken token)
         {
             var userMapped = _mapper.Map<UserDTO>(userRequest);
@@ -132,7 +128,6 @@ namespace IdentityService.Api.Controllers
         [Route("[action]/{id}/{claims}")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [Authorize]
         public async Task<IActionResult> UpdateUserClaims(int id, [FromBody] UserRequestUpdate userRequest, [FromRoute] List<Claim> claims, CancellationToken token)
         {
             var userMapped = _mapper.Map<UserDTO>(userRequest);
@@ -155,7 +150,6 @@ namespace IdentityService.Api.Controllers
         [Route("[action]/{id}/{newPassword}")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [Authorize]
         public async Task<IActionResult> UpdatePassword([FromBody] UserRequestUpdate userRequest, string newPassword, CancellationToken token)
         {
             var userMapped = _mapper.Map<UserDTO>(userRequest);
@@ -180,7 +174,6 @@ namespace IdentityService.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> ResetPassword([FromBody] UserRequestUpdate userRequest, string newPassword, CancellationToken token)
         {
             var userMapped = _mapper.Map<UserDTO>(userRequest);
@@ -203,7 +196,6 @@ namespace IdentityService.Api.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = "Dispacher,Employee")]
         public async Task<IActionResult> GetRoles(CancellationToken token)
         {
             var roleList = await _userService.GetRolesAsync(token);

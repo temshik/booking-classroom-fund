@@ -1,9 +1,6 @@
 # Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
 
-version: '2.1'
-
-networks:
-    backend:
+version: '3.4'
 
 services:
   mssql-server:
@@ -12,8 +9,6 @@ services:
         ACCEPT_EULA: "Y"
         SA_PASSWORD: "QQQzzz_7584424"
         MSSQL_PID: "Express"
-    networks:
-      - backend
     ports:
         - "1433:1433" 
   identityservice.api:
@@ -27,9 +22,7 @@ services:
       DatabasePort: "1433"
       DatabaseUser: "sa"
       DatabasePassword: "QQQzzz_7584424"
-      DatabaseName: "workspaceIdentity"    
+      DatabaseName: "workspaceIdentity"     
     ports:
       - "9000:80"
-      - "9001:443" 
-    networks:
-      - backend
+      - "9001:443"
