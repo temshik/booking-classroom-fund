@@ -51,9 +51,9 @@ namespace BookingService.BusinessLogic.Services.AsyncDataServices
 
                 _logger.LogInformation("Listening on the MessageBus");
 
-                _connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;  
+                _connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError($"Could not connect to the Message Bus: {ex.Message}");
             }
@@ -64,12 +64,13 @@ namespace BookingService.BusinessLogic.Services.AsyncDataServices
             stoppingToken.ThrowIfCancellationRequested();
 
             var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += async (sender, e) => {
+            consumer.Received += async (sender, e) =>
+            {
                 _logger.LogInformation("Event Received");
 
                 var body = e.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                
+
                 _eventProcessor.ProcessEvent(message);
             };
 
@@ -87,7 +88,7 @@ namespace BookingService.BusinessLogic.Services.AsyncDataServices
         private void OnConsumerUnregistered(object sender, ConsumerEventArgs e) { }
         private void OnConsumerRegistered(object sender, ConsumerEventArgs e) { }
         private void OnConsumerShutdown(object sender, ShutdownEventArgs e) { }
-        private void RabbitMQ_ConnectionShutdown(object sender, ShutdownEventArgs e) 
+        private void RabbitMQ_ConnectionShutdown(object sender, ShutdownEventArgs e)
         {
             _logger.LogInformation("RabbitMQ Connection Shutdown");
         }

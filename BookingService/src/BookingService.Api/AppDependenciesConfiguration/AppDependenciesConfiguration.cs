@@ -16,6 +16,7 @@
 
             builder.Services
                 .AddServices(configuration)
+                .AddConfigureJWT(builder)
                 .ConfigureServices()
                 .AddMappings();
 

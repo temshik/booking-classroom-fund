@@ -2,9 +2,8 @@
 using BookingService.Api.Requests;
 using BookingService.BusinessLogic.DTOs;
 using BookingService.BusinessLogic.Services;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BookingService.Api.Controllers
 {
@@ -34,6 +33,7 @@ namespace BookingService.Api.Controllers
         /// <returns>New booking</returns>
         [Route("[action]")]
         [HttpPost]
+        [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateBooking([FromBody] BookingRequest bookingRequest, CancellationToken cancellationToken)
@@ -57,6 +57,7 @@ namespace BookingService.Api.Controllers
         /// <returns>Updated booking</returns>
         [Route("[action]")]
         [HttpPut]
+        [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateBooking([FromBody] BookingRequest bookingRequest, CancellationToken cancellationToken)
@@ -79,6 +80,7 @@ namespace BookingService.Api.Controllers
         /// <returns>Updated list of bookings</returns>
         [Route("[action]")]
         [HttpDelete]
+        [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteBooking([FromBody] BookingRequest bookingRequest, CancellationToken cancellationToken)
@@ -101,6 +103,7 @@ namespace BookingService.Api.Controllers
         /// <returns>Bookings</returns>
         [Route("[action]/{workspaceId}")]
         [HttpPut]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetBookingsByWorkspace(int workspaceId, CancellationToken cancellationToken)
@@ -123,9 +126,10 @@ namespace BookingService.Api.Controllers
         /// <returns>Paged bookings</returns>
         [Route("[action]/{userId}")]
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetBookingsByUser(int userId,  CancellationToken cancellationToken)
+        public async Task<IActionResult> GetBookingsByUser(int userId, CancellationToken cancellationToken)
         {
             var list = await _bookService.GetBookingsByUserAsync(userId, cancellationToken);
 

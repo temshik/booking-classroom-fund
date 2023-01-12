@@ -19,7 +19,7 @@ namespace BookingService.BusinessLogic.Services.EventProcessing.Templates
                 {
                     if (bookingService.IsExternalWorkspaceExists(workspaceUpdatedEvent.WorkspaceId))
                     {
-                        ExecuteWorkspaceUpdate(bookingService, workspaceUpdatedEvent.WorkspaceId);                        
+                        ExecuteWorkspaceUpdate(bookingService, workspaceUpdatedEvent.WorkspaceId);
                     }
                     else
                     {

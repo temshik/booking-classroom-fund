@@ -148,7 +148,7 @@ namespace BookingService.BusinessLogic.Services
         /// <returns>Boolean result</returns>
         public bool IsExternalWorkspaceExists(int externalWorkspaceId)
         {
-            return _repository.IsWorkspaceExists(externalWorkspaceId);      
+            return _repository.IsWorkspaceExists(externalWorkspaceId);
         }
 
         /// <summary>

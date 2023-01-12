@@ -45,7 +45,7 @@ namespace BookingService.Api.AppDependenciesConfiguration
                 .AddScoped<IBookService, BookService>()
                 .AddHostedService<MessageSubscriber>()
                 .AddSingleton<IEventProcessor, EventProcessor>();
-                
+
             return services;
         }
 

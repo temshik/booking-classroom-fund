@@ -51,7 +51,7 @@ namespace BookingService.BusinessLogic.Services.EventProcessing
 
             switch (workspaceUpdatedEvent.Event)
             {
-                case nameof(EventType.Block):          
+                case nameof(EventType.Block):
                     _logger.LogInformation("Workspace Blocked Event Detected");
                     return EventType.Block;
                 case nameof(EventType.Unlock):
@@ -63,7 +63,7 @@ namespace BookingService.BusinessLogic.Services.EventProcessing
                 default:
                     _logger.LogInformation("Could not determine the event type");
                     return EventType.Undetermined;
-            }               
+            }
         }
     }
 }

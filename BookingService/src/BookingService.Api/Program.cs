@@ -23,6 +23,8 @@ DatabaseMigrate.MigrationInitialisation(app);
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();

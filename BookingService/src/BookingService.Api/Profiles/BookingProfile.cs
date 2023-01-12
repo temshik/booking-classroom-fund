@@ -9,7 +9,7 @@ namespace BookingService.Api.Profiles
     /// <summary>
     /// The booking mapping profile
     /// </summary>
-    public class BookingProfile : Profile 
+    public class BookingProfile : Profile
     {
         /// <summary>
         /// Initializes a new instance of <see cref="BookingProfile"/> class.

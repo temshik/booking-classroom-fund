@@ -28,12 +28,12 @@ namespace BookingService.DataAccess
         /// </summary>
         /// <param name="modelBuilder">The model builder.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {            
+        {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(BookingContext).Assembly);
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new BookingConfiguration());
-            
+
         }
     }
 }
