@@ -18,17 +18,15 @@ namespace IdentityService.Api.AppDependenciesConfiguration
         {
             var configuration = builder.Configuration;
 
-            var authenticationProviderKey = "TestKey";
             var jwtConfig = configuration.GetSection("JwtSettings");
             var secretKey = jwtConfig["secretKey"];
 
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(authenticationProviderKey, options =>
+            .AddJwtBearer(options =>
             {
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters

@@ -1,9 +1,6 @@
 ﻿using IdentityService.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Globalization;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace IdentityService.DataAccess.Repository
 {

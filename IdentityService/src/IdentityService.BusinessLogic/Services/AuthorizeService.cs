@@ -56,8 +56,8 @@ namespace IdentityService.BusinessLogic.Services
         public async Task<TokenDTO> AuthorizeAsync(string email, string password, bool rememberMe, CancellationToken cancellationToken)
         {
             var user = await ValidateUserAsync(email, password);
-            var refreshtoken = await _repository.GetSavedRefreshTokensByUserIdAsync(user.Id);              
-            
+            var refreshtoken = await _repository.GetSavedRefreshTokensByUserIdAsync(user.Id);
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var refreshToken = GenerateRefreshToken();
             var securityTokenDescriptor = await GenerateTokenAsync(user);
@@ -76,7 +76,7 @@ namespace IdentityService.BusinessLogic.Services
                 _repository.Add(new UserRefreshToken
                 {
                     CreationDate = DateTimeOffset.Now,
-                    LifeRefreshTokenInMinutes = Convert.ToInt32(_settings.GetSection("JwtSettings")["LifeTimeRefresh"])+2,
+                    LifeRefreshTokenInMinutes = Convert.ToInt32(_settings.GetSection("JwtSettings")["LifeTimeRefresh"]) + 2,
                     RefreshToken = refreshToken,
                     UserId = user.Id
                 });
@@ -93,7 +93,7 @@ namespace IdentityService.BusinessLogic.Services
                 TokenLifeTimeInMinutes = Convert.ToInt32(_settings.GetSection("JwtSettings")["LifeTimeRefresh"]),
                 AccessToken = JwtToken,
             };
-            
+
         }
 
         /// <summary>
