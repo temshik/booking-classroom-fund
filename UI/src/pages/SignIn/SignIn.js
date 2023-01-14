@@ -38,18 +38,28 @@ export default class SignIn extends React.Component {
       Email: this.state.email,
       Password: this.state.password
     };
-    const url = 'http://ocelotapigateway/Authorization/Authorize';
-    axios.post(url,data).then((result) =>{
+    const url = 'http://localhost:5000/Authorization/Authorize';
+    let request = new XMLHttpRequest();
+    request.open("POST", url);
+    request.send(data);
+    request.onload = () => {
+        if (request.status === 200) {
+            alert(request.response);
+        } else {
+            alert(`Error: ${request.status} ${request.statusText}`);
+        }
+    }
+    //axios.post(url,data).then((result) =>{
       // if(result.data == HttpStatusCode.Ok)
       // {
       //   alert("Succesfuly enter by: " + this.state.email);
       // }
       // else{
-        alert(result.data);
+       // alert(result.data);
       //}
-    }).catch((error) =>{
-        alert(error);
-    })
+    //}).catch((error) =>{
+    //    alert(error);
+    //})
   }
 
 	state = {
