@@ -38,7 +38,7 @@ export default class SignIn extends React.Component {
       Email: this.state.email,
       Password: this.state.password
     };
-    const url = 'http://ocelotapigateway/Authorization/Authorize';
+    const url = 'http://localhost:5000/Authorization/Authorize';
     axios.post(url,data).then((result) =>{
       if(result.data == HttpStatusCode.Ok)
       {
