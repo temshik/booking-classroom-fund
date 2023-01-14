@@ -15,8 +15,4 @@
     <ProjectReference Include="..\IdentityService.DataAccess\IdentityService.DataAccess.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTOs\SeedPrefilingsDatas\" />
-  </ItemGroup>
-
 </Project>

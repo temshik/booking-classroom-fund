@@ -31,7 +31,7 @@ namespace IdentityService.Api.AppDependenciesConfiguration
                 .AddValidatorsFromAssemblyContaining<UserRequestCreateValidator>()
                 .AddFluentValidationAutoValidation()
                 .AddHealthChecks()
-                .AddDbContextCheck<IdentityContext>();                
+                .AddDbContextCheck<IdentityContext>();
 
             builder.AddLogger(configuration);
 

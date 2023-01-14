@@ -1,5 +1,4 @@
 ﻿using IdentityService.DataAccess.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace IdentityService.DataAccess.Identity.Stores

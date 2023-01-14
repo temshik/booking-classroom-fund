@@ -15,14 +15,14 @@ namespace IdentityService.Api.AppDependenciesConfiguration
         /// <returns>The webapplication builder</returns>
         public static WebApplicationBuilder AddLogger(this WebApplicationBuilder builder, IConfiguration config)
         {
-            builder.Host.UseSerilog((context, services, config) => config                          
+            builder.Host.UseSerilog((context, services, config) => config
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
                 .ReadFrom.Configuration(context.Configuration)
                 .ReadFrom.Services(services)
-                .WriteTo.Console());            
+                .WriteTo.Console());
 
             return builder;
-        }       
+        }
     }
 }
