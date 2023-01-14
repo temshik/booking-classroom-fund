@@ -40,13 +40,13 @@ export default class SignIn extends React.Component {
     };
     const url = 'http://ocelotapigateway/Authorization/Authorize';
     axios.post(url,data).then((result) =>{
-      if(result.data == HttpStatusCode.Ok)
-      {
-        alert("Succesfuly enter by: " + this.state.email);
-      }
-      else{
+      // if(result.data == HttpStatusCode.Ok)
+      // {
+      //   alert("Succesfuly enter by: " + this.state.email);
+      // }
+      // else{
         alert(result.data);
-      }
+      //}
     }).catch((error) =>{
         alert(error);
     })
