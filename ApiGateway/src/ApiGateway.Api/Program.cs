@@ -10,6 +10,10 @@ var app = builder.Build();
 
 await app.UseOcelot();
 
+app.UseRouting();
+
+app.UseCors("ApiCorsPolicy");
+
 app.UseAuthorization();
 
 app.UseHttpsRedirection();
