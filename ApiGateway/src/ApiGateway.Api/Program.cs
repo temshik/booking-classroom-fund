@@ -12,7 +12,7 @@ await app.UseOcelot();
 
 app.UseRouting();
 
-app.UseCors("ApiCorsPolicy");
+app.UseCors();
 
 app.UseAuthorization();
 
