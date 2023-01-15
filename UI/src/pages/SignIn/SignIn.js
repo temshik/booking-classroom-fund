@@ -38,7 +38,7 @@ export default class SignIn extends React.Component {
       Email: this.state.email,
       Password: this.state.password
     };
-    const url = 'http://ocelotapigateway/Authorization/Authorize';
+    const url = 'http://localhost:5000/Authorization/Authorize';
     // let request = new XMLHttpRequest();
     // request.open("POST", url);
     // request.send(data);
