@@ -2,26 +2,51 @@ import React  from 'react';
 import './SignIn.scss'
 import '../SignUp/SignUp.scss'
 import RadioButton from "../../components/RadioButton/RadioButton";
-import axios, { HttpStatusCode } from "axios";
+import FormErrors from '../../components/FormErrors/FormErrors'
+import HttpStatusCode  from "axios";
+import AuthServices from '../../services/AuthServices';
+
+const authSevice = new AuthServices();
 
 export default class SignIn extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {authMode: "signin"};
-    this.state = {email: ""};
-    this.state = {password: ""};
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.state = {
+      email: "",
+      password: ""
+    };
+    this.state = {
+      FirstName: "",  
+      LastName: "",     
+      UserName: "",     
+      Email: "",     
+      Password: "",          
+      ConfirmPassword: "",
+      RoleValue: "Teacher",
+      formErrors: {FirstName: '', LastName: '', UserName: "", Email: "", Password: "", ConfirmPassword: ""},
+      FirstNameValid: false,
+      LastNameValid: false,
+      UserNameValid: false,
+      EmailValid: false,
+      PasswordValid: false,
+      ConfirmPasswordValid: false
+    }
     this.changeAuthMode = this.changeAuthMode.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);    
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleValues = this.handleValues.bind(this);
+    this.handleRegister = this.handleRegister.bind(this);
+    this.errorClass = this.errorClass.bind(this);
   }
 
   changeAuthMode(){
     let authMode = (this.state.authMode === "signin") ? "signup" : "signin";
     this.setState({authMode: authMode});
   }
-
+//SignIn
   handleEmailChange(e){
     var value = e.target.value;
     this.setState({email: value});
@@ -40,42 +65,77 @@ export default class SignIn extends React.Component {
       RememberMe: true,
       ReturnUrl: "string"
     };
-    const url = 'http://127.0.0.1:5000/Authorization/Authorize';
-    // let request = new XMLHttpRequest();
-    // request.open("POST", url);
-    // request.send(data);
-    // request.onload = () => {
-    //     if (request.status === 200) {
-    //         alert(request.response);
-    //     } else {
-    //         alert(`Error: ${request.status} ${request.statusText}`);
-    //     }
-    // }
-    axios.post(url,data).then((result) =>{
-      if(result.status == HttpStatusCode.Ok)
+    authSevice.SignIn(data).then((data) =>{
+      if(data.status == HttpStatusCode.Ok)
       {
-        alert("Succesfuly enter by: " + this.state.email);
+        console.log("Succesfuly enter by: " + data);
       }
       else{
-       alert(result.data);
+       console.log(data);
       }
     }).catch((error) =>{
-       alert("Error: ${request.status} ${request.statusText} ${error}");
-    })
+       console.log("Error: ${request.status} ${request.statusText} ${error}");
+    });
   }
-
-	state = {
-		paymentMethod: "COD"
-	}
-
+//SignUp
+  handleValues(event) {
+    const {name, value} = event.target
+    this.setState({[name]:value},
+      () => { this.validateField(name, value) },
+      console.log('name', name, 'value', value));
+  }
 	radioChangeHandler = (event) => {
 		this.setState({
-			paymentMethod: event.target.value
+			RoleValue: event.target.value
 		});
     console.log(event.target.value);
 	}
 
+  validateField(fieldName, value) {
+    console.log('CheckValidity Calling')
+    let fieldValidationErrors = this.state.formErrors;
+    let FirstNameValid = this.state.FirstNameValid;
+    let LastNameValid = this.state.LastNameValid;
+    let UserNameValid = this.state.UserNameValid;
+    let EmailValid = this.state.EmailValid;
+    let PasswordValid = this.state.PasswordValid;
+    let ConfirmPasswordValid = this.state.ConfirmPasswordValid;
+    
+    switch(fieldName) {
+      case 'Email':
+        EmailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+        fieldValidationErrors.Email = EmailValid ? '' : ' is invalid';
+        break;
+      case 'Password':
+        PasswordValid = value.length >= 6;
+        fieldValidationErrors.Password = PasswordValid ? '': ' is too short';
+        break;
+      default:
+        break;
+    }
+    this.setState({formErrors: fieldValidationErrors,
+                    EmailValid: EmailValid,
+                    PasswordValid: PasswordValid
+                  }, this.validateForm);
+  }
+  
+  validateForm() {
+    this.setState({formValid: this.state.emailValid &&
+                              this.state.passwordValid});
+  }
+
+  handleRegister(event) {
+    this.cheackfunction()
+    event.preventDefault();
+  }
+
+  errorClass(error) {
+    return(error.length === 0 ? '' : 'has-error');
+ }
+
+
 render(){
+  console.log('State: ', this.state)
   if (this.state.authMode === "signin") {
     return (
       <div className="SignIn">
@@ -96,6 +156,7 @@ render(){
                 placeholder="Enter email"
                 value={this.state.email}
                 onChange={this.handleEmailChange}
+                required
               />
             </div>
             <div className="form-group mt-3">
@@ -106,6 +167,7 @@ render(){
                 placeholder="Enter password"
                 value={this.state.password}
                 onChange={this.handlePasswordChange}
+                required
               />
             </div>
             <div className="form-group">
@@ -115,7 +177,7 @@ render(){
                     </div>
                 </div>
             <div className="d-grid gap-2 mt-3">
-              <button type="submit" className="btn btn-primary">
+              <button type="submit" className="btn btn-primary"  disabled={!this.state.formValid}>
                 Submit
               </button>
             </div>
@@ -128,9 +190,9 @@ render(){
     )
   }
   
-  return (
+  return (     
     <div className="SignUp">
-      <form className="SignUp__Auth-form">
+      <form className="SignUp__Auth-form" onSubmit={this.handleRegister}>
         <div className="SignUp__SubContainer">
           <h3 className="SignUp__Auth-form-title">Sign Up</h3>
           <div className="text-center">
@@ -142,70 +204,109 @@ render(){
           <div className="form-group mt-3">
             <label>First Name</label>
             <input
-              type="email"
+              //error={this.state.FirstNameValid}
+              type="text"
+              name='FirstName'
               className="form-control mt-1"
               placeholder="Robert"
+              value={this.state.FirstName}
+              onChange={this.handleValues}
+              required                      
             />
           </div>
           <div className="form-group mt-3">
             <label>Last Name</label>
             <input
-              type="email"
+              //error={this.state.LastNameValid}
+              type="text"
+              name='LastName'
               className="form-control mt-1"
               placeholder="Martin"
+              value={this.state.LastName}
+              onChange={this.handleValues}  
+              required            
             />
           </div>
           <div className="form-group mt-3">
             <label>User Name</label>
             <input
-              type="email"
+              //error={this.state.UserNameValid}            
+              type="text"
+              name='UserName'
               className="form-control mt-1"
               placeholder="Uncle Bob"
+              value={this.state.UserName}
+              onChange={this.handleValues}    
+              required          
             />
           </div>
-          <div className="form-group mt-3">
+          <div className="form-group mt-3${this.errorClass(this.state.formErrors.Email)}">
             <label>Email address</label>
             <input
+              //error={this.state.EmailValid}
               type="email"
-              className="form-control mt-1"
+              name='Email'
+              className="form-control mt-1 is-valid is-invalid"
               placeholder="Email Address"
+              value={this.state.Email}
+              onChange={this.handleValues}    
+              //required          
             />
+             <div class="valid-feedback">
+              Looks good!
+            </div>
+            <div className='panel panel-default'>
+              <FormErrors formErrors={this.state.formErrors} /> 
+            </div>    
+              <div class="invalid-feedback">
+                Please provide a valid city.
+              </div>     
           </div>
           <div className="form-group mt-3">
             <label>Password</label>
             <input
+              error={this.state.PasswordValid}
               type="password"
+              name='Password'
               className="form-control mt-1"
               placeholder="Password"
+              value={this.state.Password}
+              onChange={this.handleValues}       
+              required      
             />
           </div>
           <div className="form-group mt-3">
             <label>Confirm Password</label>
             <input
+              error={this.state.ConfirmPasswordValid}
               type="password"
+              name='ConfirmPassword'
               className="form-control mt-1"
               placeholder="Password"
+              value={this.state.ConfirmPassword}
+              onChange={this.handleValues}          
+              required    
             />
           </div>
           <div className="radio-btn-container" style={{ display: "flex" }}>				
 					<RadioButton 
 						changed={ this.radioChangeHandler } 
 						id="1" 
-						isSelected={ this.state.paymentMethod === "Teacher" } 
+						isSelected={ this.state.RoleValue === "Teacher" } 
 						label="Teacher" 
 						value="Teacher" 
 					/>
 					<RadioButton 
 						changed={ this.radioChangeHandler } 
 						id="2" 
-						isSelected={ this.state.paymentMethod === "Dispacher" } 
+						isSelected={ this.state.RoleValue === "Dispacher" } 
 						label="Dispacher" 
 						value="Dispacher" 
 					/>
           <RadioButton 
 						changed={ this.radioChangeHandler } 
 						id="3" 
-						isSelected={ this.state.paymentMethod === "Employee" } 
+						isSelected={ this.state.RoleValue === "Employee" } 
 						label="Employee" 
 						value="Employee" 
 					/>         
