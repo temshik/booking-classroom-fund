@@ -52,7 +52,7 @@ export default class SignIn extends React.Component {
     //     }
     // }
     axios.post(url,data).then((result) =>{
-      if(result.data == HttpStatusCode.Ok)
+      if(result.status == HttpStatusCode.Ok)
       {
         alert("Succesfuly enter by: " + this.state.email);
       }
@@ -60,7 +60,7 @@ export default class SignIn extends React.Component {
        alert(result.data);
       }
     }).catch((error) =>{
-       alert(error);
+       alert("Error: ${request.status} ${request.statusText} ${error}");
     })
   }
 
