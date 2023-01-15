@@ -17,11 +17,11 @@ namespace ApiGateway.AppDependenciesConfiguration
             var configuration = builder.Configuration;
 
             builder.Services.AddOcelot(configuration);
-            builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
-            {
-                builder.AllowAnyOrigin();
-            }
-            ));
+            builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
+                builder.WithOrigins("http://localhost:5000","http://localhost:3000")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()));
 
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             configuration.SetBasePath(builder.Environment.ContentRootPath);
