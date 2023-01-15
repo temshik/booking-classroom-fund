@@ -36,7 +36,9 @@ export default class SignIn extends React.Component {
     e.preventDefault();
     const data = {
       Email: this.state.email,
-      Password: this.state.password
+      Password: this.state.password,
+      RememberMe: true,
+      ReturnUrl: "string"
     };
     const url = 'http://127.0.0.1:5000/Authorization/Authorize';
     // let request = new XMLHttpRequest();
