@@ -315,7 +315,7 @@ render(){
               required          
             />
           </div>
-          <div className="form-group mt-3">
+          <div className="form-group mt-3${this.errorClass(this.state.formErrors.Email)}">
             <label>Email address</label>
             <input
               error={this.state.EmailValid}
@@ -327,6 +327,15 @@ render(){
               onChange={this.handleValues}    
               required          
             />
+             <div class="valid-feedback">
+              Looks good!
+            </div>
+            <div className='panel panel-default'>
+              <FormErrors formErrors={this.state.formErrors} /> 
+            </div>    
+              <div class="invalid-feedback">
+                Please provide a valid city.
+              </div>     
           </div>
           <div className="form-group mt-3">
             <label>Password</label>
