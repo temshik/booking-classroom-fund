@@ -4,11 +4,14 @@ import Configuration from "../configurations/Configuration";
 const axiosService = new AxiosServices();
 
 export default class AuthServices {
-    SignUp(data){
-        return axiosService.post(Configuration.SignUp+"$/{data}", data)
+    SignUp(data,role){
+        return axiosService.post(Configuration.SignUp+"/"+role, data)
     }
     SignIn(data){
         return axiosService.post(Configuration.SignIn, data)
+    }
+    ResetPassword(data){
+        return axiosService.put(Configuration.ResetPassword, data)
     }
 
 }

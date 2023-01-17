@@ -2,24 +2,21 @@ import React, {createRef} from 'react';
 import './SignIn.scss'
 import '../SignUp/SignUp.scss'
 import RadioButton from "../../components/RadioButton/RadioButton";
-import HttpStatusCode  from "axios";
 import AuthServices from '../../services/AuthServices';
+import { Navigate, Link } from "react-router-dom";
 
 const authSevice = new AuthServices();
 const Name_Regex = "[a-zA-Z][a-zA-Z0-9-_]{3,23}$";
-const Email_Regex = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i;
-const Password_Regex = /^(?=.*[a-z])(?=.[A-Z])(?=.*[0-9])(?=.*[!@#$%/_]).{6,24}$/;
+const User_Regex = "[a-zA-Z][a-zA-Z0-9-_][a-zA-Z ,.'-]{3,23}$";
+const Email_Regex = "(?:[a-zA-Z0-9]+\.)+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$";
+const Password_Regex = "^(?=.*[_+-/?:;№!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Zа-яА-Я])(?=.*[0-9]).{6,}$";
 
 export default class SignIn extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {authMode: "signin"};
-    this.state = {
-      email: "",
-      password: ""
-    };
-    this.state = {
+    this.state = {    
       FirstName: "",  
       FirstNameValid: false,
       FirstNameFocus: false,
@@ -45,9 +42,7 @@ export default class SignIn extends React.Component {
       ConfirmPasswordFocus: false,
 
       RoleValue: "Teacher",
-      ErrorMessage: false,
-      ShowErrorMessage: false,
-      Success: true
+      Redirect: false,
     }
     this.changeAuthMode = this.changeAuthMode.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -59,6 +54,7 @@ export default class SignIn extends React.Component {
     this.handleBlur = this.handleBlur.bind(this);
   }
 
+
   changeAuthMode(){
     let authMode = (this.state.authMode === "signin") ? "signup" : "signin";
     this.setState({authMode: authMode});
@@ -66,26 +62,154 @@ export default class SignIn extends React.Component {
 //SignIn
   handleEmailChange(e){
     var value = e.target.value;
-    this.setState({email: value});
+    this.setState({Email: value});
   }
 
   handlePasswordChange(e){
     var value = e.target.value;
-    this.setState({password: value});
+    this.setState({Password: value});
   }
 
   handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault();    
     const data = {
-      Email: this.state.email,
-      Password: this.state.password,
+      Email: this.state.Email,
+      Password: this.state.Password,
       RememberMe: true,
       ReturnUrl: "string"
     };
     authSevice.SignIn(data).then((data) =>{
-      if(data.status == HttpStatusCode.Ok)
+      if(data.status == 200)
       {
-        console.log("Succesfuly enter by: " + data);
+        alert("Succesfuly enter by: " + data.data.Email);   
+        console.log(data);       
+        this.setState({Redirect: true});
+      }
+      else{
+        console.log(data);       
+      }
+    }).catch((error) =>{
+       console.log("Error: "+error);
+    });
+  }
+//SignUp
+  handleValues(event) {
+    const {name, value} = event.target
+    const newValueIsValid = !event.target.validity.patternMismatch;
+    if (event.target.checked) {
+      if (newValueIsValid) {
+        this.setField(event.target.name, false, false); 
+      }
+    }
+    this.setState({[name]:value},
+      console.log('name', name, 'value', value)
+    );
+  }
+
+	radioChangeHandler = (event) => {
+		this.setState({RoleValue: event.target.value});
+	}
+
+  handleBlur = (event) =>{
+    if(!event.target.checked) {
+      if (event.target.validity.patternMismatch) {
+        this.ref.current.focus();
+        this.setField(event.target.name, true, true); 
+      }
+    }
+    if(event.target.checked) {
+      this.setField(event.target.name, "", false)    
+    }
+  }
+
+  handleFocus = (event) =>{     
+    if(event.target.checked){
+        this.setField(event.target.name, "", true)
+    }
+  }
+
+  style(error) {
+    if (error) {
+      return {
+        backgroundColor: "rgba(255, 0, 0, 0.5)" 
+      };
+    }
+  }
+
+  setField(name, value1, value2) {
+    switch(name) {
+      case 'FirstName':
+        if (value1 === ""){
+          this.setState({FirstNameFocus: value2})          
+        }
+        else{
+        this.setState({       
+          FirstNameValid: value1,
+          FirstNameFocus: value2,     
+        })}
+      case 'LastName':
+        if (value1 === ""){
+          this.setState({LastNameFocus: value2})          
+        }
+        else{
+        this.setState({
+          LastNameValid: value1,
+          LastNameFocus: value2
+        })}
+      case 'UserName':
+        if (value1 === ""){
+          this.setState({UserNameFocus: value2})          
+        }
+        else{
+        this.setState({
+          UserNameValid: value1,
+          UserNameFocus: value2
+        })}
+      case 'Email':
+        if (value1 === ""){
+          this.setState({EmailFocus: value2})          
+        }
+        else{
+        this.setState({
+          EmailValid: value1,
+          EmailFocus: value2
+        })}
+      case 'Password':
+        if (value1 === ""){
+          this.setState({PasswordFocus: value2})          
+        }
+        else{
+        this.setState({
+          PasswordValid: value1,
+          PasswordFocus: value2
+        })}
+      case 'ConfirmPassword':
+        if (value1 === ""){
+          this.setState({ConfirmPasswordFocus: value2})          
+        }
+        else{
+        this.setState({
+          ConfirmPasswordValid: value1,
+          ConfirmPasswordFocus: value2
+        })}
+    }
+  }
+
+  handleRegister(event) {
+    event.preventDefault();
+    const data = {
+      FirstName: this.state.FirstName,
+      LastName: this.state.LastName,
+      UserName: this.state.UserName,
+      Email: this.state.Email,
+      Password: this.state.Password,
+      ConfirmedPassword: this.state.ConfirmPassword,
+    };
+    authSevice.SignUp(data,this.state.RoleValue).then((data) =>{
+      if(data.status == 201)
+      {
+        alert("Succesfuly register");
+        console.log(data);
       }
       else{
        console.log(data);
@@ -94,108 +218,15 @@ export default class SignIn extends React.Component {
        console.log("Error: ${request.status} ${request.statusText} ${error}");
     });
   }
-//SignUp
-  handleValues(event) {
-    const {name, value} = event.target
-    const newValueIsValid = !event.target.validity.patternMismatch;
-    if (this.state.ErrorMessage) {
-      if (newValueIsValid) {
-        this.setState({
-          ErrorMessage: false,
-          ShowErrorMessage: false
-        });
-      }
-    }
-    this.setState({[name]:value},
-      //() => { this.validateField(name, value) },
-      console.log('name', name, 'value', value));
-  }
-	radioChangeHandler = (event) => {
-		this.setState({RoleValue: event.target.value});
-    console.log(event.target.value);
-	}
-
-  handleBlur = (event) =>{
-    if(!this.state.ErrorMessage) {
-      if (event.target.validity.patternMismatch) {
-        this.ref.current.focus();
-        this.setState({
-          ErrorMessage: true,
-          ShowErrorMessage: true
-        })      
-      }
-    }
-    if(this.state.ErrorMessage) {
-      this.setState({ShowErrorMessage: false})    
-    }
-  }
-
-  handleFocus = () =>{
-    if(this.state.ErrorMessage){
-        this.setState({ShowErrorMessage: true})
-    }
-  }
-
-  style(error) {
-    if (error) {
-      return {
-        backgroundColor: "rgba(255, 0, 0, 0.5)" 
-        // Or any other style you prefer
-      };
-    }
-  }
-
-   validateField() {
-    this.setState({
-      FirstNameValid: false,
-      LastNameValid: false,
-      UserNameValid: false,
-      EmailValid: false,  
-      PasswordValid: false,
-      ConfirmPasswordValid: false,
-      Success: false
-    })
-      if(Name_Regex.test(this.state.FirstName))
-      {
-        this.setState({FirstNameValid: true}, this.FirstNameValid);
-      }
-      if(Name_Regex.test(this.state.LastName))
-      {
-        this.setState({LastNameValid: true}, this.LastNameValid);
-      }
-      if(Name_Regex.test(this.state.UserName))
-      {
-        this.setState({UserNameValid: true}, this.UserNameValid);
-      }
-      if(Email_Regex.test(this.state.Email))
-      {
-        this.setState({EmailValid: true}, this.EmailValid);
-      }
-      if(Password_Regex.test(this.state.Password))
-      {
-        this.setState({PasswordValid: true}, this.PasswordValid);
-      }
-      if(Password_Regex.test(this.state.ConfirmPassword) && 
-          this.state.Password === this.state.ConfirmPassword)
-      {
-        this.setState({ConfirmPasswordValid: true}, this.ConfirmPasswordValid);
-      }
-      else
-      {
-        this.setState({Success: true}, this.Success);
-      }
-   }
-
-  handleRegister(event) {
-    this.validateField()
-    event.preventDefault();
-  }
 
 render(){
-  console.log('State: ', this.state)
+  console.log('State: ', this.state)  
   if (this.state.authMode === "signin") {
     return (
       <div className="SignIn">
+        {this.state.Redirect && (
+          <Navigate to="/" replace={true} />
+        )}
         <form className="SignIn__Auth-form" onSubmit={this.handleSubmit}>
           <div className="SignIn__Sub-Container">
             <h3 className="SignIn__Auth-form-title">Sign In</h3>
@@ -211,7 +242,7 @@ render(){
                 type="email"
                 className="form-control mt-1"
                 placeholder="Enter email"
-                value={this.state.email}
+                value={this.state.Email}
                 onChange={this.handleEmailChange}
                 required
               />
@@ -222,7 +253,7 @@ render(){
                 type="password"
                 className="form-control mt-1"
                 placeholder="Enter password"
-                value={this.state.password}
+                value={this.state.Password}
                 onChange={this.handlePasswordChange}
                 required
               />
@@ -234,12 +265,12 @@ render(){
                     </div>
                 </div>
             <div className="d-grid gap-2 mt-3">
-              <button type="submit" className="btn btn-primary"  disabled={!this.state.formValid}>
+              <button type="submit" className="btn btn-primary">
                 Submit
               </button>
             </div>
             <p className="text-center mt-2">
-              Forgot <a href="#">password?</a>
+              Forgot<Link to='/ResetPassword'> <a href="#">password?</a></Link>
             </p>
           </div>
         </form>
@@ -263,6 +294,7 @@ render(){
             <input
               type="text"
               name='FirstName'
+              checked={this.state.FirstNameValid}
               className="form-control mt-1"
               placeholder="Robert"
               value={this.state.FirstName}
@@ -271,12 +303,12 @@ render(){
               onBlur={this.handleBlur}
               onChange={this.handleValues}
               onFocus={this.handleFocus}
-              style={this.style(this.state.ErrorMessage)}
+              style={this.style(this.state.FirstNameValid)}              
               required          
             />
-            {this.state.ShowErrorMessage && (
+            {this.state.FirstNameFocus && (
               <p role="alert" style={{ color: "rgb(255, 0, 0)" }}>
-                Please make sure you've entered a <em>number</em>
+                First Name should be 4-16 characters and shouldn't include any special character!
               </p>
             )}
           </div>
@@ -285,83 +317,110 @@ render(){
             <input
               type="text"
               name='LastName'
+              checked={this.state.LastNameValid}
               className="form-control mt-1"
               placeholder="Martin"
               value={this.state.LastName}
               pattern={Name_Regex}
-              ref={this.ref}
               onBlur={this.handleBlur}
               onChange={this.handleValues}
               onFocus={this.handleFocus}
-              style={this.style(this.state.ErrorMessage)}
+              style={this.style(this.state.LastNameValid)}
               required            
             />
-            {this.state.ShowErrorMessage && (
+            {this.state.LastNameFocus && (
               <p role="alert" style={{ color: "rgb(255, 0, 0)" }}>
-                Please make sure you've entered a <em>Last Name</em>
+                Last Name should be 4-16 characters and shouldn't include any special character!
               </p>
             )}
           </div>
           <div className="form-group mt-3">
             <label>User Name</label>
-            <input
-              error={this.state.UserNameValid}            
+            <input                         
               type="text"
               name='UserName'
+              checked={this.state.UserNameValid}
               className="form-control mt-1"
-              placeholder="Uncle Bob"
+              placeholder="Cecil"
               value={this.state.UserName}
-              onChange={this.handleValues}    
+              pattern={User_Regex}              
+              onBlur={this.handleBlur}
+              onChange={this.handleValues}
+              onFocus={this.handleFocus}
+              style={this.style(this.state.UserNameValid)}   
               required          
             />
+            {this.state.UserNameFocus && (
+              <p role="alert" style={{ color: "rgb(255, 0, 0)" }}>
+                User Name should be 4-16 characters and shouldn't include any special character!
+              </p>
+            )}
           </div>
-          <div className="form-group mt-3${this.errorClass(this.state.formErrors.Email)}">
+          <div className="form-group mt-3">
             <label>Email address</label>
             <input
-              error={this.state.EmailValid}
+              checked={this.state.EmailValid}
               type="email"
               name='Email'
-              className="form-control mt-1 is-valid is-invalid"
+              className="form-control mt-1"
               placeholder="Email Address"
               value={this.state.Email}
-              onChange={this.handleValues}    
+              pattern={Email_Regex}              
+              onBlur={this.handleBlur}
+              onChange={this.handleValues}
+              onFocus={this.handleFocus}
+              style={this.style(this.state.EmailValid)}       
               required          
             />
-             <div class="valid-feedback">
-              Looks good!
-            </div>
-            <div className='panel panel-default'>
-              <FormErrors formErrors={this.state.formErrors} /> 
-            </div>    
-              <div class="invalid-feedback">
-                Please provide a valid city.
-              </div>     
+            {this.state.EmailFocus && (
+              <p role="alert" style={{ color: "rgb(255, 0, 0)" }}>
+                It should be a valid email address!
+              </p>
+            )}
           </div>
           <div className="form-group mt-3">
             <label>Password</label>
             <input
-              error={this.state.PasswordValid}
+              checked={this.state.PasswordValid}
               type="password"
               name='Password'
               className="form-control mt-1"
               placeholder="Password"
               value={this.state.Password}
-              onChange={this.handleValues}       
+              pattern={Password_Regex}              
+              onBlur={this.handleBlur}
+              onChange={this.handleValues}
+              onFocus={this.handleFocus}
+              style={this.style(this.state.PasswordValid)}          
               required      
             />
+            {this.state.PasswordFocus && (
+              <p role="alert" style={{ color: "rgb(255, 0, 0)" }}>
+                Password must contain more then 6 elements and include at least 1 lower case and 1 upper case letter, 1 numeric value and 1 special character!
+              </p>
+            )}
           </div>
           <div className="form-group mt-3">
             <label>Confirm Password</label>
             <input
-              error={this.state.ConfirmPasswordValid}
+              checked={this.state.ConfirmPasswordValid}
               type="password"
               name='ConfirmPassword'
               className="form-control mt-1"
               placeholder="Password"
               value={this.state.ConfirmPassword}
-              onChange={this.handleValues}          
+              pattern={this.state.Password}              
+              onBlur={this.handleBlur}
+              onChange={this.handleValues}
+              onFocus={this.handleFocus}
+              style={this.style(this.state.ConfirmPasswordValid)}            
               required    
             />
+            {this.state.ConfirmPasswordFocus && (
+              <p role="alert" style={{ color: "rgb(255, 0, 0)" }}>
+                Password don't match!
+              </p>
+            )}
           </div>
           <div className="radio-btn-container" style={{ display: "flex" }}>				
 					<RadioButton 
@@ -387,7 +446,7 @@ render(){
 					/>         
 				</div>
           <div className="d-grid gap-2 mt-3">
-            <button type="submit" className="btn btn-primary" disabled={this.state.ShowErrorMessage}>
+            <button type="submit" className="btn btn-primary" disabled={this.state.ErrorMessage}>
               Register
             </button>
           </div>
