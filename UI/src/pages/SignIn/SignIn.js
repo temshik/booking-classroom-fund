@@ -39,17 +39,22 @@ export default class SignIn extends React.Component {
       ReturnUrl: "string"
     };
     authSevice.SignIn(data).then((data) =>{
+      console.log(data.data);  
       if(data.status === 200)
-      {
-        alert("Succesfuly enter by: " + data.data.Email);   
-        console.log(data);       
+      { 
+        console.log(JSON.stringify(data.data.accessToken)); 
+        console.log(JSON.stringify(data.data.refreshToken)); 
+        console.log(JSON.stringify(data.data.tokenLifeTimeInMinutes)); 
         this.setState({Redirect: true});
       }
-      else{
-        console.log(data);       
-      }
-    }).catch((error) =>{
-      console.log("Error: "+error);
+    }).catch((error) => {
+      if(error.code === 'ERR_BAD_RESPONSE'){
+        console.log("Server error");
+        console.log(JSON.stringify(error));       
+      }   
+      if(!error){
+        console.log("No server response "+error);
+      }   
     });    
   }
 
