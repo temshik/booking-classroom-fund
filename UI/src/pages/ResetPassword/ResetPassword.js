@@ -2,8 +2,10 @@ import React, {createRef} from 'react';
 import '../SignIn/SignIn.scss'
 import AuthServices from '../../services/AuthServices';
 import { Navigate } from "react-router-dom";
+import ErrorHandler from '../../modules/ErrorHandler';
 
 const authSevice = new AuthServices();
+const errorHandler = new ErrorHandler();
 const Email_Regex = "(?:[a-zA-Z0-9]+\.)+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$";
 const Password_Regex = "^(?=.*[_+-/?:;№!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Zа-яА-Я])(?=.*[0-9]).{6,}$";
 
@@ -43,9 +45,7 @@ export default class ResetPassword extends React.Component {
         else{
           console.log(data);       
         }
-      }).catch((error) =>{
-          console.log("Error: "+error);
-      });
+      }).catch(errorHandler.httpErrorHandler) 
     }
 
   handleValues(event) {

@@ -3,8 +3,10 @@ import './SignUp.scss'
 import RadioButton from "../../components/RadioButton/RadioButton";
 import AuthServices from '../../services/AuthServices';
 import { Navigate, Link } from "react-router-dom";
+import ErrorHandler from '../../modules/ErrorHandler';
 
 const authSevice = new AuthServices();
+const errorHandler = new ErrorHandler();
 const Name_Regex = "[a-zA-Z][a-zA-Z0-9-_]{3,23}$";
 const User_Regex = "[a-zA-Z][a-zA-Z0-9-_][a-zA-Z ,.'-]{3,23}$";
 const Email_Regex = "(?:[a-zA-Z0-9]+\.)+@(?:[a-zA-Z0-9]+.)+[A-Za-z]+$";
@@ -68,9 +70,7 @@ export default class SignUp extends React.Component{
       else{
        console.log(data);
       }
-    }).catch((error) =>{
-       console.log("Error: "+error);
-    });
+    }).catch(errorHandler.httpErrorHandler)
   }
 
   handleValues(event) {

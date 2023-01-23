@@ -2,8 +2,10 @@ import React, {createRef} from 'react';
 import './SignIn.scss'
 import AuthServices from '../../services/AuthServices';
 import { Navigate, Link } from "react-router-dom";
+import ErrorHandler from '../../modules/ErrorHandler';
 
 const authSevice = new AuthServices();
+const errorHandler = new ErrorHandler();
 const Email_Regex = "(?:[a-zA-Z0-9]+\.)+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$";
 const Password_Regex = "^(?=.*[_+-/?:;№!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Zа-яА-Я])(?=.*[0-9]).{6,}$";
 
@@ -47,15 +49,7 @@ export default class SignIn extends React.Component {
         console.log(JSON.stringify(data.data.tokenLifeTimeInMinutes)); 
         this.setState({Redirect: true});
       }
-    }).catch((error) => {
-      if(error.code === 'ERR_BAD_RESPONSE'){
-        console.log("Server error");
-        console.log(JSON.stringify(error));       
-      }   
-      if(!error){
-        console.log("No server response "+error);
-      }   
-    });    
+    }).catch(errorHandler.httpErrorHandler) 
   }
 
   handleValues(event) {
