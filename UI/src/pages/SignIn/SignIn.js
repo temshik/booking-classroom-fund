@@ -137,7 +137,7 @@ render(){
             <div className="text-center">
               Not registered yet?{" "}
               <span className="link-primary">
-              <Link to='/SignUp'><a href="#">Sign Up</a></Link>
+              <Link to='/SignUp' style={{ color: '#14A44D' }}>Sign Up</Link>
               </span>
             </div>
             <div className="form-group mt-3">
@@ -198,12 +198,12 @@ render(){
                     </div>
                 </div>
             <div className="d-grid gap-2 mt-3">
-              <button type="submit" className="btn btn-primary">
+              <button type="submit" className="btn btn-outline-success">
                 Submit
               </button>
             </div>
             <p className="text-center mt-2">
-              Forgot<Link to='/ResetPassword'> <a href="#">password?</a></Link>
+              Forgot <Link to='/ResetPassword' style={{ color: '#14A44D' }}>password?</Link>
             </p>
           </div>
         </form>

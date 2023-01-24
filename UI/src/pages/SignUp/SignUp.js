@@ -197,7 +197,7 @@ render(){
             <div className="text-center">
               Already registered?{" "}
               <span className="link-primary">
-              <Link to='/SignIn'><a href="#">Sign In</a></Link>
+              <Link to='/SignIn' style={{ color: '#14A44D' }}>Sign In</Link>
               </span>
             </div>
             <div className="form-group mt-3">
@@ -357,7 +357,7 @@ render(){
             />         
           </div>
             <div className="d-grid gap-2 mt-3">
-              <button type="submit" className="btn btn-primary" disabled={this.state.ErrorMessage}>
+              <button type="submit" className="btn btn-outline-success" disabled={this.state.ErrorMessage}>
                 Register
               </button>
             </div>
