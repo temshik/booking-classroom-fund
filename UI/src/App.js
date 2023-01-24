@@ -4,6 +4,8 @@ import HomePage from "./pages/HomePage/HomePage";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import Catalog from "./pages/Catalog/Catalog";
+import Workspace from "./pages/Workspace/Workspace";
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
           <Route path={'/signin'} element={<SignIn/>} />
           <Route path={'/signup'} element={<SignUp/>} />
           <Route path={'/resetpassword'} element={<ResetPassword/>} />
+          <Route path={'/catalog'} element={<Catalog/>}/>
+          <Route path={'/catalog/:id'} element={<Workspace/>}/>
       </Routes>
   );
 }

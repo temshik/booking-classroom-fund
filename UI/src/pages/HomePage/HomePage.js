@@ -1,12 +1,14 @@
 import React from 'react';
+import Navbar from '../../components/Navbar/Navbar';
+import Header from '../../components/Header/Header';
+import "./HomePage.scss"
 
 const HomePage = () => {
     return (
-        <nav class="navbar navbar-dark bg-primary">
-            <div className="row col-12 d-flex justify-content-center text-white">
-            <span className="h3">Register</span>
-            </div>
-        </nav>
+        <div>
+            <Navbar/>
+            <Header homeMode={true} />
+        </div>
     );
 };
 
