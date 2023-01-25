@@ -6,6 +6,7 @@ import SignUp from "./pages/SignUp/SignUp";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import Catalog from "./pages/Catalog/Catalog";
 import Workspace from "./pages/Workspace/Workspace";
+import Geolocation from "./modules/Geolocation/Geolocation";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path={'/resetpassword'} element={<ResetPassword/>} />
           <Route path={'/catalog'} element={<Catalog/>}/>
           <Route path={'/catalog/:id'} element={<Workspace/>}/>
+          <Route path={'/geolocation'} element={<Geolocation/>}/>
       </Routes>
   );
 }

@@ -8,28 +8,31 @@
 .headerContainer{
     width: 100%;
     max-width: 1024px;
-    margin: 20px 0px -40px 0px;
+    margin: 20px 0px -40px 10px;
 }
 
 .headerContainer.homeMode{
     width: 100%;
     max-width: 1024px;
-    margin: 20px 0px 50px 0px;
+    margin: 20px 10px 50px 10px;
 }
 
 .headerList{
-    display: flex;
+    display: flex; 
     gap: 40px;
 }
 
-.headerListItem{
+.headerListItem {    
+    color: white;
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 50px;
+    margin: 0px 0px 50px 0px;
+     
 }
 
-.headerListItem.active{
+.headerListItem:hover{
+    color: white;
     border: 1px solid white;
     padding: 10px;
     border-radius: 15px;

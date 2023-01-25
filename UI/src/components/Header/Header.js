@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Link } from "react-router-dom";
 import Select  from 'react-select'
 import colourStyles from '../Select/Select.tsx'
 import { colourOptions } from '../../docs/data.ts';
@@ -11,7 +12,8 @@ export default class Header extends React.Component{
         super(props);
         this.state = {
             value: '',
-            homeMode: this.props.homeMode
+            homeMode: this.props.homeMode,
+            isActive: false
         }
     }
     
@@ -26,26 +28,26 @@ render(){
         <div className='header'>
             <div className={this.state.homeMode ? "headerContainer homeMode" : "headerContainer"}>
                 <div className='headerList'>
-                    <div className='headerListItem active'>
-                    <FontAwesomeIcon icon={faBuildingColumns} />
-                    <span>Univesity</span>
-                    </div> 
-                    <div className='headerListItem'>
-                    <FontAwesomeIcon icon={faList} />
-                    <span>Catalog</span>
-                    </div>
-                    <div className='headerListItem'>
-                    <FontAwesomeIcon icon={faBookOpen} />
-                    <span>Booking</span>
-                    </div> 
-                    <div className='headerListItem'>
-                    <FontAwesomeIcon icon={faUser} />
-                    <span>Account</span>
-                    </div> 
-                    <div className='headerListItem'>
-                    <FontAwesomeIcon icon={faEllipsisH} />
-                    <span>About</span>
-                    </div> 
+                    <Link to='/' className='headerListItem'>
+                        <FontAwesomeIcon icon={faBuildingColumns} />
+                        <span>Home</span>
+                    </Link> 
+                    <Link to='/Catalog' className='headerListItem'>                                            
+                        <FontAwesomeIcon icon={faList}/> 
+                        <span>Catalog</span>                                         
+                    </Link> 
+                    <Link to='/Booking'  className='headerListItem'>
+                        <FontAwesomeIcon icon={faBookOpen} />
+                        <span>Booking</span>
+                    </Link> 
+                    <Link to='/Account'  className='headerListItem'>
+                        <FontAwesomeIcon icon={faUser} />
+                        <span>Account</span>
+                    </Link> 
+                    <Link to='/About'  className='headerListItem'>
+                        <FontAwesomeIcon icon={faEllipsisH} />
+                        <span>About</span>
+                    </Link> 
                 </div>
                 {this.state.homeMode && 
                     <div>
