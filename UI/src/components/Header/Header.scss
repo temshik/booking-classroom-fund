@@ -2,13 +2,13 @@
     background-color: #008a5e;
     color: white;
     display: flex;
-    justify-content: center;
+    justify-content: center;    
 }
 
 .headerContainer{
     width: 100%;
     max-width: 1024px;
-    margin: 20px 0px -40px 10px;
+    margin: 20px 10px -40px 10px;    
 }
 
 .headerContainer.homeMode{
@@ -19,23 +19,29 @@
 
 .headerList{
     display: flex; 
-    gap: 40px;
+    gap: 35px;
 }
 
 .headerListItem {    
     color: white;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
     margin: 0px 0px 50px 0px;
-     
 }
 
 .headerListItem:hover{
-    color: white;
+    color: white;  
     border: 1px solid white;
-    padding: 10px;
+    padding: 10px;       
     border-radius: 15px;
+}
+
+.headerListItem.active {    
+    color: white;  
+    border: 1px solid white;
+    padding: 10px;       
+    border-radius: 15px;       
 }
 
 .headerDesc{

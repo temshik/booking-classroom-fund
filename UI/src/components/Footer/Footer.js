@@ -21,7 +21,7 @@ const Footer = () => {
                 <div className='col'>                      
                     <ui className='fList'>   
                         <p className='fListHeading'>Services</p>              
-                        <li className='fListItem'>University</li>
+                        <li className='fListItem'>Home</li>
                         <li className='fListItem'>Catalog</li>
                         <li className='fListItem'>Booking</li>
                         <li className='fListItem'>Account</li>

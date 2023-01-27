@@ -18,7 +18,6 @@ export interface ColourOption {
     { value: 'FCE', label: 'Faculty of Civil Engineering'},
     { value: 'FI', label: 'Faculty of Instrumentation'},
     { value: 'FTC', label: 'Faculty of Transport Communications'},
-
     { value: 'MTF', label: 'Military Technical Faculty'},
     { value: 'STF', label: 'Sports and technical faculty'},
     { value: 'Branch Soligorsk', label: 'Branch Soligorsk'},
