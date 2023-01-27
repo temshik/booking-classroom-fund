@@ -1,0 +1,17 @@
+.lsContainer{
+    width: 100%;
+    justify-content: space-between;
+}
+
+.lsButton{
+    font-size: 18px;   
+    border-radius: 5px;
+    padding: 5px;
+    background-color: rgba(27, 178, 97, 0.28);
+    border: none;
+}
+
+.lsButton:hover{
+    border: 1px solid #008a5e;
+    background-color: white;
+}
