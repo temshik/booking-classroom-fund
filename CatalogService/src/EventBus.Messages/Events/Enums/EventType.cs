@@ -19,9 +19,9 @@ namespace EventBus.Messages.Events.Enums
         Block,
 
         /// <summary>
-        /// Unlock the audience after blocking
+        /// UnBlock the audience after blocking
         /// </summary>
-        Unlock,
+        UnBlock,
 
         /// <summary>
         /// Delete the audience

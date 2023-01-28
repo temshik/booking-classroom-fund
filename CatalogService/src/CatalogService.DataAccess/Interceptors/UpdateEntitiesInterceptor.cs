@@ -42,7 +42,7 @@ namespace CatalogService.DataAccess.Interceptors
                         _messageProducer.PublishUpdatedEvent(new WorkspaceUpdatedEvent()
                         {
                             WorkspaceId = entityEntry.Property(a => a.Id).CurrentValue,
-                            Event = EventType.Unlock.ToString(),
+                            Event = EventType.UnBlock.ToString(),
                         });
                     }
                     else
