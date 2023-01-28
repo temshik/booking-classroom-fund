@@ -8,10 +8,14 @@ builder.ConfigureDependencies();
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseCors("CorsPolicy");
+
 await app.UseOcelot();
 
 app.UseAuthorization();
-
-app.UseHttpsRedirection();
 
 app.Run();
