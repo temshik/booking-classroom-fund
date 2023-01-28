@@ -11,13 +11,11 @@ namespace BookingService.BusinessLogic.Services.EventProcessing
     public class EventProcessor : IEventProcessor
     {
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly IMapper _mapper;
         private readonly ILogger<EventProcessor> _logger;
 
-        public EventProcessor(IServiceScopeFactory scopeFactory, IMapper mapper, ILogger<EventProcessor> logger)
+        public EventProcessor(IServiceScopeFactory scopeFactory, ILogger<EventProcessor> logger)
         {
             _scopeFactory = scopeFactory;
-            _mapper = mapper;
             _logger = logger;
         }
 
@@ -31,9 +29,9 @@ namespace BookingService.BusinessLogic.Services.EventProcessing
                     var block = new Block();
                     block.ExecuteEvent(_scopeFactory, message, _logger);
                     break;
-                case EventType.Unlock:
-                    var unlock = new Unlock();
-                    unlock.ExecuteEvent(_scopeFactory, message, _logger);
+                case EventType.UnBlock:
+                    var unblock = new UnBlock();
+                    unblock.ExecuteEvent(_scopeFactory, message, _logger);
                     break;
                 case EventType.Delete:
                     var delete = new Delete();
@@ -54,9 +52,9 @@ namespace BookingService.BusinessLogic.Services.EventProcessing
                 case nameof(EventType.Block):
                     _logger.LogInformation("Workspace Blocked Event Detected");
                     return EventType.Block;
-                case nameof(EventType.Unlock):
+                case nameof(EventType.UnBlock):
                     _logger.LogInformation("Workspace Unlocked Event Detected");
-                    return EventType.Unlock;
+                    return EventType.UnBlock;
                 case nameof(EventType.Delete):
                     _logger.LogInformation("Workspace Deleted Event Detected");
                     return EventType.Delete;
