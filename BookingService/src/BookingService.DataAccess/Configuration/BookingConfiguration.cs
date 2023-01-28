@@ -24,6 +24,8 @@ namespace BookingService.DataAccess.Configuration
                 .IsRequired(true);
             builder.Property(i => i.WorkspaceId)
                 .IsRequired(true);
+            builder.Property(i => i.IsWorkspaceAvailable)
+                .IsRequired(true);
             builder.Property(i => i.DayOfWeek)
                 .IsRequired(true);
             builder.Property(i => i.StartBookingTime)

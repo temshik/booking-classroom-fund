@@ -36,6 +36,9 @@ namespace BookingService.DataAccess.Migrations
                     b.Property<int>("GroupNumber")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsWorkspaceAvailable")
+                        .HasColumnType("bit");
+
                     b.Property<DateTimeOffset>("StartBookingTime")
                         .HasColumnType("datetimeoffset");
 

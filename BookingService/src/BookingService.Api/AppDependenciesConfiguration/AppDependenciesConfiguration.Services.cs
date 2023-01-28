@@ -1,5 +1,7 @@
 ﻿using BookingService.Api.Profiles;
 using BookingService.BusinessLogic.Services;
+using BookingService.BusinessLogic.Services.AsyncDataServices;
+using BookingService.BusinessLogic.Services.EventProcessing;
 using BookingService.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +26,7 @@ namespace BookingService.Api.AppDependenciesConfiguration
             var password = configuration["DatabasePassword"] ?? "";
             var database = configuration["DatabaseName"] ?? "";
 
-            var connectionString = $"Server={server},{port}; Initial Catalog={database}; User ID={user}; Password={password}";
+            var connectionString = $"Server={server},{port}; Initial Catalog={database}; User ID={user}; Password={password}; TrustServerCertificate = True;";
 
             services.AddBookingServices(options =>
                 options.UseSqlServer(connectionString));
@@ -40,7 +42,9 @@ namespace BookingService.Api.AppDependenciesConfiguration
         public static IServiceCollection ConfigureServices(this IServiceCollection services)
         {
             services
-                .AddScoped<IBookService, BookService>();
+                .AddScoped<IBookService, BookService>()
+                .AddHostedService<MessageSubscriber>()
+                .AddSingleton<IEventProcessor, EventProcessor>();
 
             return services;
         }
