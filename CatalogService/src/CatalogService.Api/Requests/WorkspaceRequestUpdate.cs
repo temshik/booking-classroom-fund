@@ -1,5 +1,4 @@
-﻿using CatalogService.BusinessLogic.DTOs;
-using CatalogService.DataAccess.Models;
+﻿using CatalogService.DataAccess.Models;
 
 namespace CatalogService.Api.Requests
 {
@@ -8,7 +7,7 @@ namespace CatalogService.Api.Requests
     /// </summary>
     public class WorkspaceRequestUpdate
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
         /// <summary>
         /// The number of the campus on the territory of the university.
         /// </summary>

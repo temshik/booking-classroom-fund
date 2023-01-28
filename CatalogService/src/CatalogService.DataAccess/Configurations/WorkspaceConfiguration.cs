@@ -29,7 +29,7 @@ namespace CatalogService.DataAccess.Configurations
             builder.Property(i => i.NumberOfSeats)
                 .IsRequired(true);
             builder.Property(i => i.IsAvailable)
-                .IsRequired(true);            
+                .IsRequired(true);
 
             builder.HasOne(i => i.Category)
                 .WithMany(x => x.Workspaces);

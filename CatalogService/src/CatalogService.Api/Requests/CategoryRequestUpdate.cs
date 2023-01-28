@@ -1,6 +1,4 @@
-﻿using CatalogService.BusinessLogic.DTOs;
-
-namespace CatalogService.Api.Requests
+﻿namespace CatalogService.Api.Requests
 {
     /// <summary>
     /// The category for update request 

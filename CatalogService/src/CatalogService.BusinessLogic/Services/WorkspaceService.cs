@@ -100,7 +100,7 @@ namespace CatalogService.BusinessLogic.Services
             {
                 await _bookingDataClient.SendWorkspaceToBooking(workspaceDatabase);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("Could not send synchronously");
             }
@@ -124,7 +124,7 @@ namespace CatalogService.BusinessLogic.Services
                 throw new NotFoundException("The workspace was not found");
             }
 
-            var listDTO = _mapper.Map<List<WorkspaceDTO>>(list);       
+            var listDTO = _mapper.Map<List<WorkspaceDTO>>(list);
 
             return listDTO;
         }

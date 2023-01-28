@@ -31,7 +31,7 @@ namespace CatalogService.DataAccess.Repositories
         /// <param name="category">The category that we want to add</param>
         public void Add(Category category)
         {
-             _categories.Add(category);
+            _categories.Add(category);
 
             _logger.LogInformation("Added the category to The database");
         }
