@@ -12,8 +12,12 @@
 }
 
 .listSearch{
-    flex: 1.2;    
+    flex: 1;    
     position: sticky;
     top: 10px;
     height: max-content;   
+}
+
+.listResult{
+    flex: 2;
 }

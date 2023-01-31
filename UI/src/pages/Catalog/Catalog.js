@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import {useLocation} from 'react-router-dom';
-import React, { useState } from 'react';
-import {useLocation} from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import Navbar from '../../components/Navbar/Navbar';
-import Footer from '../../components/Footer/Footer';
-import FilterPanel from '../../components/FilterPanel/FilterPanel';
-import SearchItem from '../../components/SearchItem/SearchItem';
-import notFound from '../../images/no-result-found-1.webp';
 import Footer from '../../components/Footer/Footer';
 import FilterPanel from '../../components/FilterPanel/FilterPanel';
 import SearchItem from '../../components/SearchItem/SearchItem';
