@@ -1,17 +1,18 @@
-.lsContainer{
+.categoryContainer{
     width: 100%;
+    display: flex;
     justify-content: space-between;
 }
 
-.lsButton{
+.categoryBut{
     font-size: 18px;   
     border-radius: 5px;
     padding: 5px;
-    background-color: rgba(27, 178, 97, 0.28);
+    background-color: white;
     border: none;
 }
 
-.lsButton:hover{
+.categoryBut:hover{
     border: 1px solid #008a5e;
     background-color: white;
 }
