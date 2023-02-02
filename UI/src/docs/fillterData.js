@@ -23,7 +23,7 @@ export const courseList = [
         id: 5,
         value: 5,
         label: 5
-    },
+    },    
 ];
 
 export const categoryList = [

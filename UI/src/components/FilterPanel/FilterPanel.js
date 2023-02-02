@@ -24,8 +24,8 @@ const FilterPanel = ({value,changeInput, selectedCategory, selectedCourse, selec
                 </label>
             </div>
             <div className='lsItem'>  
-                <label>Course number
-                <FilterListToggle options={courseList} value={selectedCourse} selectToggle={selectCourse}/>
+                <label>Course Number:
+                    <FilterListToggle options={courseList} value={selectedCourse} selectToggle={selectCourse}/>
                 </label>
             </div>
             <div className='lsItem'>  
