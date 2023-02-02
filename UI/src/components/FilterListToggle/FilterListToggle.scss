@@ -1,18 +1,7 @@
-.categoryContainer{
+.categoryContainer{    
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    text-align: center;   
+    display: table-cell;  
 }
 
-.categoryBut{
-    font-size: 18px;   
-    border-radius: 5px;
-    padding: 5px;
-    background-color: white;
-    border: none;
-}
-
-.categoryBut:hover{
-    border: 1px solid #008a5e;
-    background-color: white;
-}

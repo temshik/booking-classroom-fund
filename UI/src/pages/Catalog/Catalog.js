@@ -15,13 +15,9 @@ const Catalog = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedCourse, setSelectedCourse] = useState(null);
 
-    const handleSelectCategory=()=>{
+    const handleSelectCategory=(event, value)=>!value? null:setSelectedCategory(value);
 
-    }
-
-    const handleSelectCourse=()=>{
-
-    }
+    const handleSelectCourse=(event, value)=>!value? null:setSelectedCourse(value);
 
     return (
         <div>                   
