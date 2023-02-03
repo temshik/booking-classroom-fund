@@ -1,58 +1,56 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './FilterListToggle.scss'
 
-const FilterListToggle = ({options, value, selectToggle}) => {  
-    const [select, setSelect] = useState(true);
-    const [values, setValues] = useState([]);
-    const item ={  
-        fontsize: 18,   
-        borderRadius: 5,
-        padding: 10,
-        backgroundColor: 'white',
-        marginRight: 5,
-        marginBottom: 5,
-        border: 'none',    
-    };
-    const selected={
-        fontsize: 18,   
-        borderRadius: 5,
-        padding: 10,
-        backgroundColor: 'white',
-        marginRight: 5,
-        marginBottom: 5,
-        border: '2px solid black',
-    };
-
-    function handleButton(button)
-    {
-        select ? setSelect(false) : setSelect(true);
-        let tmp = values;
-        if (values.includes(button)) {
-            setValues(
-                values.filter(el => el !== button)
-            )
-        } else {
-            tmp.push(button);
-            setValues(tmp);
+export default class FilterListToggle extends React.Component
+{  
+    constructor(props){
+        super(props);
+        this.state = {
+            options: this.props.options,    
+            value: this.props.value,
+            selectToggle: this.props.selectToggle,        
+            selectedValues: []
         }
     }
 
+    handleButton(buttonId){
+        console.log("ButtonId: ",buttonId);
+          let newSelectedValues = this.state.selectedValues;
+          if (this.state.selectedValues.includes(buttonId)) {
+            console.log("newSelectedValues if 1:",newSelectedValues);
+            newSelectedValues = this.state.selectedValues.filter(el => el !== buttonId)
+              this.setState({
+                  selectedValues: newSelectedValues
+              })
+             console.log("newSelectedValues if 2: ",newSelectedValues);
+          }
+          else{
+          console.log("newSelectedValues: ",newSelectedValues);
+          newSelectedValues.push(buttonId);
+          console.log("newSelectedValues push: ",newSelectedValues);
+          this.setState({
+              selectedValues: newSelectedValues
+          })
+          }
+      }
+
+render () {
     return ( 
         <div
             className='categoryContainer'       
-            value={value}
-            onChange={selectToggle}>  
-            {options.map(bt =>
+            // value={this.state.value}
+            // onChange={this.state.selectToggle}
+            >  
+            {this.state.options.map( bt =>
                 <button                     
                     key={bt.id}
-                    onClick={handleButton(bt.id)}
-                    style={select? item : selected}
+                    onClick={() => this.handleButton(bt.id)}                    
+                    className = { this.state.selectedValues.includes(bt.id) ? 'btSelected' : 'btItem'}                    
                     value={bt.value}>
                     {bt.label}
                 </button>)
             }       
         </div>   
-    );
+        );
+    }
 };
-
-export default FilterListToggle;

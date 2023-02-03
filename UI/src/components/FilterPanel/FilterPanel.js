@@ -2,8 +2,9 @@ import React from 'react';
 import FilterListToggle from '../FilterListToggle/FilterListToggle';
 import "./FilterPanel.scss"
 import {categoryList, courseList} from '../../docs/fillterData'
+import FilterListBuilding from '../FilterListBuilding/FilterListBuilding';
 
-const FilterPanel = ({value,changeInput, selectedCategory, selectedCourse, selectCategory, selectCourse}) => {
+const FilterPanel = ({value,changeInput, selectedCategory, selectedCourse, selectCategory, selectCourse, faculty}) => {
     return (         
         <div className='FilterPanel'>   
             <h1 className='lsTitle'>Options:</h1>                     
@@ -29,28 +30,19 @@ const FilterPanel = ({value,changeInput, selectedCategory, selectedCourse, selec
                 </label>
             </div>
             <div className='lsItem'>  
-                <label>Building</label>
-            </div> 
-            <div className="checkbox-wrapper">
-            <label>
-                <input type="checkbox" />
-                <span>{1}</span>
-            </label>
-            </div>  
+                <label>Buildings used by {faculty}:</label>
+                <FilterListBuilding faculty={faculty}/>
+            </div>             
             <h1 className='lsTitle' style={{marginTop: '15px'}}>Filter by:</h1> 
             <div className='lsItem'>  
-                <label>Workstation (for IT suites)</label>
+                <label>Equipment (for IT suites)
+                <input type="checkbox" />
+                </label>
             </div>
             <div className='lsItem'>  
                 <label>Locked
                 <input type="checkbox" />
                 </label>
-            </div> 
-            <div className='lsItem'>  
-                <label>Layout</label>
-            </div>
-            <div className='lsItem'>  
-                <label>Equipment</label>
             </div>                                                                    
         </div>
     );

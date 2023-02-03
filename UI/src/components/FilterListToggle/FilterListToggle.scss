@@ -5,3 +5,25 @@
     display: table-cell;  
 }
 
+.btItem{      
+    padding: 5px;
+    border-radius: 5px;
+    background-color: white;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: none; 
+}
+
+.btSelected{
+    font-size: 18px;   
+    border-radius: 5px;
+    padding: 8px;
+    background-color: white;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: 2px solid black;
+}
+
+.btItem:focus{
+    outline: none;
+}

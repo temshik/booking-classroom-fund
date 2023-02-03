@@ -31,6 +31,7 @@ const Catalog = () => {
                         selectedCourse = {selectedCourse}
                         selectCategory={handleSelectCategory}
                         selectCourse={handleSelectCourse} 
+                        faculty={faculty}
                     />
                     </div>
                     <div className='listResult'>
