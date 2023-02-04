@@ -1,11 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import FilterListToggle from '../FilterListToggle/FilterListToggle';
-import "./FilterPanel.scss"
-import {categoryList, courseList} from '../../docs/fillterData'
 import FilterListBuilding from '../FilterListBuilding/FilterListBuilding';
-import { buildingOptions, colourOptions } from '../../docs/data.ts';
+import CheckboxBuildings from '../FilterListBuilding/CheckboxBuildings';
+import {categoryList, courseList} from '../../docs/fillterData'
+import "./FilterPanel.scss"
 
-const FilterPanel = ({value,changeInput, selectedCategory, selectedCourse, selectCategory, selectCourse, faculty}) => {   
+const FilterPanel = ({
+    value, 
+    changeInput, 
+    selectedCategory, 
+    selectedCourse, 
+    selectedBuildings,
+    setSelectedBuildings,
+    selectCategory, 
+    selectCourse,
+    changeChecked,
+    faculty}) => {       
     return (         
         <div className='FilterPanel'>   
             <h1 className='lsTitle'>Options:</h1>                     
@@ -32,7 +42,12 @@ const FilterPanel = ({value,changeInput, selectedCategory, selectedCourse, selec
             </div>
             <div className='lsItem'>  
                 <label>Buildings used by {faculty}:</label>
-                <FilterListBuilding faculty={faculty}/>
+                {/* <FilterListBuilding faculty={faculty}/>    */}     
+                {selectedBuildings.map((buildingOption) => 
+                <CheckboxBuildings 
+                    buildingOption = {buildingOption}
+                    changeChecked={changeChecked}
+                />)}                                             
             </div>             
             <h1 className='lsTitle' style={{marginTop: '15px'}}>Filter by:</h1> 
             <div className='lsItem'>  
