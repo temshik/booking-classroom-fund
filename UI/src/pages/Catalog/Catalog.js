@@ -13,11 +13,11 @@ const Catalog = () => {
     console.log(location);
     const [faculty, setFaculty]= useState(location.state !== null ? location.state.value : '');
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const [selectedCourse, setSelectedCourse] = useState(null);
+    const [selectedCourse, setSelectedCourse] = useState(null);    
 
     const handleSelectCategory=(event, value)=>!value? null:setSelectedCategory(value);
 
-    const handleSelectCourse=(event, value)=>!value? null:setSelectedCourse(value);
+    const handleSelectCourse=(event, value)=>!value? null:setSelectedCourse(value);    
 
     return (
         <div>                   
@@ -30,7 +30,7 @@ const Catalog = () => {
                         selectedCategory={selectedCategory}
                         selectedCourse = {selectedCourse}
                         selectCategory={handleSelectCategory}
-                        selectCourse={handleSelectCourse} 
+                        selectCourse={handleSelectCourse}                         
                         faculty={faculty}
                     />
                     </div>

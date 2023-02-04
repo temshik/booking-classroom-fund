@@ -11,38 +11,43 @@ export default class FilterListBuilding extends React.Component
             defaultBuildings: [],
             openOptions: false,            
         }
-        this.handleFacultyChange = this.handleFacultyChange.bind(this);
+        this.handleCheckboxChange=this.handleCheckboxChange.bind(this);
     }  
+
+    componentDidMount(){
+        this.handleFacultyChange();
+    }
 
     handleFacultyChange(){       
         console.log("handleFacultyChange");
-        if(this.state.faculty !== null)
+        if(this.state.faculty !== '')
         {
-        let newDefaultBuilding = this.state.selectedValues;                   
-        colourOptions.map(({value, label, usedBuildings}) =>{
-            console.log('value: ',value, 'usedBuildings: ',usedBuildings);
-            if(value === this.state.faculty)
-            {
-                console.log('value: ',value);
-                for (var i = 0; i < usedBuildings.length; i++) {
-                    newDefaultBuilding.push(usedBuildings[i]);    
-                    //this.handleCheckboxChange(usedBuildings[i]);
-                }                
-            }
-        })
-        console.log('newDefaultBuilding: ',newDefaultBuilding);
+            let newDefaultBuilding = this.state.selectedValues;                   
+            colourOptions.map(({value, label, usedBuildings}) =>{
+                //console.log('value: ',value, 'usedBuildings: ',usedBuildings);
+                if(value === this.state.faculty)
+                {
+                    console.log('value: ',value);
+                    for (var i = 0; i < usedBuildings.length; i++) {
+                        newDefaultBuilding.push(usedBuildings[i]);    
+                        //this.handleCheckboxChange(usedBuildings[i]);
+                    }                
+                }
+            })
+            console.log('newDefaultBuilding: ',newDefaultBuilding);
+            this.setState({
+                selectedValues: newDefaultBuilding
+            })            
+            console.log('selectedValues: ',this.state.selectedValues);    
+            console.log('facultu: ',this.state.faculty);  
+        }    
         this.setState({
-            selectedValues: newDefaultBuilding
+            faculty: ''
         })
-        this.setState({
-            faculty: null
-        })
-        console.log('selectedValues: ',this.state.selectedValues);    
-        console.log('facultu: ',this.state.faculty);  
-    }    
     }
 
     handleCheckboxChange=(value)=>{
+        console.log('test')
         let newSelectedValues = this.state.selectedValues;        
         if (this.state.selectedValues.includes(value)) {
             console.log("newSelectedValues if 1:",newSelectedValues);
@@ -74,8 +79,7 @@ render(){
                                 key={index}
                                 type="checkbox"                                
                                 checked={this.state.selectedValues.includes(menu.value) ? true : false}
-                                onClick={()=> this.handleCheckboxChange(menu.value)}
-                                onChange={this.handleFacultyChange}                                 
+                                onClick={()=> this.handleCheckboxChange(menu.value)}                              
                                 />                                                                                                                                                                                                                             
                         </li>
                     );
