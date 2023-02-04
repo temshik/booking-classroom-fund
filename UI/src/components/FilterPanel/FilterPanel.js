@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import FilterListToggle from '../FilterListToggle/FilterListToggle';
-import "./FilterPanel.scss"
-import {categoryList, courseList} from '../../docs/fillterData'
 import FilterListBuilding from '../FilterListBuilding/FilterListBuilding';
-import { buildingOptions, colourOptions } from '../../docs/data.ts';
+import {categoryList, courseList} from '../../docs/fillterData'
+import "./FilterPanel.scss"
 
-const FilterPanel = ({value,changeInput, selectedCategory, selectedCourse, selectCategory, selectCourse, faculty}) => {   
+const FilterPanel = ({value, changeInput, selectedCategory, selectedCourse, selectCategory, selectCourse, faculty}) => {   
     return (         
         <div className='FilterPanel'>   
             <h1 className='lsTitle'>Options:</h1>                     

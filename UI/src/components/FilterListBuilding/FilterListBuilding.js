@@ -7,9 +7,7 @@ export default class FilterListBuilding extends React.Component
         super(props);
         this.state = {
             faculty: this.props.faculty,                     
-            selectedValues: [],            
-            defaultBuildings: [],
-            openOptions: false,            
+            selectedValues: [],                      
         }
         this.handleCheckboxChange=this.handleCheckboxChange.bind(this);
     }  
@@ -19,48 +17,34 @@ export default class FilterListBuilding extends React.Component
     }
 
     handleFacultyChange(){       
-        console.log("handleFacultyChange");
         if(this.state.faculty !== '')
         {
             let newDefaultBuilding = this.state.selectedValues;                   
             colourOptions.map(({value, label, usedBuildings}) =>{
-                //console.log('value: ',value, 'usedBuildings: ',usedBuildings);
                 if(value === this.state.faculty)
                 {
                     console.log('value: ',value);
                     for (var i = 0; i < usedBuildings.length; i++) {
                         newDefaultBuilding.push(usedBuildings[i]);    
-                        //this.handleCheckboxChange(usedBuildings[i]);
                     }                
                 }
             })
-            console.log('newDefaultBuilding: ',newDefaultBuilding);
             this.setState({
                 selectedValues: newDefaultBuilding
-            })            
-            console.log('selectedValues: ',this.state.selectedValues);    
-            console.log('facultu: ',this.state.faculty);  
-        }    
-        this.setState({
-            faculty: ''
-        })
+            })                        
+        }            
     }
 
     handleCheckboxChange=(value)=>{
-        console.log('test')
         let newSelectedValues = this.state.selectedValues;        
-        if (this.state.selectedValues.includes(value)) {
-            console.log("newSelectedValues if 1:",newSelectedValues);
+        if (this.state.selectedValues.includes(value)) {            
             newSelectedValues = this.state.selectedValues.filter(el => el !== value)
             this.setState({
                 selectedValues: newSelectedValues
-            })
-            console.log("newSelectedValues if 2: ",newSelectedValues);
+            })            
         }        
-        else{
-            console.log("newSelectedValues: ",newSelectedValues);
-            newSelectedValues.push(value);
-            console.log("newSelectedValues push: ",newSelectedValues);
+        else{            
+            newSelectedValues.push(value);            
             this.setState({
                 selectedValues: newSelectedValues
             })

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {useLocation} from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import Navbar from '../../components/Navbar/Navbar';
@@ -9,11 +9,10 @@ import notFound from '../../images/no-result-found-1.webp';
 import "./Catalog.scss"
 
 const Catalog = () => {
-    const location = useLocation();
-    console.log(location);
+    const location = useLocation();    
     const [faculty, setFaculty]= useState(location.state !== null ? location.state.value : '');
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const [selectedCourse, setSelectedCourse] = useState(null);    
+    const [selectedCourse, setSelectedCourse] = useState(null);        
 
     const handleSelectCategory=(event, value)=>!value? null:setSelectedCategory(value);
 

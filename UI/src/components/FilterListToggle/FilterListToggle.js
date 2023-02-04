@@ -14,20 +14,15 @@ export default class FilterListToggle extends React.Component
     }
 
     handleButton(buttonId){
-        console.log("ButtonId: ",buttonId);
           let newSelectedValues = this.state.selectedValues;
           if (this.state.selectedValues.includes(buttonId)) {
-            console.log("newSelectedValues if 1:",newSelectedValues);
             newSelectedValues = this.state.selectedValues.filter(el => el !== buttonId)
               this.setState({
                   selectedValues: newSelectedValues
               })
-             console.log("newSelectedValues if 2: ",newSelectedValues);
           }
           else{
-          console.log("newSelectedValues: ",newSelectedValues);
           newSelectedValues.push(buttonId);
-          console.log("newSelectedValues push: ",newSelectedValues);
           this.setState({
               selectedValues: newSelectedValues
           })
