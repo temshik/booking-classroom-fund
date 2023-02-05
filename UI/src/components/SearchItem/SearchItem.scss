@@ -1,0 +1,51 @@
+.searchItem{
+    border: 1px solid lightgray;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.siImg{
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.siDesc{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 2;
+}
+
+.siTitle{
+    font-size: 25px;
+    color: #008a5e;
+}
+
+.siTitle:hover{
+    color: #008a5e;
+}
+
+.siMore{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px
+}
+
+.siDetails{
+    font-size: 18px;   
+    border-radius: 5px;
+    padding: 5px;
+    background-color: rgba(27, 178, 97, 0.28);
+    border: none;
+}
+
+.siDetails:hover{
+    border: 1px solid #008a5e;
+    background-color: white;
+}

@@ -1,0 +1,24 @@
+.footer{
+    width: 100%;             
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: 1; 
+    margin-top: 15px;
+}
+
+.fList{    
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-left: 50px;
+    margin-bottom: 50px;    
+}
+
+.fListItem{
+    margin-bottom: 10px;        
+    cursor: pointer;
+}

@@ -1,0 +1,11 @@
+.App {
+    height: 100%;
+    width: 100%;
+    background-color: white;
+}
+
+label {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgb(34, 34, 34);
+  }
