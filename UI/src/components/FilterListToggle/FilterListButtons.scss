@@ -1,12 +1,6 @@
-.categoryContainer{    
-    width: 100%;
-    display: flex;
-    text-align: center;   
-    display: table-cell;  
-}
-
 .btItem{      
     padding: 5px;
+    font-size: 18px;  
     border-radius: 5px;
     background-color: white;
     margin-right: 5px;
@@ -17,7 +11,7 @@
 .btSelected{
     font-size: 18px;   
     border-radius: 5px;
-    padding: 8px;
+    padding: 5px;
     background-color: white;
     margin-right: 5px;
     margin-bottom: 5px;

@@ -1,5 +1,4 @@
 import React from 'react'
-import './FilterListToggle.scss'
 
 export default class FilterListToggle extends React.Component
 {  

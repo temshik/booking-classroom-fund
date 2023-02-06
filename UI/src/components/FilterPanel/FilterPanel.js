@@ -1,5 +1,6 @@
 import React from 'react';
 import FilterListToggle from '../FilterListToggle/FilterListToggle';
+import FilterListButtons from '../FilterListToggle/FilterListButtons';
 import FilterListBuilding from '../FilterListBuilding/FilterListBuilding';
 import CheckboxBuildings from '../FilterListBuilding/CheckboxBuildings';
 import {categoryList, courseList} from '../../docs/fillterData'
@@ -10,14 +11,15 @@ const FilterPanel = ({
     changeInput, 
     selectedCategory, 
     selectedCourse, 
-    selectedBuildings,
-    setSelectedBuildings,
+    selectedBuildings,    
     selectCategory, 
     selectCourse,
     changeChecked,
     faculty}) => {       
     return (         
         <div className='FilterPanel'>   
+            {console.log("Filter course", selectedCourse)}
+            {console.log("Filter category", selectedCategory)}
             <h1 className='lsTitle'>Options:</h1>                     
             <input 
                 type="text" 
@@ -28,7 +30,10 @@ const FilterPanel = ({
             />
             <div className='lsItem'>                            
                 <label>Room Category</label>
-                <FilterListToggle options={categoryList} value={selectedCategory} selectToggle={selectCategory}/>
+                {/* <FilterListToggle options={categoryList} value={selectedCategory} selectToggle={selectCategory}/> */}
+                <div className='categoryContainer'>     
+                    {selectedCategory.map((category)=> <FilterListButtons item={category} selectedValues={selectedCategory} selectToggle={selectCategory} select={category.selected}/>)}
+                </div>
             </div>                        
             <div className='lsItem'>  
             <label>Room Capacity                    
@@ -37,7 +42,10 @@ const FilterPanel = ({
             </div>
             <div className='lsItem'>  
                 <label>Course Number:
-                    <FilterListToggle options={courseList} value={selectedCourse} selectToggle={selectCourse}/>
+                <div className='categoryContainer'>
+                    {selectedCourse.map((course)=> <FilterListButtons item={course} selectedValues={selectedCourse} selectToggle={selectCourse} select={course.selected}/>)}
+                    {/* <FilterListButtons options={courseList} selectedValues={selectedCourse} selectToggle={selectCourse}/> */}
+                </div>
                 </label>
             </div>
             <div className='lsItem'>  
