@@ -9,6 +9,8 @@ import Workspace from "./pages/Workspace/Workspace";
 import Geolocation from "./modules/Geolocation/Geolocation";
 import NotFound from "./pages/NotFound/NotFound";
 import About from "./pages/About/About";
+import {mapMarkers} from "./docs/data.ts";
+import Geo from "./modules/Geolocation/Geo";
 
 function App() {
   return (
@@ -20,6 +22,11 @@ function App() {
           <Route path={'/catalog'} element={<Catalog/>}/>
           <Route path={'/catalog/:id'} element={<Workspace/>}/>
           <Route path={'/geolocation'} element={<Geolocation/>}/>
+          <Route path='geo/*'>
+              {mapMarkers.map(marker => {
+                  return <Route key={marker.id} path={marker.text} element={<Geo mark={marker} />} />
+              })}
+          </Route>
           <Route path={'/about'} element={<About/>}/>
           <Route path="*" element={<NotFound/>} />
       </Routes>
