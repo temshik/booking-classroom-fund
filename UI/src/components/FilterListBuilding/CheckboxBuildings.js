@@ -7,7 +7,7 @@ const CheckboxBuildings=({buildingOption, changeChecked})=>
         <div className='buildingOptions'>
             <div className='optionsItem'>           
                 <li className="menu-items" key={id}>
-                    <a href={`/Geolocation/:${value}`}>{value} </a>                                                                                                       
+                    <a href={`geo/${value}`}>{value} </a>
                     <input 
                         key={id}
                         type="checkbox"                                                                

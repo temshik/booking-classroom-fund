@@ -3,13 +3,14 @@ import FilterListToggle from '../FilterListToggle/FilterListToggle';
 import FilterListButtons from '../FilterListToggle/FilterListButtons';
 import FilterListBuilding from '../FilterListBuilding/FilterListBuilding';
 import CheckboxBuildings from '../FilterListBuilding/CheckboxBuildings';
-import {categoryList, courseList} from '../../docs/fillterData'
 import "./FilterPanel.scss"
 
 const FilterPanel = ({
     value, 
     changeInput, 
     selectedCategory, 
+    selectedRoomCapacity,
+    selectRoomCapacity,
     selectedCourse, 
     selectedBuildings,    
     selectCategory, 
@@ -20,7 +21,7 @@ const FilterPanel = ({
         <div className='FilterPanel'>   
             {console.log("Filter course", selectedCourse)}
             {console.log("Filter category", selectedCategory)}
-            <h1 className='lsTitle'>Options:</h1>                     
+            <h1 className='lsTitle'>Filter by:</h1>                                 
             <input 
                 type="text" 
                 placeholder=" Search..." 
@@ -34,10 +35,15 @@ const FilterPanel = ({
                 <div className='categoryContainer'>     
                     {selectedCategory.map((category)=> <FilterListButtons item={category} selectedValues={selectedCategory} selectToggle={selectCategory} select={category.selected}/>)}
                 </div>
+            </div>
+            <div className='lsItem'>  
+                <label>Special Category Equipment (for IT suites)
+                <input type="checkbox" />
+                </label>
             </div>                        
             <div className='lsItem'>  
-            <label>Room Capacity                    
-                <input type="number" min={8} style={{textAlign: 'right'}} className="lsItemInput" placeholder='8'/>
+                <label>Room Capacity                    
+                    <input type="number" min={8} max={9999} style={{textAlign: 'right'}} className="lsItemInput" value={selectedRoomCapacity} onChange={selectRoomCapacity}/>
                 </label>
             </div>
             <div className='lsItem'>  
@@ -56,13 +62,7 @@ const FilterPanel = ({
                     buildingOption = {buildingOption}
                     changeChecked={changeChecked}
                 />)}                                             
-            </div>             
-            <h1 className='lsTitle' style={{marginTop: '15px'}}>Filter by:</h1> 
-            <div className='lsItem'>  
-                <label>Equipment (for IT suites)
-                <input type="checkbox" />
-                </label>
-            </div>
+            </div>                                     
             <div className='lsItem'>  
                 <label>Locked
                 <input type="checkbox" />

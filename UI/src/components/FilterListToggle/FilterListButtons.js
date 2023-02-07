@@ -3,11 +3,11 @@ import './FilterListButtons.scss'
 
 const FilterListButtons = ({item, selectedValues, selectToggle, select}) =>
 {      
-    const {id, value, label}=item;
+    const {id, name}=item;
 
     const changeSelected=(value)=>{
         selectToggle(value);        
-        console.log("value", value, 'selectedValues', selectedValues, 'selectToggle ', selectToggle);
+        console.log("value", value, 'selectedValues', selectedValues);
     }
 
     return (                                      
@@ -15,8 +15,8 @@ const FilterListButtons = ({item, selectedValues, selectToggle, select}) =>
             key={id}
             onClick={() => changeSelected(id)}                    
             className = { select ? 'btSelected' : 'btItem'}
-            value={value}>
-            {label}
+            value={name}>
+            {name}
         </button>                            
     );
     
