@@ -13,5 +13,4 @@ export default class AuthServices {
     ResetPassword(data){
         return axiosService.put(Configuration.ResetPassword, data)
     }
-
 }
