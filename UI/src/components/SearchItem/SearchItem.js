@@ -5,13 +5,19 @@ import image1 from '../../images/noimage.png'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLocationDot, faUsers, faChalkboardUser, faPersonDotsFromLine, faDisplay} from "@fortawesome/free-solid-svg-icons";
 
-const SearchItem = ({item:{id,campusNumber, workspaceNumber,categoryId,description,numberOfSeats,courseNumber,isAvailable}, categories}) => {
+const SearchItem = ({item, categories}) => {
+    const {id,campusNumber, workspaceNumber,categoryId,description,numberOfSeats,courseNumber,isAvailable}=item
     console.log('categorys ',categories)
+
+    const truncate=(str)=>{
+        return str.length > 20 ? str.substring(0, 100) + "..." : str;
+    }
+
     return (
        <div className='searchItem'>
             <img src={image1} alt='' className='siImg'/> 
             <div className='siDesc'>
-                <Link to='/catalog/:{id}' className='siTitle'>Workspace number: {workspaceNumber}</Link>
+                <Link to={`/catalog/${id}`} className='siTitle'>Workspace number: {workspaceNumber}</Link>
                 <span className='siLocation'>
                     <FontAwesomeIcon icon={faLocationDot}/>
                     <> The {campusNumber}-th building</>
@@ -28,12 +34,12 @@ const SearchItem = ({item:{id,campusNumber, workspaceNumber,categoryId,descripti
                         }
                     })}</>
                 </span>
-                <span className='siTextDesc'>
-                    Description: {description}
+                <span style={{maxLength:12}} className='siTextDesc'>
+                    Description: {truncate(description)}
                 </span>
             </div> 
             <div className='siMore'>
-                <button className='siDetails'>Details</button>
+                <button className='siDetails'><Link to={{pathname:`/catalog/${id}`}} style={{color:'black', textDecoration: 'none'}}>Details</Link></button>
                 <button className='siDetails'>Book</button>
                 <button className='siDetails'>TimeTable</button>
             </div>

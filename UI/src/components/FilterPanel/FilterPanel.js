@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FilterListToggle from '../FilterListToggle/FilterListToggle';
 import FilterListButtons from '../FilterListToggle/FilterListButtons';
 import FilterListBuilding from '../FilterListBuilding/FilterListBuilding';
 import CheckboxBuildings from '../FilterListBuilding/CheckboxBuildings';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPlusSquare, faMinusSquare} from "@fortawesome/free-solid-svg-icons";
 import "./FilterPanel.scss"
 
 const FilterPanel = ({
@@ -20,7 +22,10 @@ const FilterPanel = ({
     selectCategory, 
     selectCourse,
     changeChecked,    
-    faculty}) => {       
+    faculty}) => {     
+        
+    const [openBuildingOptions, setOpenBuildingOptions] = useState(faculty ? true: false);
+        
     return (         
         <div className='FilterPanel'>   
             {console.log("Filter course", selectedCourse)}
@@ -28,7 +33,7 @@ const FilterPanel = ({
             <h1 className='lsTitle'>Filter by:</h1>                                 
             <input 
                 type="text" 
-                placeholder="Search..." 
+                placeholder="Search in description ..." 
                 className="search" 
                 value={value} 
                 onChange={changeInput}
@@ -54,9 +59,9 @@ const FilterPanel = ({
                 </label>
             </div>
             <div className='lsItem'>  
-                <label>Buildings used by {faculty}:</label>
+                <span className='drop' onClick={()=>setOpenBuildingOptions(!openBuildingOptions)}>Buildings used by {faculty}: <FontAwesomeIcon icon={openBuildingOptions? faMinusSquare : faPlusSquare}/></span>
                 {/* <FilterListBuilding faculty={faculty}/>    */}     
-                {selectedBuildings.map((buildingOption) => 
+                {openBuildingOptions && selectedBuildings.map((buildingOption) => 
                 <CheckboxBuildings 
                     buildingOption = {buildingOption}
                     changeChecked={changeChecked}
