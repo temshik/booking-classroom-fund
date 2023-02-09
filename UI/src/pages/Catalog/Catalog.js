@@ -87,9 +87,9 @@ const Catalog = () => {
 
         //InputSearch
         if(inputSearch){
-            updatedList=updatedList.filter((item)=>item.description.toLowerCase().search(inputSearch.toLocaleLowerCase().trim())!==-1);
+            updatedList=updatedList.filter((item)=>
+                item.description.toLowerCase().search(inputSearch.toLocaleLowerCase().trim())!==-1);
         }
-
 
         //SelectedCategoty
         const newSelectedCategory = selectedCategory
@@ -111,6 +111,7 @@ const Catalog = () => {
             .filter((item) => item.checked)
             .map((item)=>item.value);
         if(selectedChecked.length){
+            console.log('selectedChecked',selectedChecked)
             updatedList = updatedList.filter((item) => selectedChecked.includes(item.campusNumber.toString()));
         }
 
@@ -166,7 +167,8 @@ const Catalog = () => {
                     {resultFound ? <div className='listResult'>
                         {list.map(item=><SearchItem 
                             key={item.id} 
-                            item={item}  
+                            item={item}
+                            list={list}  
                             categories={categoryList}/>
                             )}                                              
                     </div> : <div className='listResult'> <img src={notFound} alt=''/> </div>}
