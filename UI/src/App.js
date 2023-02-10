@@ -8,6 +8,7 @@ import Catalog from "./pages/Catalog/Catalog";
 import Workspace from "./pages/Workspace/Workspace";
 import Geolocation from "./modules/Geolocation/Geolocation";
 import NotFound from "./pages/NotFound/NotFound";
+import Booking from './pages/Booking/Booking';
 import About from "./pages/About/About";
 import {mapMarkers} from "./docs/data.ts";
 import Geo from "./modules/Geolocation/Geo";
@@ -27,6 +28,7 @@ function App() {
                   return <Route key={marker.id} path={marker.text} element={<Geo mark={marker} />} />
               })}
           </Route>
+          <Route path={'/booking'} element={<Booking/>}/>
           <Route path={'/about'} element={<About/>}/>
           <Route path="*" element={<NotFound/>} />
       </Routes>
