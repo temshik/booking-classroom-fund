@@ -5,8 +5,12 @@ import Footer from '../../components/Footer/Footer';
 import BookingSelector from 'react-booking-selector'
 
 const Booking = () => {
-    const [schedule, setSchedule] = useState([]);
-    const [blocked, setBlocked] = useState([]); 
+    const [schedule, setSchedule] = useState(['2023-01-05T12:21:04.256Z']);
+    const [blocked, setBlocked] = useState([
+        'Wed Feb 15 2023 10:00:00 GMT-0700 (Pacific Daylight Time)',
+        'Thu Feb 16 2023 10:00:00 GMT-0700 (Pacific Daylight Time)',
+        'Fri Feb 17 2023 10:00:00 GMT-0700 (Pacific Daylight Time)']); 
+    const [currentDay, setCurrentDay] = useState(new Date());
 
     const handleChange = (newSchedule) => {
         setSchedule( newSchedule );
@@ -29,7 +33,7 @@ const Booking = () => {
                         margin={3}                                         
                         selection={schedule}
                         blocked={blocked}
-                        //startDate = new Date()
+                        startDate = {currentDay.setDate(currentDay.getDate() - currentDay.getDate() + (currentDay.getDate() == 0 ? -6:1))}
                         numDays={6}
                         minTime={8}
                         maxTime={22}
