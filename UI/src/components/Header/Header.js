@@ -19,8 +19,7 @@ render(){
         <div className='header'>                             
             <div className={this.state.homeMode ? "headerContainer homeMode" : "headerContainer"}>
                 <div className='headerList'>
-                    <NavLink to="/" end                         
-                        exact
+                    <NavLink to="/" end                                                 
                         activeClassName="headerListItem--active"
                         className="headerListItem">                        
                             <FontAwesomeIcon icon={faBuildingColumns} />

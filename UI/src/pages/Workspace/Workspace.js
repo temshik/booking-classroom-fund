@@ -33,16 +33,14 @@ const Worksapce = () => {
             <Navbar/>
             <Header/>
             <div className='workspaceContainer'>
-                <div className='workspaceWrapper'>                    
+                <div className='workspaceWrapper'>         
+                    <div className='siPic'>           
                         <span className='workspaceTitle'>
-                        <>Workspacae number: {item.map(element => {
-                                return element.workspaceNumber
-                        })}</>
-                        </span>
-                    <div className='siPic'>
-                        <div className='workspaceImageWrapper'>
-                            <img src={image1} alt="" className='workspaceImage'/>                        
-                        </div>                        
+                            <>Workspacae number: {item.map(element => {
+                                    return element.workspaceNumber
+                            })}</>
+                        </span>                                            
+                        <img src={image1} alt="" className='workspaceImage'/>                                                                       
                     </div>
                     <div className='siFunc'>
                         <span className='siLocation'>
@@ -76,13 +74,13 @@ const Worksapce = () => {
                             <button className='siDetails'>Book</button>                        
                             <button className='siDetails'>TimeTable</button>
                             {isAvailable ? <button className='siDetails'>Lock</button> : <button className='siDetails'>UnLock</button>}
-                        </div>                    
-                    </div>
-                    <span className='siTextDesc'>
-                        <h4>Description:</h4> {item.map(element => {
-                            return element.description
-                       })}
-                    </span>                     
+                        </div>                                        
+                        <span className='siTextDesc'>
+                            <h4>Description:</h4> {item.map(element => {
+                                return element.description
+                        })}
+                        </span>   
+                    </div>                  
                 </div>                                  
             </div>
             <Footer/>

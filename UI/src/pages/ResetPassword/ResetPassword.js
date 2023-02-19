@@ -149,7 +149,7 @@ render(){
               )}
             </div>
             <div className="form-group mt-3">
-              <label>Password</label>
+              <label>New password</label>
               <input
                 type="password"
                 name='Password'

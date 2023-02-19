@@ -12,7 +12,7 @@ const CheckboxBuildings=({buildingOption, changeChecked})=>
                         key={id}
                         type="checkbox"                                                                
                         checked={checked}
-                        onClick={()=> changeChecked(id)}                              
+                        onChange={()=> changeChecked(id)}                              
                         />                                                                                                                                                                                                                             
                 </li>                    
             </div>

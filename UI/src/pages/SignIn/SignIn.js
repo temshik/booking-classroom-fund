@@ -1,8 +1,12 @@
 import React, {createRef} from 'react';
-import './SignIn.scss'
-import AuthServices from '../../services/AuthServices';
 import { Navigate, Link } from "react-router-dom";
+import { SET_ACTIVE_USER } from '../../redux/slice/authSlice';
+import store from '../../redux/store';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import AuthServices from '../../services/AuthServices';
 import ErrorHandler from '../../modules/ErrorHandler';
+import './SignIn.scss'
 
 const authSevice = new AuthServices();
 const errorHandler = new ErrorHandler();
@@ -10,7 +14,6 @@ const Email_Regex = "(?:[a-zA-Z0-9]+\.)+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$";
 const Password_Regex = "^(?=.*[_+-/?:;№!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Zа-яА-Я])(?=.*[0-9]).{6,}$";
 
 export default class SignIn extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {          
@@ -45,9 +48,23 @@ export default class SignIn extends React.Component {
       if(data.status === 200)
       { 
         console.log(JSON.stringify(data.data.accessToken)); 
+        const accessToken = data.data.accessToken;
         console.log(JSON.stringify(data.data.refreshToken)); 
+        const refreshToken = data.data.refreshToken;
         console.log(JSON.stringify(data.data.tokenLifeTimeInMinutes)); 
-        this.setState({Redirect: true});
+        const tokenLifeTimeInMinutes = data.data.tokenLifeTimeInMinutes;
+
+        store.dispatch(SET_ACTIVE_USER({          
+          email: this.state.Email,
+          accessToken: JSON.stringify(data.data.accessToken),
+          refreshToken: JSON.stringify(data.data.refreshToken),
+          tokenLifeTimeInMinutes: JSON.stringify(data.data.tokenLifeTimeInMinutes),
+          RememberMe: this.state.Checked,
+          ReturnUrl: "string"          
+        }))
+
+        alert("Succesfuly Loged in");
+        this.setState({Redirect: true});     
       }
     }).catch(errorHandler.httpErrorHandler) 
   }
@@ -125,11 +142,10 @@ export default class SignIn extends React.Component {
   }
 
 render(){
-  console.log('SignIn_State: ', this.state)  
     return (
       <div className="SignIn">
         {this.state.Redirect && (
-          <Navigate to="/" replace={true} />
+          <Navigate to="/" replace={true}/>
         )}
         <form className="SignIn__Auth-form" onSubmit={this.handleSubmit}>
           <div className="SignIn__Sub-Container">
@@ -207,6 +223,7 @@ render(){
             </p>
           </div>
         </form>
+        <ToastContainer />
       </div>
     )
   }

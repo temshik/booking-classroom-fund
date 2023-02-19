@@ -1,5 +1,7 @@
 import React, {createRef} from 'react';
 import './SignUp.scss'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import RadioButton from "../../components/RadioButton/RadioButton";
 import AuthServices from '../../services/AuthServices';
 import { Navigate, Link } from "react-router-dom";
@@ -363,7 +365,8 @@ render(){
             </div>
           </div>
         </form>
-      </div>
+        <ToastContainer />
+      </div>      
     )
   }
 }

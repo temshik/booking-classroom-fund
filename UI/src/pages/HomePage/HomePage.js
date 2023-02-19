@@ -4,7 +4,8 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import Slider from '../../components/Slider/Slider';
 
-const HomePage = () => {
+
+const HomePage = () => {    
     return (
         <div>
             <Navbar/>

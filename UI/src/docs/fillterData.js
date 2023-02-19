@@ -79,3 +79,23 @@ export const dataList = [
         "isAvailable": false
     },
 ]
+export const bookingsList = [
+    {
+        "id": 0,
+        "userId": 1,
+        "workspaceId": 2,
+        "isWorkspaceAvailable": true,
+        "dayOfWeek": 0,//numberOfWeek
+        "startBookingTime": "2023-02-15T12:00:04.256Z",
+        "groupNumber": 0
+    },
+    {
+        "id": 1,
+        "userId": 1,
+        "workspaceId": 2,
+        "isWorkspaceAvailable": true,
+        "dayOfWeek": 0,//numberOfWeek
+        "startBookingTime": "2023-02-16T12:00:04.256Z",
+        "groupNumber": 0
+      }
+]

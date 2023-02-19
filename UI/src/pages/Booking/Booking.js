@@ -1,52 +1,55 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from '../../components/Header/Header';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
-import BookingSelector from 'react-booking-selector'
+import Moment from 'react-moment';
+import moment from 'moment';
+import Loader from '../../components/Loader/Loader';
+import {bookingsList} from "../../docs/fillterData";
+import BookingSelect from "../../components/BookingSelect/BookingSelect";
+import { ScheduleComponent, Day, Week, WorkWeek, Month, Agenda, Inject } from '@syncfusion/ej2-react-schedule';
+import './Booking.scss'
 
-const Booking = () => {
-    const [schedule, setSchedule] = useState(['2023-01-05T12:21:04.256Z']);
-    const [blocked, setBlocked] = useState([
-        'Wed Feb 15 2023 10:00:00 GMT-0700 (Pacific Daylight Time)',
-        'Thu Feb 16 2023 10:00:00 GMT-0700 (Pacific Daylight Time)',
-        'Fri Feb 17 2023 10:00:00 GMT-0700 (Pacific Daylight Time)']); 
-    const [currentDay, setCurrentDay] = useState(new Date());
-
-    const handleChange = (newSchedule) => {
-        setSchedule( newSchedule );
-        console.log('schedule',schedule);
-        console.log('blocked', blocked)
-    }
-
-    const getMonday=(d)=>{
-        d = new Date(d);
-        var day = d.getDay(),
-            diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-        return new Date(d.setDate(diff));
-      }
+const Booking = () => {    
+    const [blocked, setBlocked] = useState([]); 
+    const [isLoading, setIsLoading] =useState(true);
+    const data = [
+        {
+          Id: 1,
+          Subject: 'Meeting',
+          StartTime: new Date(2023, 1, 15, 10, 0),
+          EndTime: new Date(2023, 1, 15, 12, 30),
+        },
+      ];
+    useEffect(()=>{
+        let newBlocked = [];
+        bookingsList.forEach((item)=>{
+            //var myDate = item.startBookingTime;
+            //newBlocked.push(moment(myDate).format('MMM D YYYY, hh:00:ss a'))
+            newBlocked.push(item.startBookingTime.toString());
+            console.log('newBlocked',newBlocked)                       
+        })
+        setBlocked(newBlocked); 
+        console.log('newBlocked',typeof newBlocked[0])
+    },[])
 
     return(
         <div>
+            {/* {isLoading && <Loader/>} */}
+            {console.log('blocked1',blocked)}
             <Navbar/>
-            <Header/>
-            <div className="bookingSelector">
-                <BookingSelector 
-                        selectedColor= 'rgba(89, 154, 242, 1)'
-                        unselectedColor= '#dbedff'
-                        hoveredColor= 'rgba(162, 198, 248, 1)'
-                        blockedColor= 'rgba(79, 79, 79, 1)'
-                        selectionScheme = 'linear'                        
-                        dateFormat = 'D'
-                        margin={3}                                         
-                        selection={schedule}
-                        blocked={blocked}
-                        startDate = {getMonday(currentDay)}
-                        numDays={6}
-                        minTime={8}
-                        maxTime={22}
-                        onChange={()=>handleChange}
-                    />
-            </div>
+            <Header/>            
+            {/* <BookingSelect 
+                block={blocked}
+            />             */}
+            <ScheduleComponent
+                selectedDate={new Date(2023, 1, 15)}
+                eventSettings={{
+                    dataSource: data,
+                }}
+                >
+                <Inject services={[Day, Week, WorkWeek, Month, Agenda]} />
+            </ScheduleComponent>
             <Footer/>
         </div>
     );

@@ -14,13 +14,13 @@ const Catalog = () => {
     const location = useLocation();    
     const [faculty, setFaculty]= useState(location.state !== null ? location.state.value : '');
     const [inputSearch, setInputSearch] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState(categoryList);
+    const [selectedCategory, setSelectedCategory] = useState(categoryList);//
     const [selectedCourse, setSelectedCourse] = useState(courseList);
     const [selectedBuildings, setSelectedBuildings] = useState(buildingOptions);
     const [locked, setLocked] = useState(false);
     const [equipment, setEquipment] = useState(false);
     const [roomCapacity, setRoomCapacity] = useState(8);
-    const [list, setList] = useState(dataList);
+    const [list, setList] = useState(dataList);//
     const [resultFound, setResultFound] = useState(true);
 
     const handleSelectCategory=(value)=>{

@@ -1,30 +1,44 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from "react-router-dom";
-import "./Navbar.scss"
+import { useSelector } from 'react-redux';
+import {selectIsLoggedIn, selectEmail} from '../../redux/slice/authSlice'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUserCheck, faUserXmark} from "@fortawesome/free-solid-svg-icons";
 import Sidebar from '../Sidebar/Sidebar';
+import "./Navbar.scss"
 
-export default class Navbar extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            authMode: this.props.authMode,   
-            sidebar: false   
-        };
-        this.showSidebar=this.showSidebar.bind(this);
-    }
+const Navbar = () => {
+    const [sidebar, setSidebar] = useState(false);
+    const email = useSelector(selectEmail);    
+    const isLoggedIn = useSelector(selectIsLoggedIn)
 
-    showSidebar(){
-        if(this.state.sidebar === false)
-        this.setState({sidebar:true});
+    const showSidebar=()=>{
+        if(sidebar === false)
+        setSidebar(true);
         else
-        this.setState({sidebar:false});
+        setSidebar(false);
     }
+    
+    if(isLoggedIn)
+        return(
+            <div className='navbar'>
+                <div className='navContainer'>
+                    <span className='logo'>Workspace booking</span>
+                    <div className='dropdown'>
+                        <>{email}</>
+                        <Link to='#' className='menu-bars'>
+                            {!sidebar &&<FontAwesomeIcon onClick={showSidebar} style={{color:'white'}} icon={faUserCheck}/>}
+                            {sidebar &&<FontAwesomeIcon onClick={showSidebar} style={{color:'white'}} icon={faUserXmark}/>}
+                        </Link>
+                        <Sidebar isSidebar={sidebar} />
+                    </div>
 
-render(){
-    if(this.state.authMode){
-        return (
+
+                </div>
+            </div>
+        )        
+    else
+        return(
             <div className='navbar'>
             <div className='navContainer'>
                 <span className='logo'>Workspace booking</span>
@@ -38,26 +52,7 @@ render(){
                     </div>             
             </div>
             </div>
-        );}
-    else{
-    return (
-        <div className='navbar'>
-            <div className='navContainer'>
-                <span className='logo'>Workspace booking</span>
-                <div className='dropdown'>
-                    <Link to='#' className='menu-bars'>
-                        {!this.state.sidebar &&<FontAwesomeIcon onClick={this.showSidebar} style={{color:'white'}} icon={faUserCheck}/>}
-                        {this.state.sidebar &&<FontAwesomeIcon onClick={this.showSidebar} style={{color:'white'}} icon={faUserXmark}/>}
-                    </Link>
-                    <Sidebar isSidebar={this.state.sidebar} />
-                </div>
-
-
-            </div>
-        </div>
-    );
-    }
+        )        
 };
-}
 
-Navbar.defaultProps = {authMode: false}
+export default Navbar;

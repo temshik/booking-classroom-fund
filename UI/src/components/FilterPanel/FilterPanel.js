@@ -42,7 +42,7 @@ const FilterPanel = ({
                 <label>Room Category</label>
                 {/* <FilterListToggle options={categoryList} value={selectedCategory} selectToggle={selectCategory}/> */}
                 <div className='categoryContainer'>     
-                    {selectedCategory.map((category)=> <FilterListButtons item={category} selectedValues={selectedCategory} selectToggle={selectCategory} select={category.selected}/>)}
+                    {selectedCategory.map((category)=> <FilterListButtons key={category.id} item={category} selectedValues={selectedCategory} selectToggle={selectCategory} select={category.selected}/>)}
                 </div>
             </div>                                    
             <div className='lsItem'>  
@@ -53,7 +53,7 @@ const FilterPanel = ({
             <div className='lsItem'>  
                 <label>Course Number:
                 <div className='categoryContainer'>
-                    {selectedCourse.map((course)=> <FilterListButtons item={course} selectedValues={selectedCourse} selectToggle={selectCourse} select={course.selected}/>)}
+                    {selectedCourse.map((course)=> <FilterListButtons key={course.id} item={course} selectedValues={selectedCourse} selectToggle={selectCourse} select={course.selected}/>)}
                     {/* <FilterListButtons options={courseList} selectedValues={selectedCourse} selectToggle={selectCourse}/> */}
                 </div>
                 </label>
@@ -63,6 +63,7 @@ const FilterPanel = ({
                 {/* <FilterListBuilding faculty={faculty}/>    */}     
                 {openBuildingOptions && selectedBuildings.map((buildingOption) => 
                 <CheckboxBuildings 
+                    key = {buildingOption.id}
                     buildingOption = {buildingOption}
                     changeChecked={changeChecked}
                 />)}                                             
@@ -71,8 +72,8 @@ const FilterPanel = ({
                 <label>Special Workspace Equipment (for IT suites)
                 <input 
                     type="checkbox"
-                    checked={equipment}
-                    onClick={()=> setEquipment(!equipment)} 
+                    defaultChecked={equipment}
+                    onChange={()=> setEquipment(!equipment)} 
                 />
                 </label>
             </div>                               
@@ -80,8 +81,8 @@ const FilterPanel = ({
                 <label>Locked
                 <input 
                     type="checkbox" 
-                    checked={locked}
-                    onClick={()=> setLocked(!locked)}
+                    defaultChecked={locked}
+                    onChange={()=> setLocked(!locked)}
                 />
                 </label>
             </div>                                                                    
