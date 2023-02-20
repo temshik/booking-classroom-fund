@@ -7,4 +7,7 @@ export default class AxiosServices {
     put(url,data){
         return axios.put(url, data)
     }
+    get(url, config){
+        return axios.get(url, config)
+    }
 }

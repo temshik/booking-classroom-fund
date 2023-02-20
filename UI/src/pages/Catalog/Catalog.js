@@ -1,18 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import {useLocation} from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import {selectIsLoggedIn, selectAccessToken} from '../../redux/slice/authSlice'
 import Header from '../../components/Header/Header';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import FilterPanel from '../../components/FilterPanel/FilterPanel';
 import SearchItem from '../../components/SearchItem/SearchItem';
 import notFound from '../../images/NoResults.gif';
+import CatalogServices from '../../services/CatalogServices';
 import { buildingOptions, colourOptions } from '../../docs/data.ts';
-import "./Catalog.scss"
 import {courseList, categoryList, dataList} from "../../docs/fillterData";
+import "./Catalog.scss"
+
+const catalogService = new CatalogServices();
 
 const Catalog = () => {
     const location = useLocation();    
     const [faculty, setFaculty]= useState(location.state !== null ? location.state.value : '');
+    const accessToken = useSelector(selectAccessToken);    
+    const isLoggedIn = useSelector(selectIsLoggedIn)
     const [inputSearch, setInputSearch] = useState('');
     const [selectedCategory, setSelectedCategory] = useState(categoryList);//
     const [selectedCourse, setSelectedCourse] = useState(courseList);
@@ -76,6 +83,22 @@ const Catalog = () => {
            })
 
         }
+        if(isLoggedIn){  
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                  },
+                }
+            catalogService.GetCategories(config).then(({data})=>{               
+                console.log("Respons",data);
+            }).catch((error)=>{
+                if (error.response.data.message === "TokenExpiredError") {
+                    console.log('logout');
+                }
+                else
+                console.log(error);
+            });
+        } 
     }, [])
 
     useEffect(()=>{

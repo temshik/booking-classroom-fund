@@ -3,6 +3,8 @@ import { Navigate, Link } from "react-router-dom";
 import { SET_ACTIVE_USER } from '../../redux/slice/authSlice';
 import store from '../../redux/store';
 import { ToastContainer } from 'react-toastify';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthServices from '../../services/AuthServices';
 import ErrorHandler from '../../modules/ErrorHandler';
@@ -24,6 +26,7 @@ export default class SignIn extends React.Component {
       Password: "",      
       PasswordValid: false,
       PasswordFocus: false,
+      PasswordShow:false,
 
       Redirect: false,
       Checked: false
@@ -48,17 +51,14 @@ export default class SignIn extends React.Component {
       if(data.status === 200)
       { 
         console.log(JSON.stringify(data.data.accessToken)); 
-        const accessToken = data.data.accessToken;
         console.log(JSON.stringify(data.data.refreshToken)); 
-        const refreshToken = data.data.refreshToken;
         console.log(JSON.stringify(data.data.tokenLifeTimeInMinutes)); 
-        const tokenLifeTimeInMinutes = data.data.tokenLifeTimeInMinutes;
 
         store.dispatch(SET_ACTIVE_USER({          
           email: this.state.Email,
-          accessToken: JSON.stringify(data.data.accessToken),
-          refreshToken: JSON.stringify(data.data.refreshToken),
-          tokenLifeTimeInMinutes: JSON.stringify(data.data.tokenLifeTimeInMinutes),
+          accessToken: data.data.accessToken,
+          refreshToken: data.data.refreshToken,
+          tokenLifeTimeInMinutes: data.data.tokenLifeTimeInMinutes,
           RememberMe: this.state.Checked,
           ReturnUrl: "string"          
         }))
@@ -181,9 +181,10 @@ render(){
             </div>
             <div className="form-group mt-3">
               <label>Password</label>
-              <input
+              <div className="input-group">
+              <input                
                 checked={this.state.PasswordValid}
-                type="password"
+                type={this.state.PasswordShow ? "text" : "password"}
                 name='Password'
                 className="form-control mt-1"
                 placeholder="Enter password"
@@ -193,8 +194,12 @@ render(){
                 onChange={this.handleValues}
                 onFocus={this.handleFocus}
                 style={this.style(this.state.PasswordValid)}
-                required
+                required                
               />
+              <div className="input-group-btn" style={{width:"30px", height:"38px", marginTop:"4px", border:"1px solid black", borderTopRightRadius:"5px", borderBottomRightRadius:"5px", alignItems:'center', justifyContent:"center", display:'flex'}}>
+                <FontAwesomeIcon  onClick={() => this.setState({PasswordShow: !this.state.PasswordShow})} style={{color:'black'}} icon={this.state.PasswordShow ? faEye : faEyeSlash}/>
+              </div>
+              </div>
               {this.state.PasswordFocus && (
                 <p role="alert" style={{ color: "rgb(255, 0, 0)" }}>
                   Password must contain more then 6 elements and include at least 1 lower case and 1 upper case letter, 1 numeric value and 1 special character!

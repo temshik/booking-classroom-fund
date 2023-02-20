@@ -85,17 +85,17 @@ export const bookingsList = [
         "userId": 1,
         "workspaceId": 2,
         "isWorkspaceAvailable": true,
-        "dayOfWeek": 0,//numberOfWeek
-        "startBookingTime": "2023-02-15T12:00:04.256Z",
-        "groupNumber": 0
+        "dayOfWeek": 1,//numberOfWeek
+        "startBookingTime": "2023-02-20T12:00:04.256Z",
+        "groupNumber": 10702319
     },
     {
         "id": 1,
-        "userId": 1,
+        "userId": 2,
         "workspaceId": 2,
         "isWorkspaceAvailable": true,
-        "dayOfWeek": 0,//numberOfWeek
-        "startBookingTime": "2023-02-16T12:00:04.256Z",
-        "groupNumber": 0
+        "dayOfWeek": 2,//numberOfWeek
+        "startBookingTime": "2023-02-21T12:30:04.256Z",
+        "groupNumber": 10702419
       }
 ]

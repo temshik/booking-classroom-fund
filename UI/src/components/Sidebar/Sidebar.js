@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import {useDispatch} from 'react-redux';
-import {REMOVE_ACTIVE_USER} from '../../redux/slice/authSlice'
+import {REMOVE_ACTIVE_USER, REFRESH_ACCESS_TOKEN} from '../../redux/slice/authSlice'
 import "./Sidebar.scss"
 
 const Sidebar = ({ isSidebar }) => {    
@@ -14,6 +14,10 @@ const Sidebar = ({ isSidebar }) => {
             window.location.reload();  
         }
     },[signOut])
+
+    const refresh=()=>{
+        dispatch(REFRESH_ACCESS_TOKEN());
+    }
 
     return (                
         <div className={`menu ${isSidebar ? 'menu-active' : ''}`}>
@@ -32,6 +36,11 @@ const Sidebar = ({ isSidebar }) => {
                             <span>Update Password</span>
                     </Link>
             </li>
+            <div className="nav-item">
+                    <div style={{border: 'none'}} className="nav-item-link" onClick={()=>refresh()}>
+                            <span>Refresh</span>
+                    </div>
+            </div>
             <div className="nav-item">
                     <div style={{border: 'none'}} className="nav-item-link" onClick={()=>setSignOut(true)}>
                             <span>Sign Out</span>
