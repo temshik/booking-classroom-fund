@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/static/css/main.1a891625.css",
+    "main.js": "/static/js/main.2eea8ef4.js",
+    "static/media/Main_building_of_BNTU.jpg": "/static/media/Main_building_of_BNTU.5930ac0ff0ef80b771b2.jpg",
+    "static/media/headerimage.jpg": "/static/media/headerimage.2d93a27b4023f1a80802.jpg",
+    "static/media/2_DJI_0021.jpg": "/static/media/2_DJI_0021.118cefd6da0a1d7e3738.jpg",
+    "static/media/noimage.png": "/static/media/noimage.bfbb40fcd2baf8844fdc.png",
+    "static/media/no-result-found-1.webp": "/static/media/no-result-found-1.9801243a9d682f6b3fcc.webp",
+    "index.html": "/index.html",
+    "main.1a891625.css.map": "/static/css/main.1a891625.css.map",
+    "main.2eea8ef4.js.map": "/static/js/main.2eea8ef4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1a891625.css",
+    "static/js/main.2eea8ef4.js"
+  ]
+}
