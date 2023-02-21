@@ -37,7 +37,7 @@ namespace CatalogService.Api.Controllers
         /// <returns>List of categories</returns>
         [Route("[action]")]
         [HttpGet]
-        [Authorize(Roles = "Dispacher, Employee")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCategories(CancellationToken cancellationToken)
         {

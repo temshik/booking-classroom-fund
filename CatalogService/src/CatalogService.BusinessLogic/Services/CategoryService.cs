@@ -81,9 +81,9 @@ namespace CatalogService.BusinessLogic.Services
         /// Function to get the category from the database.
         /// </summary>
         /// <returns>A List of <see cref="CategoryDTO"/>.</returns>
-        public async Task<List<Category>> GetCategoriesAsync(CancellationToken cancellationToken)
+        public async Task<List<CategoryDTO>> GetCategoriesAsync(CancellationToken cancellationToken)
         {
-            var list = await _repository.GetCategoriesAsync(cancellationToken);
+            var list = _mapper.Map<List<CategoryDTO>>(await _repository.GetCategoriesAsync(cancellationToken));
 
             if (list == null)
             {

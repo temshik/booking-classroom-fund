@@ -15,7 +15,7 @@ namespace CatalogService.DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SpecialEquipment = table.Column<bool>(type: "bit", nullable: false)
+                    Selected = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -34,6 +34,7 @@ namespace CatalogService.DataAccess.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NumberOfSeats = table.Column<long>(type: "bigint", nullable: false),
                     CourseNumber = table.Column<int>(type: "int", nullable: false),
+                    SpecialEquipment = table.Column<bool>(type: "bit", nullable: false),
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
