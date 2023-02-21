@@ -84,7 +84,7 @@ namespace IdentityService.Api.Controllers
         /// <param name="id">User email</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>User</returns>
-        [Route("[action]/{email}")]
+        [Route("[action]")]
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
