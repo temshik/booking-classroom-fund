@@ -70,7 +70,15 @@ namespace IdentityService.BusinessLogic.Services
         /// </summary>
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
-        /// <returns><see cref="user"/>.</returns>
+        /// <returns><see cref="User"/>.</returns>
         Task<User> GetUserAsync(string id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get user by email.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns><see cref="User"/>.</returns>
+        Task<User> GetUserByEmailAsync(string email, CancellationToken cancellationToken);
     }
 }

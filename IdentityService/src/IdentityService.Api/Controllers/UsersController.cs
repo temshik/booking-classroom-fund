@@ -63,11 +63,35 @@ namespace IdentityService.Api.Controllers
         /// <returns>User</returns>
         [Route("[action]/{id}")]
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetUser(string id, CancellationToken token)
         {            
             var result = await _userService.GetUserAsync(id, token);
+
+            if (result == null)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get user by email
+        /// </summary>
+        /// <param name="id">User email</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>User</returns>
+        [Route("[action]/{id}")]
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetUserByEmail(string email, CancellationToken token)
+        {
+            var result = await _userService.GetUserByEmailAsync(email, token);
 
             if (result == null)
             {
