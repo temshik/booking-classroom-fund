@@ -145,6 +145,18 @@
       "UpstreamHttpMethod": [ "GET" ]
     },
     {
+      "DownstreamPathTemplate": "/api/Users/GetUserByEmail/{email}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [        
+        {
+          "Host": "locahost",
+          "Port": "9000"
+        }
+      ],
+      "UpstreamPathTemplate": "/Users/GetUserByEmail/{email}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/Users/Logout",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

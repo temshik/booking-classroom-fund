@@ -146,6 +146,18 @@
       "UpstreamHttpMethod": [ "GET" ]
     },
     {
+      "DownstreamPathTemplate": "/api/Users/GetUserByEmail/{email}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identityservice.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Users/GetUserByEmail/{email}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/Users/Logout",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
