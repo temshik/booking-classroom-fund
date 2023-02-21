@@ -28,6 +28,8 @@ namespace CatalogService.DataAccess.Configurations
                 .IsRequired(true);
             builder.Property(i => i.NumberOfSeats)
                 .IsRequired(true);
+            builder.Property(i => i.SpecialEquipment)
+                .IsRequired(true);
             builder.Property(i => i.IsAvailable)
                 .IsRequired(true);
 

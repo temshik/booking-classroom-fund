@@ -33,7 +33,7 @@ namespace CatalogService.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("SpecialEquipment")
+                    b.Property<bool>("Selected")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -67,6 +67,9 @@ namespace CatalogService.DataAccess.Migrations
 
                     b.Property<long>("NumberOfSeats")
                         .HasColumnType("bigint");
+
+                    b.Property<bool>("SpecialEquipment")
+                        .HasColumnType("bit");
 
                     b.Property<long>("WorkspaceNumber")
                         .HasColumnType("bigint");

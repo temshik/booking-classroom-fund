@@ -22,7 +22,7 @@ namespace CatalogService.DataAccess.Configurations
 
             builder.Property(i => i.Name)
                 .IsRequired(true);
-            builder.Property(i => i.SpecialEquipment)
+            builder.Property(i => i.Selected)
                 .IsRequired(true);
 
             builder.ToTable("Categories");

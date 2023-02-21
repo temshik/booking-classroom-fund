@@ -43,7 +43,7 @@ namespace CatalogService.Api.Controllers
         /// <returns>Desired workspace.</returns>
         [Route("[action]/{id}")]
         [HttpGet]
-        [Authorize(Roles = "Dispacher, Employee")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetWorkspaces(int id, CancellationToken cancellationToken)
