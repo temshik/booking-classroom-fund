@@ -134,6 +134,18 @@
       "UpstreamHttpMethod": [ "POST" ]
     },
     {
+      "DownstreamPathTemplate": "/api/Users/GetUser/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identityservice.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Users/GetUser/{id}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/Users/Logout",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -180,45 +192,45 @@
       ],
       "UpstreamPathTemplate": "/Users/GetRoles",
       "UpstreamHttpMethod": [ "GET" ]
-      },
-      //Booking API
-      {
-        "DownstreamPathTemplate": "/api/Bookings/{everything}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "bookingservice.api",
-            "Port": "80"
-          }
-        ],
-        "UpstreamPathTemplate": "/Bookings/{everything}",
-        "UpstreamHttpMethod": [ "POST", "PUT", "DELETE" ]
-      },
-      //GetBookingsByWorkspace/{workspaceId}
-      {
-        "DownstreamPathTemplate": "/api/Bookings/GetBookingsByWorkspace/{workspaceId}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "bookingservice.api",
-            "Port": "80"
-          }
-        ],
-        "UpstreamPathTemplate": "/Bookings/GetBookingsByWorkspace/{workspaceId}",
-        "UpstreamHttpMethod": [ "PUT" ]
-      },
-      //GetBookingsByUser/{userId}
-      {
-        "DownstreamPathTemplate": "/api/Bookings/GetBookingsByUser/{userId}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "bookingservice.api",
-            "Port": "80"
-          }
-        ],
-        "UpstreamPathTemplate": "/Bookings/GetBookingsByUser/{userId}",
-        "UpstreamHttpMethod": [ "GET" ]
-      }
+    },
+    //Booking API
+    {
+      "DownstreamPathTemplate": "/api/Bookings/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "bookingservice.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Bookings/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "DELETE" ]
+    },
+    //GetBookingsByWorkspace/{workspaceId}
+    {
+      "DownstreamPathTemplate": "/api/Bookings/GetBookingsByWorkspace/{workspaceId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "bookingservice.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Bookings/GetBookingsByWorkspace/{workspaceId}",
+      "UpstreamHttpMethod": [ "PUT" ]
+    },
+    //GetBookingsByUser/{userId}
+    {
+      "DownstreamPathTemplate": "/api/Bookings/GetBookingsByUser/{userId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "bookingservice.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Bookings/GetBookingsByUser/{userId}",
+      "UpstreamHttpMethod": [ "GET" ]
+    }
   ]
 }
