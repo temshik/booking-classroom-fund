@@ -62,7 +62,15 @@ namespace IdentityService.BusinessLogic.Services
         /// <summary>
         /// Function to get the roles from the database.
         /// </summary>
-        /// <returns>A List of <see cref="PasswordDTO"/>.</returns>
+        /// <returns>A List of <see cref="Role"/>.</returns>
         Task<List<Role>> GetRolesAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get user by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns><see cref="user"/>.</returns>
+        Task<User> GetUserAsync(string id, CancellationToken cancellationToken);
     }
 }
