@@ -9,7 +9,7 @@ import "./Navbar.scss"
 
 const Navbar = () => {
     const [sidebar, setSidebar] = useState(false);
-    const email = useSelector(selectEmail);    
+    const email = window.sessionStorage.getItem('email');    
     const isLoggedIn = useSelector(selectIsLoggedIn)
 
     const showSidebar=()=>{
@@ -19,7 +19,7 @@ const Navbar = () => {
         setSidebar(false);
     }
     
-    if(isLoggedIn)
+    if(email !== null)
         return(
             <div className='navbar'>
                 <div className='navContainer'>

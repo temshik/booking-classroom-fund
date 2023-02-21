@@ -17,9 +17,7 @@ const catalogService = new CatalogServices();
 
 const Catalog = () => {
     const location = useLocation();    
-    const [faculty, setFaculty]= useState(location.state !== null ? location.state.value : '');
-    const accessToken = useSelector(selectAccessToken);    
-    const isLoggedIn = useSelector(selectIsLoggedIn)
+    const [faculty, setFaculty]= useState(location.state !== null ? location.state.value : '');        
     const [inputSearch, setInputSearch] = useState('');
     const [selectedCategory, setSelectedCategory] = useState(categoryList);//
     const [selectedCourse, setSelectedCourse] = useState(courseList);
@@ -83,7 +81,7 @@ const Catalog = () => {
            })
 
         }
-        if(isLoggedIn){              
+        if(window.sessionStorage.getItem('email')!== null){              
             catalogService.GetCategories().then(({data})=>{               
                 console.log("Respons",data);
             }).catch((error)=>{

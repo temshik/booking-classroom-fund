@@ -1,6 +1,7 @@
 import React, {useEffect} from "react";
 import { useDispatch } from "react-redux";
-import {SET_ACTIVE_USER}  from './redux/slice/authSlice';
+import AuthServices from './services/AuthServices';
+import {REMOVE_ACTIVE_USER, SET_ACTIVE_USER}  from './redux/slice/authSlice';
 import {Route, Routes} from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import SignIn from "./pages/SignIn/SignIn";
@@ -15,19 +16,33 @@ import About from "./pages/About/About";
 import {mapMarkers} from "./docs/data.ts";
 import Geo from "./modules/Geolocation/Geo";
 
+const authSevice = new AuthServices();
+
 function App() {
     const dispatch = useDispatch()
     useEffect(()=>{
-        if (window.localStorage.getItem('email') !== null)
+        if (window.localStorage.getItem('accessToken') !== null &&
+            window.sessionStorage.getItem('email') !== null)
         {
-            dispatch(SET_ACTIVE_USER({          
-                email: window.localStorage.getItem('email'),
-                accessToken: window.localStorage.getItem('accessToken'),
-                refreshToken: window.localStorage.getItem('refreshToken'),
-                tokenLifeTimeInMinutes: window.localStorage.getItem('tokenLifeTimeInMinutes'),
-                RememberMe: true,
-                ReturnUrl: "string"          
-              }));
+            const data = {
+                email: window.sessionStorage.getItem('email')
+            };
+            authSevice.GetUserByEmail(data).then((data) =>{
+                if(data.status === 200){
+                    dispatch(SET_ACTIVE_USER({          
+                        email: window.sessionStorage.getItem('email'),
+                        accessToken: window.localStorage.getItem('accessToken'),
+                        refreshToken: window.localStorage.getItem('refreshToken'),
+                        tokenLifeTimeInMinutes: window.localStorage.getItem('tokenLifeTimeInMinutes'),
+                        RememberMe: true,
+                        ReturnUrl: "string"          
+                      }));
+                }                
+            }).catch((error)=>{
+                console.log(error);
+                dispatch(REMOVE_ACTIVE_USER());
+                window.location.reload(); 
+            })            
         }
     },[])
   return (
