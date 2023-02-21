@@ -77,6 +77,25 @@ namespace IdentityService.BusinessLogic.Services
         }
 
         /// <summary>
+        /// Get user by email
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <returns><see cref="User"/></returns>
+        public async Task<User> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
+        {
+            var result = await _userManager.FindByEmailAsync(email);
+
+            if (result == null)
+            {
+                _logger.LogError("An error occured the user were not found by id");
+
+                throw new NotFoundException("User was not found");
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Creates a new user
         /// </summary>
         /// <param name="user">The user that we want to add</param>
