@@ -76,6 +76,7 @@ export default class SignIn extends React.Component {
     //           RememberMe: this.state.Checked,
     //           ReturnUrl: "string"          
     //         }))
+    //       console.log('data',data);
     //   this.setState({Password: ''});
     //   this.setState({Redirect: true});        
     // }).catch((error => console.log(error)))

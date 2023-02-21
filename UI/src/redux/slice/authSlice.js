@@ -8,8 +8,10 @@ const errorHandler = new ErrorHandler();
 const authSevice = new AuthServices();
 
 const initialState = {
+    isLoading: false,
     isLoggedIn: false,
     status: null,
+    errorMessage: null,
     email: null,
     //userName: null,
     //userId: null,
@@ -57,10 +59,10 @@ export const Authorize = createAsyncThunk(
                 console.log(data.refreshToken); 
                 console.log(data.tokenLifeTimeInMinutes);                                                              
             } 
-            console.log(data);
+            console.log('data',data);
             return data;  
         } catch (error) {
-            errorHandler.httpErrorHandler(error);
+            errorHandler.httpErrorHandler(error);            
         }
     },
 )
@@ -128,23 +130,30 @@ const authSlice = createSlice({
     extraReducers: {
         //запрос отправляется
         [Authorize.pending]: (state) => {
+            state.isLoading = true
             state.isLoggedIn = false
             state.status = null
+            state.errorMessage = null
         },
         //запрос выполнился
         [Authorize.fulfilled]: (state, action) => {
+            state.isLoading = false
             state.isLoggedIn = true
             //переделоть на бэке для вывода ошибок
-            //state.status = action.payload.errors
+            //state.status = action.payload.status
+            //state.errorMessage = action.payload.errors  
+            //console.log('state.errorMessage',state.errorMessage);  
             state.accessToken = action.payload.accessToken
             state.refreshToken = action.payload.refreshToken
             state.tokenLifeTimeInMinutes = action.payload.tokenLifeTimeInMinutes
         },
         //запрос вернул ошибку
         [Authorize.rejected]: (state, action) => {
+            state.isLoading = false
             state.isLoggedIn = false
             //переделоть на бэке для вывода ошибок
-            //state.status = action.payload.errors           
+            state.status = action.payload.status  
+            state.errorMessage = action.payload.errors     
         },        
     }
     

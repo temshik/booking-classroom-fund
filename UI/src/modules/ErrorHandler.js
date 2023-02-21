@@ -25,14 +25,14 @@ export default class ErrorHandler {
           if (response) {
             //The request was made and the server responded with a status code that falls out of the range of 2xx the http status code mentioned above
             const statusCode = response?.status
-            if (statusCode === 404) {
+            if (statusCode === 500) {
               console.log('The requested resource does not exist or has been deleted')
               toast.error("The requested resource does not exist or has been deleted", {
                 position: toast.POSITION.TOP_CENTER
               });               
-            } else if (statusCode === 400) {
-              console.log('Request failed with status code 400');
-              toast.info("Perhaps a user name with this name or email already exists try changing them", {
+            } else if (statusCode === 409) {
+              console.log('Request failed with status code 409');
+              toast.info("Perhaps a user with this user name or email already exists try changing them", {
                 position: toast.POSITION.TOP_CENTER
               }); 
             } else if (statusCode === 401) {
@@ -41,7 +41,7 @@ export default class ErrorHandler {
                 position: toast.POSITION.TOP_CENTER
               }); 
               //redirect user to login
-            } else if (statusCode === 500) {
+            } else if (statusCode === 404) {
               console.log('User not found')
               toast.warn("User not found", {
                 position: toast.POSITION.TOP_CENTER
