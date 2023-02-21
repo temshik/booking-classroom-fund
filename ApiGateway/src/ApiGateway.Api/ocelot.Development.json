@@ -155,7 +155,7 @@
         }
       ],
       "UpstreamPathTemplate": "/Users/GetUserByEmail",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "POST" ]
     },
     {
       "DownstreamPathTemplate": "/api/Users/Logout",
