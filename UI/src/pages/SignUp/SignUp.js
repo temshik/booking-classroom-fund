@@ -1,13 +1,12 @@
 import React, {createRef} from 'react';
-import './SignUp.scss'
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Navigate, Link } from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
+import { ToastContainer } from 'react-toastify';
 import RadioButton from "../../components/RadioButton/RadioButton";
 import AuthServices from '../../services/AuthServices';
-import { Navigate, Link } from "react-router-dom";
 import ErrorHandler from '../../modules/ErrorHandler';
+import './SignUp.scss'
 
 const authSevice = new AuthServices();
 const errorHandler = new ErrorHandler();
@@ -65,13 +64,16 @@ export default class SignUp extends React.Component{
       Email: this.state.Email,
       Password: this.state.Password,
       ConfirmedPassword: this.state.ConfirmPassword,
+      Role: this.state.RoleValue
     };
     authSevice.SignUp(data,this.state.RoleValue).then((data) =>{
       if(data.status === 201)
       {
         alert("Succesfuly register");
         console.log(data);
-        this.setState({Redirect: true})
+        this.setState({Redirect: true});
+        this.setState({Password: ''});
+        this.setState({ConfirmPassword: ''});
       }
       else{
        console.log(data);
@@ -195,7 +197,7 @@ render(){
     return (     
       <div className="SignUp">
         {this.state.Redirect && (
-          <Navigate to="/" replace={true} />
+          <Navigate to="/SignIn" replace={true} />
         )}
         <form className="SignUp__Auth-form" onSubmit={this.handleRegister}>
           <div className="SignUp__SubContainer">

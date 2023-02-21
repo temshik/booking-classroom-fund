@@ -1,4 +1,5 @@
-import axios from "axios";
+//import axios from "axios";
+import axios from "../utils/axios"
 
 export default class AxiosServices {
     post(url,data) {

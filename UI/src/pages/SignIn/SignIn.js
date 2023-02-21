@@ -1,7 +1,7 @@
 import React, {createRef} from 'react';
 import { Navigate, Link } from "react-router-dom";
-import { SET_ACTIVE_USER } from '../../redux/slice/authSlice';
 import store from '../../redux/store';
+import {Authorize, SET_ACTIVE_USER, selectIsLoggedIn}  from '../../redux/slice/authSlice';
 import { ToastContainer } from 'react-toastify';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +12,7 @@ import './SignIn.scss'
 
 const authSevice = new AuthServices();
 const errorHandler = new ErrorHandler();
+
 const Email_Regex = "(?:[a-zA-Z0-9]+\.)+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$";
 const Password_Regex = "^(?=.*[_+-/?:;№!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Zа-яА-Я])(?=.*[0-9]).{6,}$";
 
@@ -50,9 +51,9 @@ export default class SignIn extends React.Component {
       console.log(data.data);  
       if(data.status === 200)
       { 
-        console.log(JSON.stringify(data.data.accessToken)); 
-        console.log(JSON.stringify(data.data.refreshToken)); 
-        console.log(JSON.stringify(data.data.tokenLifeTimeInMinutes)); 
+        console.log(data.data.accessToken); 
+        console.log(data.data.refreshToken); 
+        console.log(data.data.tokenLifeTimeInMinutes); 
 
         store.dispatch(SET_ACTIVE_USER({          
           email: this.state.Email,
@@ -63,10 +64,21 @@ export default class SignIn extends React.Component {
           ReturnUrl: "string"          
         }))
 
-        alert("Succesfuly Loged in");
+        //alert("Succesfuly Loged in");
+        this.setState({Password: ''});
         this.setState({Redirect: true});     
       }
     }).catch(errorHandler.httpErrorHandler) 
+               
+    // store.dispatch(Authorize(data)).then((data) => {              
+    //   store.dispatch(SET_ACTIVE_USER({          
+    //           email: this.state.Email,             
+    //           RememberMe: this.state.Checked,
+    //           ReturnUrl: "string"          
+    //         }))
+    //   this.setState({Password: ''});
+    //   this.setState({Redirect: true});        
+    // }).catch((error => console.log(error)))
   }
 
   handleValues(event) {

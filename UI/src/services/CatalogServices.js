@@ -4,7 +4,11 @@ import Configuration from "../configurations/Configuration";
 const axiosService = new AxiosServices();
 
 export default class CatalogServices {
-    GetCategories(config){
-        return axiosService.get(Configuration.GetCategories, config)
+
+    GetCategories(){
+        return axiosService.get(Configuration.GetCategories)
+    }
+    EditWorkspace(){
+
     }
 }

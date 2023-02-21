@@ -83,13 +83,8 @@ const Catalog = () => {
            })
 
         }
-        if(isLoggedIn){  
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                  },
-                }
-            catalogService.GetCategories(config).then(({data})=>{               
+        if(isLoggedIn){              
+            catalogService.GetCategories().then(({data})=>{               
                 console.log("Respons",data);
             }).catch((error)=>{
                 if (error.response.data.message === "TokenExpiredError") {

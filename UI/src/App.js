@@ -1,4 +1,6 @@
-import React from "react";
+import React, {useEffect} from "react";
+import { useDispatch } from "react-redux";
+import {SET_ACTIVE_USER}  from './redux/slice/authSlice';
 import {Route, Routes} from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import SignIn from "./pages/SignIn/SignIn";
@@ -14,6 +16,20 @@ import {mapMarkers} from "./docs/data.ts";
 import Geo from "./modules/Geolocation/Geo";
 
 function App() {
+    const dispatch = useDispatch()
+    useEffect(()=>{
+        if (window.localStorage.getItem('email') !== null)
+        {
+            dispatch(SET_ACTIVE_USER({          
+                email: window.localStorage.getItem('email'),
+                accessToken: window.localStorage.getItem('accessToken'),
+                refreshToken: window.localStorage.getItem('refreshToken'),
+                tokenLifeTimeInMinutes: window.localStorage.getItem('tokenLifeTimeInMinutes'),
+                RememberMe: true,
+                ReturnUrl: "string"          
+              }));
+        }
+    },[])
   return (
       <Routes>
           <Route path={'/'} element={<HomePage/>} />
