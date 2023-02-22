@@ -9,15 +9,19 @@ import FilterPanel from '../../components/FilterPanel/FilterPanel';
 import SearchItem from '../../components/SearchItem/SearchItem';
 import notFound from '../../images/NoResults.gif';
 import CatalogServices from '../../services/CatalogServices';
+import ReactPaginate from 'react-paginate';
 import { buildingOptions, colourOptions } from '../../docs/data.ts';
 import {courseList, categoryList, dataList} from "../../docs/fillterData";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import "./Catalog.scss"
 
 const catalogService = new CatalogServices();
 
 const Catalog = () => {
     const location = useLocation();    
-    const [faculty, setFaculty]= useState(location.state !== null ? location.state.value : '');        
+    const [faculty, setFaculty] = useState(location.state !== null ? location.state.value : '');   
+    const [pageCount, setPageCount] = useState(15);     
     const [inputSearch, setInputSearch] = useState('');
     const [selectedCategory, setSelectedCategory] = useState(categoryList);//
     const [selectedCourse, setSelectedCourse] = useState(courseList);
@@ -27,6 +31,11 @@ const Catalog = () => {
     const [roomCapacity, setRoomCapacity] = useState(8);
     const [list, setList] = useState(dataList);//
     const [resultFound, setResultFound] = useState(true);
+
+
+    const handlePageClick=(data)=>{
+        console.log(data.selected);
+    }
 
     const handleSelectCategory=(value)=>{
         console.log('Catalog SCategory value ', value)
@@ -190,6 +199,26 @@ const Catalog = () => {
                     </div> : <div className='listResult'> <img src={notFound} alt=''/> </div>}
                 </div>
             </div>
+            <ReactPaginate
+                previousLabel={<FontAwesomeIcon icon={faArrowLeft}/>}
+                nextLabel={<FontAwesomeIcon icon={faArrowRight}/>}
+                breakLabel={'...'}
+                pageCount={pageCount}
+                marginPagesDisplayed={1}
+                pageRangeDisplayed={5}
+                onPageChange={handlePageClick}
+                renderOnZeroPageCount={null}
+                containerClassName={'pagination justify-content-center'}
+                pageClassName={'page-item'}
+                pageLinkClassName={'page-link'}
+                previousClassName={'page-item'}
+                previousLinkClassName={'page-link'}
+                nextClassName={'page-item'}
+                nextLinkClassName={'page-link'}
+                brakClassName={'page-item'}
+                breakLinkClassName={'page-link'}
+                activeClassName={'active'}                                
+            />
             <Footer/>
         </div>
     );
