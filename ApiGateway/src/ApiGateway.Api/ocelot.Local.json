@@ -43,7 +43,7 @@
     },
     //GetWorkspaciesPaged?PageSize=2&CurrentPage=1&SortOn=Id&SortDirection=ASC
     {
-      "DownstreamPathTemplate": "/api/Workspacies/GetWorkspaciesPaged?PageSize={PageSize}&CurrentPage={CurrentPage}&SortOn={SortOn}&SortDirection={SortDirection}}",
+      "DownstreamPathTemplate": "/api/Workspacies/GetWorkspaciesPaged?{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -51,7 +51,7 @@
           "Port": "8000"
         }
       ],
-      "UpstreamPathTemplate": "/Workspacies/GetWorkspaciesPaged?PageSize={PageSize}&CurrentPage={CurrentPage}&SortOn={SortOn}&SortDirection={SortDirection}}",
+      "UpstreamPathTemplate": "/Workspacies/GetWorkspaciesPaged?{everything}",
       "UpstreamHttpMethod": [ "GET" ]
     },
     {
@@ -130,30 +130,6 @@
         }
       ],
       "UpstreamPathTemplate": "/Users/CreateUser/{role}",
-      "UpstreamHttpMethod": [ "POST" ]
-    },
-    {
-      "DownstreamPathTemplate": "/api/Users/GetUser/{id}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "locahost",
-          "Port": "9000"
-        }
-      ],
-      "UpstreamPathTemplate": "/Users/GetUser/{id}",
-      "UpstreamHttpMethod": [ "GET" ]
-    },
-    {
-      "DownstreamPathTemplate": "/api/Users/GetUserByEmail",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "locahost",
-          "Port": "9000"
-        }
-      ],
-      "UpstreamPathTemplate": "/Users/GetUserByEmail",
       "UpstreamHttpMethod": [ "POST" ]
     },
     {
