@@ -44,7 +44,7 @@ namespace CatalogService.BusinessLogic.Services
         /// Function to get a workspace paged.
         /// </summary>
         /// <returns>A PagedList of <see cref="WorkspaceDTO"/>.</returns>
-        Task<PagedList<WorkspaceDTO>> GetWorkspaciesPagedAsync(PagedQueryBase query, CancellationToken cancellationToken);
+        Task<PagedWorkspaceDTO> GetWorkspaciesPagedAsync(PagedQueryBase query, CancellationToken cancellationToken);
 
         /// <summary>
         /// Function to update the workspace to the database.

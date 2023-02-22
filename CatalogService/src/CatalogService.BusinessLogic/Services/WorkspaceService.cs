@@ -6,6 +6,7 @@ using CatalogService.DataAccess.Models;
 using CatalogService.DataAccess.Pagination;
 using CatalogService.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace CatalogService.BusinessLogic.Services
 {
@@ -113,13 +114,15 @@ namespace CatalogService.BusinessLogic.Services
         /// </summary>
         /// <param name="number">The number of the course.</param>
         /// <returns>A PagedList of <see cref="WorkspaceDTO"/>.</returns>
-        public async Task<PagedList<WorkspaceDTO>> GetWorkspaciesPagedAsync(PagedQueryBase query, CancellationToken cancellationToken)
+        public async Task<PagedWorkspaceDTO> GetWorkspaciesPagedAsync(PagedQueryBase query, CancellationToken cancellationToken)
         {
             try
             {
                 var list = await _repository.GetWorkspaciesPagedAsync(query, cancellationToken);
                 var mapWorkspaces = _mapper.Map<List<WorkspaceDTO>>(list);
                 var workspacesDTO = new PagedList<WorkspaceDTO>(mapWorkspaces, list.TotalCount, list.CurrentPage, list.PageSize);
+                var pagedWorkspaceDTO = new PagedWorkspaceDTO(workspacesDTO, list.TotalPages);
+
                 if (list == null)
                 {
                     _logger.LogError("Such course number dosen't exist");
@@ -127,9 +130,9 @@ namespace CatalogService.BusinessLogic.Services
                     throw new NotFoundException("The workspace was not found");
                 }
 
-                //var listDTO = _mapper.Map<List<WorkspaceDTO>>(list);
+                //var listDTO = _mapper.Map<List<WorkspaceDTO>>(list);                
 
-                return workspacesDTO;
+                return pagedWorkspaceDTO;
             }
             catch(Exception ex)
             {
