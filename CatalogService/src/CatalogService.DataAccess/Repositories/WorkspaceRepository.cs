@@ -83,11 +83,13 @@ namespace CatalogService.DataAccess.Repositories
 
             try
             {
-                return await _workspaces
-                            .AsNoTracking()
-                            .Sort(query.SortOn, query.SortDirection)
-                            .ToPagedListAsync(query);
+                var result = await _workspaces.
+                    Include(x => x.Category)
+                    .AsNoTracking()
+                    .Sort(query.SortOn, query.SortDirection)
+                    .ToPagedListAsync(query);
 
+                return result;
             }
             catch (Exception ex)
             {

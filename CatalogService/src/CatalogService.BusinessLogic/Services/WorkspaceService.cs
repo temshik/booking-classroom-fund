@@ -115,19 +115,27 @@ namespace CatalogService.BusinessLogic.Services
         /// <returns>A PagedList of <see cref="WorkspaceDTO"/>.</returns>
         public async Task<PagedList<WorkspaceDTO>> GetWorkspaciesPagedAsync(PagedQueryBase query, CancellationToken cancellationToken)
         {
-            var list = await _repository.GetWorkspaciesPagedAsync(query,cancellationToken);
-            var mapWorkspaces = _mapper.Map<List<WorkspaceDTO>>(list);
-            var workspacesDTO = new PagedList<WorkspaceDTO>(mapWorkspaces, list.TotalCount, list.CurrentPage, list.PageSize);
-            if (list == null)
+            try
             {
-                _logger.LogError("Such course number dosen't exist");
+                var list = await _repository.GetWorkspaciesPagedAsync(query, cancellationToken);
+                var mapWorkspaces = _mapper.Map<List<WorkspaceDTO>>(list);
+                var workspacesDTO = new PagedList<WorkspaceDTO>(mapWorkspaces, list.TotalCount, list.CurrentPage, list.PageSize);
+                if (list == null)
+                {
+                    _logger.LogError("Such course number dosen't exist");
 
-                throw new NotFoundException("The workspace was not found");
+                    throw new NotFoundException("The workspace was not found");
+                }
+
+                //var listDTO = _mapper.Map<List<WorkspaceDTO>>(list);
+
+                return workspacesDTO;
             }
-
-            //var listDTO = _mapper.Map<List<WorkspaceDTO>>(list);
-
-            return workspacesDTO;
+            catch(Exception ex)
+            {
+                _logger.LogError($"Non correct values in the {nameof(GetWorkspaciesPagedAsync)} action {ex}");
+                return null;
+            }
         }
 
         /// <summary>

@@ -71,7 +71,7 @@ namespace CatalogService.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetWorkspaciesPaged([FromQuery] PagedQueryBase query, CancellationToken cancellationToken)
         {
-            var list = _service.GetWorkspaciesPagedAsync(query, cancellationToken);
+            var list = await _service.GetWorkspaciesPagedAsync(query, cancellationToken);
 
             if (list == null)
             {
