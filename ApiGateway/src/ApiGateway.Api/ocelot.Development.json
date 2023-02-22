@@ -42,9 +42,9 @@
       "UpstreamPathTemplate": "/Workspacies/GetWorkspaces/{id}",
       "UpstreamHttpMethod": [ "GET" ]
     },
-    //Get/{number}
+    //GetWorkspaciesPaged?PageSize=2&CurrentPage=1&SortOn=Id&SortDirection=ASC
     {
-      "DownstreamPathTemplate": "/api/Workspacies/Get/{number}",
+      "DownstreamPathTemplate": "/api/Workspacies/GetWorkspaciesPaged?PageSize={PageSize}&CurrentPage={CurrentPage}&SortOn={SortOn}&SortDirection={SortDirection}}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -52,7 +52,7 @@
           "Port": "80"
         }
       ],
-      "UpstreamPathTemplate": "/Workspacies/Get/{number}",
+      "UpstreamPathTemplate": "/Workspacies/GetWorkspaciesPaged?PageSize={PageSize}&CurrentPage={CurrentPage}&SortOn={SortOn}&SortDirection={SortDirection}}",
       "UpstreamHttpMethod": [ "GET" ]
     },
     {
