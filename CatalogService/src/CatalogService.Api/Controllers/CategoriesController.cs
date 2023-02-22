@@ -74,7 +74,7 @@ namespace CatalogService.Api.Controllers
         /// <returns>Updated category.</returns>
         [Route("[action]")]
         [HttpPut]
-        [Authorize(Roles = "Dispacher, Employee")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateCategory([FromBody] CategoryRequestUpdate categoryRequest, CancellationToken cancellationToken)
         {
