@@ -1,4 +1,5 @@
 ﻿using CatalogService.DataAccess.Models;
+using CatalogService.DataAccess.Pagination;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -70,15 +71,29 @@ namespace CatalogService.DataAccess.Repositories
         /// </summary>
         /// <param name="number">The number of the course</param>
         /// <returns>list of workspaceies</returns>
-        public Task<List<Workspace>> GetWorkspaciesByCourseNumberAsync(string number, CancellationToken cancellationToken)
+        public async Task<PagedList<Workspace>> GetWorkspaciesPagedAsync(PagedQueryBase query, CancellationToken cancellationToken)
         {
-            var result = _workspaces
+            /*var result = _workspaces
                 .Where(x => x.CourseNumber.ToString() == number)
                 .ToListAsync(cancellationToken);
 
             _logger.LogInformation("Get the workspace from the database by course number");
 
-            return result;
+            return result;*/
+
+            try
+            {
+                return await _workspaces
+                            .AsNoTracking()
+                            .Sort(query.SortOn, query.SortDirection)
+                            .ToPagedListAsync(query);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong in the {nameof(GetWorkspaciesPagedAsync)} action {ex}");
+                return new PagedList<Workspace>(new List<Workspace>(), 0, 0, 0);
+            }
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using CatalogService.BusinessLogic.DTOs;
+using CatalogService.DataAccess.Pagination;
 
 namespace CatalogService.BusinessLogic.Services
 {
@@ -40,11 +41,10 @@ namespace CatalogService.BusinessLogic.Services
         Task<WorkspaceDTO> GetWorkspaceAsync(WorkspaceDTO workspace, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Function to get a workspace by the course number.
+        /// Function to get a workspace paged.
         /// </summary>
-        /// <param name="number">The number of the course.</param>
-        /// <returns>A List of <see cref="WorkspaceDTO"/>.</returns>
-        Task<List<WorkspaceDTO>> GetWorkspaciesByCourseNumberAsync(string number, CancellationToken cancellationToken);
+        /// <returns>A PagedList of <see cref="WorkspaceDTO"/>.</returns>
+        Task<PagedList<WorkspaceDTO>> GetWorkspaciesPagedAsync(PagedQueryBase query, CancellationToken cancellationToken);
 
         /// <summary>
         /// Function to update the workspace to the database.

@@ -3,6 +3,7 @@ using CatalogService.BusinessLogic.DTOs;
 using CatalogService.BusinessLogic.Exceptions;
 using CatalogService.BusinessLogic.Services.SyncDataService.Http;
 using CatalogService.DataAccess.Models;
+using CatalogService.DataAccess.Pagination;
 using CatalogService.DataAccess.Repositories;
 using Microsoft.Extensions.Logging;
 
@@ -108,14 +109,15 @@ namespace CatalogService.BusinessLogic.Services
         }
 
         /// <summary>
-        /// Function to get a workspace by the course number.
+        /// Function to get a workspace paged.
         /// </summary>
         /// <param name="number">The number of the course.</param>
-        /// <returns>A List of <see cref="WorkspaceDTO"/>.</returns>
-        public async Task<List<WorkspaceDTO>> GetWorkspaciesByCourseNumberAsync(string number, CancellationToken cancellationToken)
+        /// <returns>A PagedList of <see cref="WorkspaceDTO"/>.</returns>
+        public async Task<PagedList<WorkspaceDTO>> GetWorkspaciesPagedAsync(PagedQueryBase query, CancellationToken cancellationToken)
         {
-            var list = _repository.GetWorkspaciesByCourseNumberAsync(number, cancellationToken);
-
+            var list = await _repository.GetWorkspaciesPagedAsync(query,cancellationToken);
+            var mapWorkspaces = _mapper.Map<List<WorkspaceDTO>>(list);
+            var workspacesDTO = new PagedList<WorkspaceDTO>(mapWorkspaces, list.TotalCount, list.CurrentPage, list.PageSize);
             if (list == null)
             {
                 _logger.LogError("Such course number dosen't exist");
@@ -123,9 +125,9 @@ namespace CatalogService.BusinessLogic.Services
                 throw new NotFoundException("The workspace was not found");
             }
 
-            var listDTO = _mapper.Map<List<WorkspaceDTO>>(list);
+            //var listDTO = _mapper.Map<List<WorkspaceDTO>>(list);
 
-            return listDTO;
+            return workspacesDTO;
         }
 
         /// <summary>

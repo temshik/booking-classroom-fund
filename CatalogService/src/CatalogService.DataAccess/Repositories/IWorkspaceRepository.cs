@@ -1,4 +1,5 @@
 ﻿using CatalogService.DataAccess.Models;
+using CatalogService.DataAccess.Pagination;
 
 namespace CatalogService.DataAccess.Repositories
 {
@@ -27,11 +28,11 @@ namespace CatalogService.DataAccess.Repositories
         Task<Workspace> GetWorkspaceAsync(int id, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Function to get a workspace by the course number
+        /// Function to get a paged workspace
         /// </summary>
         /// <param name="number">The number of the course</param>
         /// <returns>A List of <see cref="Workspace"/></returns>
-        Task<List<Workspace>> GetWorkspaciesByCourseNumberAsync(string number, CancellationToken cancellationToken);
+        Task<PagedList<Workspace>> GetWorkspaciesPagedAsync(PagedQueryBase query, CancellationToken cancellationToken);
 
         /// <summary>
         /// Function to update the workspace to the database

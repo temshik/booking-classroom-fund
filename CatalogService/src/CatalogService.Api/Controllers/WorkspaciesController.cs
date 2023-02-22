@@ -2,6 +2,7 @@
 using CatalogService.Api.Requests;
 using CatalogService.BusinessLogic.DTOs;
 using CatalogService.BusinessLogic.Services;
+using CatalogService.DataAccess.Pagination;
 using EventBus.Messages.Events;
 using EventBus.Messages.Events.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -59,19 +60,18 @@ namespace CatalogService.Api.Controllers
         }
 
         /// <summary>
-        /// Get a specific workspace data.
-        /// </summary>
-        /// <param name="number">Course number.</param>
+        /// Get paged workspace data.
+        /// </summary>        
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Desired workspace.</returns>
-        [Route("[action]/{number}")]
+        [Route("[action]")]
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get(string number, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetWorkspaciesPaged([FromQuery] PagedQueryBase query, CancellationToken cancellationToken)
         {
-            var list = _service.GetWorkspaciesByCourseNumberAsync(number, cancellationToken);
+            var list = _service.GetWorkspaciesPagedAsync(query, cancellationToken);
 
             if (list == null)
             {
