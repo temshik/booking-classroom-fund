@@ -1,4 +1,4 @@
-﻿namespace IdentityService.BusinessLogic.Exceptions
+﻿namespace CatalogService.BusinessLogic.Exceptions
 {
     /// <summary>
     /// Exception class for catchin not found items

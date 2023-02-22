@@ -3,7 +3,6 @@ using CatalogService.BusinessLogic.DTOs;
 using CatalogService.BusinessLogic.Exceptions;
 using CatalogService.DataAccess.Models;
 using CatalogService.DataAccess.Repositories;
-using IdentityService.BusinessLogic.Exceptions;
 using Microsoft.Extensions.Logging;
 
 namespace CatalogService.BusinessLogic.Services

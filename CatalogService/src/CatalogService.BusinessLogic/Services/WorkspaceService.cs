@@ -4,7 +4,6 @@ using CatalogService.BusinessLogic.Exceptions;
 using CatalogService.BusinessLogic.Services.SyncDataService.Http;
 using CatalogService.DataAccess.Models;
 using CatalogService.DataAccess.Repositories;
-using IdentityService.BusinessLogic.Exceptions;
 using Microsoft.Extensions.Logging;
 
 namespace CatalogService.BusinessLogic.Services
