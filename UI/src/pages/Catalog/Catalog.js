@@ -21,20 +21,28 @@ const catalogService = new CatalogServices();
 const Catalog = () => {
     const location = useLocation();    
     const [faculty, setFaculty] = useState(location.state !== null ? location.state.value : '');   
-    const [pageCount, setPageCount] = useState(15);     
+    const [pageCount, setPageCount] = useState(15);//   
+    const [PageSize, setPageSize] = useState(1);
+    const [CurrentPage, setCurrentPage] = useState(1);
+    const [SortOn, setSortOn] = useState("Id");
+    const [SortDirection, setSortDirection] = useState("ASC");
     const [inputSearch, setInputSearch] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState(categoryList);//
+    const [selectedCategory, setSelectedCategory] = useState([]);//
     const [selectedCourse, setSelectedCourse] = useState(courseList);
     const [selectedBuildings, setSelectedBuildings] = useState(buildingOptions);
     const [locked, setLocked] = useState(false);
     const [equipment, setEquipment] = useState(false);
     const [roomCapacity, setRoomCapacity] = useState(8);
-    const [list, setList] = useState(dataList);//
+    const [list, setList] = useState([]);//
+    const [workspacies, setWorkspacies] = useState([]);
     const [resultFound, setResultFound] = useState(true);
 
 
     const handlePageClick=(data)=>{
-        console.log(data.selected);
+        console.log(data.selected+1);
+        setCurrentPage(data.selected+1)
+        getWorkspacies();
+        getCategories();
     }
 
     const handleSelectCategory=(value)=>{
@@ -76,7 +84,7 @@ const Catalog = () => {
         setSelectedBuildings(changeSelectedBuildings);        
     }        
 
-    useEffect(()=>{
+    useEffect(() =>{
         if(faculty !== '')
         {
            colourOptions.forEach(({label, usedBuildings, value}) => {
@@ -88,27 +96,52 @@ const Catalog = () => {
                     setSelectedBuildings(newSelectedBuildings)
                 }
            })
+        }        
+        getWorkspacies();
+        getCategories();        
+    }, [CurrentPage])
 
+    const getWorkspacies = async () => {    
+        if(window.localStorage.getItem('accessToken') !== null)                                                  
+        await catalogService.GetWorkspaciesPaged(PageSize,CurrentPage,SortOn,SortDirection).then(({data})=>{      
+            console.log('data.workspaceDTOs',data.workspaceDTOs);     
+            console.log('data',data.workspaceDTOs);   
+            setWorkspacies(data.workspaceDTOs)        
+            setList(workspacies);
+            setPageCount(data.totalPages);                    
+        }).catch((error)=>{
+        if (error.response.data.message === "TokenExpiredError") {
+            console.log('logout');
         }
-        if(window.sessionStorage.getItem('email')!== null){              
-            catalogService.GetCategories().then(({data})=>{               
-                console.log("Respons",data);
-            }).catch((error)=>{
-                if (error.response.data.message === "TokenExpiredError") {
-                    console.log('logout');
-                }
-                else
-                console.log(error);
-            });
-        } 
-    }, [])
+        else
+            console.log(error);
+        });        
+    }
+
+    const getCategories = async () => {
+        if(window.localStorage.getItem('accessToken') !== null)
+        await catalogService.GetCategories().then(({data})=>{               
+            console.log("Categories",data);
+            setSelectedCategory(data);
+
+        }).catch((error)=>{
+            if (error.response.data.message === "TokenExpiredError") {
+                console.log('logout');
+            }
+            else
+            console.log(error);
+        });           
+    }
 
     useEffect(()=>{
-        applyFilters();        
+        if (list !== null)
+        applyFilters();  
+        console.log('[eq',list)      
     },[selectedBuildings, selectedCourse, selectedCategory, roomCapacity, locked, equipment, inputSearch])
 
-    const applyFilters=()=>{
-        let updatedList = dataList;
+    const applyFilters=()=>{          
+        //getWorkspacies();
+        let updatedList = workspacies;
 
         //InputSearch
         if(inputSearch){
@@ -159,9 +192,10 @@ const Catalog = () => {
             updatedList = updatedList.filter((item) => equipment === (item.specialEquipment))                
         }
 
-        setList(updatedList);       
-        
-        !updatedList.length ? setResultFound(false) : setResultFound(true);
+        if(updatedList !== list){
+            setList(updatedList);                   
+            !updatedList.length ? setResultFound(false) : setResultFound(true);   
+        }     
     }   
 
     return (        

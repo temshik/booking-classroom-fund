@@ -7,8 +7,7 @@ const instance = axios.create({
 })
 
 const Refresh=()=>{
-    const dispatch = useDispatch();
-    console.log('хуй');
+    const dispatch = useDispatch();    
     dispatch(REFRESH_ACCESS_TOKEN());
 }
 
@@ -25,9 +24,10 @@ instance.interceptors.response.use((response)=>{
     const originalConfig = error.config;
     if (error.response) {
         if (error.response.status === 401 && !originalConfig._retry) {
-            originalConfig._retry = true;
-            console.log('хуй');
+            originalConfig._retry = true;   
+            console.log("запрос на ревреш токе до:",window.localStorage.getItem('accessToken'))
             Refresh();
+            console.log("запрос на ревреш токе после:",window.localStorage.getItem('accessToken'))
             // Do something, call refreshToken() request for example;
             // return a request
             return instance(originalConfig);

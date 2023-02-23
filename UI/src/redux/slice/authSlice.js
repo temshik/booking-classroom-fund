@@ -124,7 +124,7 @@ const authSlice = createSlice({
                     window.localStorage.setItem('tokenLifeTimeInMinutes',data.data.tokenLifeTimeInMinutes);
                 }
             }).catch((error)=>{
-                console.log(error);
+                console.log("Refresh",error);
             })
         }
     },
@@ -154,7 +154,7 @@ const authSlice = createSlice({
             state.isLoggedIn = false
             //переделоть на бэке для вывода ошибок
             state.status = action.payload.status  
-            state.errorMessage = action.payload.errors     
+            state.errorMessage = action.payload.errors              
         },        
     }
     

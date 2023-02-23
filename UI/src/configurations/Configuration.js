@@ -8,5 +8,7 @@ module.exports={
     GetUserByEmail:"/Users/GetUserByEmail",
     UpdateUser:"/Users/UpdateUser",
     DeleteUser:"Users/DeleteUser",
+    //Catalog
     GetCategories:"/categories/getcategories",
+    GetWorkspaciesPaged:"/Workspacies/GetWorkspaciesPaged"
 }

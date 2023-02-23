@@ -8,7 +8,7 @@ export default class CatalogServices {
     GetCategories(){
         return axiosService.get(Configuration.GetCategories)
     }
-    EditWorkspace(){
-
+    GetWorkspaciesPaged(PageSize,CurrentPage,SortOn,SortDirection){
+        return axiosService.get(Configuration.GetWorkspaciesPaged+`?PageSize=${PageSize}&CurrentPage=${CurrentPage}&SortOn=${SortOn}&SortDirection=${SortDirection}`)
     }
 }
