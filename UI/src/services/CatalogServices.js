@@ -11,4 +11,7 @@ export default class CatalogServices {
     GetWorkspaciesPaged(PageSize,CurrentPage,SortOn,SortDirection){
         return axiosService.get(Configuration.GetWorkspaciesPaged+`?PageSize=${PageSize}&CurrentPage=${CurrentPage}&SortOn=${SortOn}&SortDirection=${SortDirection}`)
     }
+    UpdateCategory(data){
+        return axiosService.put(Configuration.UpdateCategory,data)
+    }
 }

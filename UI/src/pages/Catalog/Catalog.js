@@ -48,12 +48,15 @@ const Catalog = () => {
     const handleSelectCategory=(value)=>{
         console.log('Catalog SCategory value ', value)
         console.log('Catalog SCategory ', selectedCategory)
-        const newSelectedCategory = selectedCategory.map(category => {
+        selectedCategory.map(category => {
             if(category.id === value) {
-                return {...category, selected: !category.selected}
+                category.selected = !category.selected 
+                console.log('aa'.category);              
+                updateCategory(category);
             } else return category
         })
-        setSelectedCategory(newSelectedCategory)
+        //setSelectedCategory(newSelectedCategory)
+        getCategories();
         console.log('Catalog SCategory RETURN', selectedCourse)
     }
 
@@ -133,14 +136,28 @@ const Catalog = () => {
         });           
     }
 
+    const updateCategory = async (item) => {
+        if(window.localStorage.getItem('accessToken') !== null)
+        await catalogService.UpdateCategory(item).then(({data})=>{               
+            console.log("Categories",data);
+            //setSelectedCategory(data);
+
+        }).catch((error)=>{
+            if (error.response.data.message === "TokenExpiredError") {
+                console.log('logout');
+            }
+            else
+            console.log(error);
+        });
+    }
+
     useEffect(()=>{
         if (list !== null)
         applyFilters();  
         console.log('[eq',list)      
     },[selectedBuildings, selectedCourse, selectedCategory, roomCapacity, locked, equipment, inputSearch])
 
-    const applyFilters=()=>{          
-        //getWorkspacies();
+    const applyFilters=()=>{                  
         let updatedList = workspacies;
 
         //InputSearch

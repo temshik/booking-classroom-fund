@@ -1,14 +1,31 @@
 import axios from 'axios'
 import {useDispatch} from 'react-redux';
 import {REFRESH_ACCESS_TOKEN} from '../redux/slice/authSlice'
+import AuthServices from '../services/AuthServices';
 
 const instance = axios.create({
     baseURL: 'http://127.0.0.1:5000'
 })
 
 const Refresh=()=>{
-    const dispatch = useDispatch();    
-    dispatch(REFRESH_ACCESS_TOKEN());
+    // const dispatch = useDispatch();    
+    // dispatch(REFRESH_ACCESS_TOKEN());
+    const authSevice = new AuthServices();
+    const data = {refreshToken: window.localStorage.getItem('refreshToken')}
+    authSevice.RefreshToken(data).then((data)=>{
+        console.log(data.data);  
+        //if(data.status === 200)
+        {                     
+            console.log(JSON.stringify(data.data.accessToken)); 
+            window.localStorage.setItem('accessToken',data.data.accessToken);
+            console.log(JSON.stringify(data.data.refreshToken)); 
+            window.localStorage.setItem('refreshToken',data.data.refreshToken);
+            console.log(JSON.stringify(data.data.tokenLifeTimeInMinutes)); 
+            window.localStorage.setItem('tokenLifeTimeInMinutes',data.data.tokenLifeTimeInMinutes);
+        }
+    }).catch((error)=>{
+        console.log("Refresh",error);
+    })
 }
 
 instance.interceptors.request.use((config)=>{

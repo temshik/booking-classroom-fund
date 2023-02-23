@@ -10,5 +10,6 @@ module.exports={
     DeleteUser:"Users/DeleteUser",
     //Catalog
     GetCategories:"/categories/getcategories",
-    GetWorkspaciesPaged:"/Workspacies/GetWorkspaciesPaged"
+    GetWorkspaciesPaged:"/Workspacies/GetWorkspaciesPaged",
+    UpdateCategory:"/categories/updatecategory"
 }

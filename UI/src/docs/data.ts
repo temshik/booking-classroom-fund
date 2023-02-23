@@ -5,22 +5,22 @@ export interface ColourOption {
   }
   
   export const colourOptions: readonly ColourOption[] = [
-    { value: 'ATF', label: 'Automotive and Tractor Faculty', usedBuildings: ['1','8','11А','16','17','20']},
+    { value: 'ATF', label: 'Automotive and Tractor Faculty', usedBuildings: ['1','8','11','16','17','20']},
     { value: 'FMEE', label: 'The Faculty of Mining and Engineering Ecology', usedBuildings: ['1','7','9','18']},
     { value: 'MSF', label: 'Faculty of Mechanical Engineering', usedBuildings: ['1','6','17']},
     { value: 'MTF', label: 'The Faculty of Mechanics and Technology', usedBuildings: ['1','7','8']},
     { value: 'FMME', label: 'The Faculty of Marketing, Management, Entrepreneurship', usedBuildings: ['18']},
-    { value: 'FE', label: 'The Faculty of Energy', usedBuildings: ['1','2','8','11А','18']},
-    { value: 'FITR', label: 'Faculty of Information Technology and Robotics', usedBuildings: ['1','6','11А']},
+    { value: 'FE', label: 'The Faculty of Energy', usedBuildings: ['1','2','8','11','18']},
+    { value: 'FITR', label: 'Faculty of Information Technology and Robotics', usedBuildings: ['1','6','11']},
     { value: 'FMTH', label: 'Faculty of Management Technologies and Humanization', usedBuildings: ['1','9']},
     { value: 'FEE', label: 'Faculty of Engineering and Education', usedBuildings: ['1','17','20']},
-    { value: 'FEC', label: 'Faculty of Energy Construction', usedBuildings: ['1','2','6','8','11А']},
+    { value: 'FEC', label: 'Faculty of Energy Construction', usedBuildings: ['1','2','6','8','11']},
     { value: 'AF', label: 'Architecture faculty', usedBuildings: ['1','5','6','7','8','12','17']},
-    { value: 'FCE', label: 'Faculty of Civil Engineering', usedBuildings: ['1','11А','16','17','20']},
+    { value: 'FCE', label: 'Faculty of Civil Engineering', usedBuildings: ['1','11','16','17','20']},
     { value: 'FI', label: 'Faculty of Instrumentation', usedBuildings: ['1','17']},
-    { value: 'FTC', label: 'Faculty of Transport Communications', usedBuildings: ['1','8','11А','16','17','20']},
-    { value: 'MTF', label: 'Military Technical Faculty', usedBuildings: ['1','4','6','7','8','11А','17','18']},
-    { value: 'STF', label: 'Sports and technical faculty', usedBuildings: ['1','8','17','11Б',]},            
+    { value: 'FTC', label: 'Faculty of Transport Communications', usedBuildings: ['1','8','11','16','17','20']},
+    { value: 'MTF', label: 'Military Technical Faculty', usedBuildings: ['1','4','6','7','8','11','17','18']},
+    { value: 'STF', label: 'Sports and technical faculty', usedBuildings: ['1','8','17',]},            
   ];
 
 export interface BuildingOption{
@@ -38,14 +38,13 @@ export interface BuildingOption{
     {id: 6, value: '7', checked: false},
     {id: 7, value: '8', checked: false},
     {id: 8, value: '9', checked: false},
-    {id: 9, value: '11А', checked: false},
-    {id: 10, value: '11Б', checked: false},
-    {id: 11, value: '12', checked: false},
-    {id: 12, value: '15', checked: false},
-    {id: 13, value: '16', checked: false},
-    {id: 14, value: '17', checked: false},
-    {id: 15, value: '18', checked: false},
-    {id: 16, value: '20', checked: false},    
+    {id: 9, value: '11', checked: false},
+    {id: 10, value: '12', checked: false},
+    {id: 11, value: '15', checked: false},
+    {id: 12, value: '16', checked: false},
+    {id: 13, value: '17', checked: false},
+    {id: 14, value: '18', checked: false},
+    {id: 15, value: '20', checked: false},    
   ];
 
   export interface IMapMarkers{
@@ -98,41 +97,35 @@ export interface BuildingOption{
     {
       id: 9,
       geo: [53.92354601790836, 27.59476787985397],
-      text: '11A'
+      text: '11'
     },
     {
       id: 10,
-      geo: [53.92314799284806, 27.595116567020305],
-      text: '11Б'
-    }
-    ,
-    {
-      id: 11,
       geo: [53.923671, 27.593768],
       text: '12'
     },
     {
-      id: 12,
+      id: 11,
       geo: [53.93789930283648, 27.668509542331684],
       text: '15'
     },
     {
-      id: 13,
+      id: 12,
       geo: [53.929474457516434, 27.669153099999996],
       text: '16'
     },
     {
-      id: 14,
+      id: 13,
       geo: [53.92337608578156, 27.59217818650766],
       text: '17'
     },
     {
-      id: 15,
+      id: 14,
       geo: [53.921479668477815, 27.594813124743567],
       text: '18'
     },
     {
-      id: 16,
+      id: 15,
       geo: [53.921843, 27.594328],
       text: '20'
     }

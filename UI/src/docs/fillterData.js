@@ -44,34 +44,6 @@ export const categoryList = [
     // },  
 ];
 
-export const data = {    
-    "workspaceDTOs": [
-        {
-            "id": 2,
-            "campusNumber": 1,
-            "workspaceNumber": 314,
-            "categoryId": 2,
-            "description": "Equipment: Whiteboard, Visualiser, Blu-ray playback, Laptop Connectivity - HDMI, VGA and mini jack audio, Wireless Coverage, PC, Slide Advancer/Laser Pointer, Data Projector, Equipment Control - Extron touch screen, Desk Microphone, Induction Loop, Hybrid - Capture & Stream",
-            "numberOfSeats": 14,
-            "courseNumber": 2,
-            "specialEquipment": true,
-            "isAvailable": true
-        },
-        {
-            "id": 3,
-            "campusNumber": 1,
-            "workspaceNumber": 416,
-            "categoryId": 2,
-            "description": "Equipment: Whiteboard, Visualiser, Blu-ray playback, Laptop Connectivity - HDMI, VGA and mini jack audio, Wireless Coverage, PC, Slide Advancer/Laser Pointer, Data Projector, Equipment Control - Extron touch screen, Desk Microphone, Induction Loop, Hybrid - Capture & Stream",
-            "numberOfSeats": 14,
-            "courseNumber": 2,
-            "specialEquipment": true,
-            "isAvailable": true
-        }
-    ],
-    "totalPages": 1    
-}
-
 export const dataList = [
     {
         "id": 1,
