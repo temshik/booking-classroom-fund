@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {useLocation} from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import {selectIsLoggedIn, selectAccessToken} from '../../redux/slice/authSlice'
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategory, selectCat, updatedCat, getWorkspacePaged, selectWorkspacePaged, selectTotalPages, updateCategory} from '../../redux/slice/catalogSlice';
 import Header from '../../components/Header/Header';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import FilterPanel from '../../components/FilterPanel/FilterPanel';
 import SearchItem from '../../components/SearchItem/SearchItem';
 import notFound from '../../images/NoResults.gif';
-import CatalogServices from '../../services/CatalogServices';
 import ReactPaginate from 'react-paginate';
 import { buildingOptions, colourOptions } from '../../docs/data.ts';
 import {courseList, categoryList, dataList} from "../../docs/fillterData";
@@ -16,15 +15,17 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import "./Catalog.scss"
 
-const catalogService = new CatalogServices();
-
 const Catalog = () => {
     const location = useLocation();    
+    const dispatch = useDispatch();
+    const cat = useSelector(selectCat);
+    const updateCat = useSelector(updatedCat);
+    const workspacies = useSelector(selectWorkspacePaged);
+    const pageCount = useSelector(selectTotalPages);
     const [faculty, setFaculty] = useState(location.state !== null ? location.state.value : '');   
-    const [pageCount, setPageCount] = useState(15);//   
-    const [PageSize, setPageSize] = useState(1);
+    const [PageSize, setPageSize] = useState(2);
     const [CurrentPage, setCurrentPage] = useState(1);
-    const [SortOn, setSortOn] = useState("Id");
+    const [SortOn, setSortOn] = useState("categoryId");
     const [SortDirection, setSortDirection] = useState("ASC");
     const [inputSearch, setInputSearch] = useState('');
     const [selectedCategory, setSelectedCategory] = useState([]);//
@@ -34,30 +35,29 @@ const Catalog = () => {
     const [equipment, setEquipment] = useState(false);
     const [roomCapacity, setRoomCapacity] = useState(8);
     const [list, setList] = useState([]);//
-    const [workspacies, setWorkspacies] = useState([]);
     const [resultFound, setResultFound] = useState(true);
 
 
     const handlePageClick=(data)=>{
         console.log(data.selected+1);
         setCurrentPage(data.selected+1)
-        getWorkspacies();
-        getCategories();
     }
 
     const handleSelectCategory=(value)=>{
         console.log('Catalog SCategory value ', value)
         console.log('Catalog SCategory ', selectedCategory)
-        selectedCategory.map(category => {
-            if(category.id === value) {
-                category.selected = !category.selected 
-                console.log('aa'.category);              
-                updateCategory(category);
-            } else return category
-        })
-        //setSelectedCategory(newSelectedCategory)
-        getCategories();
-        console.log('Catalog SCategory RETURN', selectedCourse)
+        const newCategory = selectedCategory.map(category => {
+            const {id, selected} = category;            
+            if(id === value) {
+                console.log('aa',id);                              
+                return{...category, selected: !category.selected};                                                          
+            } else return category            
+        })                      
+        if (newCategory !== null)
+        updateCategories(newCategory[value-1]);            
+        //getCategories();
+        //setSelectedCategory(newCategory);
+        console.log('Catalog SCategory RETURN', selectedCategory)
     }
 
     const handleRoomCapacity=(event)=>{
@@ -87,7 +87,82 @@ const Catalog = () => {
         setSelectedBuildings(changeSelectedBuildings);        
     }        
 
-    useEffect(() =>{
+    const getWorkspacies = async () => {    
+        if(window.localStorage.getItem('accessToken') !== null){                                            
+        // await catalogService.GetWorkspaciesPaged(PageSize,CurrentPage,SortOn,SortDirection).then(({data})=>{      
+        //     console.log('data.workspaceDTOs',data.workspaceDTOs);     
+        //     console.log('data',data.workspaceDTOs);   
+        //     setWorkspacies(data.workspaceDTOs)        
+        //     setList(workspacies);
+        //     setPageCount(data.totalPages);                    
+        // }).catch((error)=>{
+        // if (error.response.data.message === "TokenExpiredError") {
+        //     console.log('logout');
+        // }
+        // else
+        //     console.log(error);
+        // });        
+        dispatch(getWorkspacePaged({PageSize,CurrentPage,SortOn,SortDirection}));
+        console.log('disp', workspacies)
+        }
+    }
+
+    const getCategories = () => {
+        if(window.localStorage.getItem('accessToken') !== null){
+        // await catalogService.GetCategories().then(({data})=>{               
+        //     console.log("Categories",data);
+        //     setSelectedCategory(data);
+
+        // }).catch((error)=>{
+        //     if (error.response.data.message === "TokenExpiredError") {
+        //         console.log('logout');
+        //     }
+        //     else
+        //     console.log(error);
+        // });         
+        dispatch(getCategory());  
+        console.log('cat0', cat)        
+        }
+    }
+
+    const updateCategories = (item) => {
+        if(window.localStorage.getItem('accessToken') !== null){
+        // await catalogService.UpdateCategory(item).then(({data})=>{               
+        //     console.log("Categories",data);
+        //     //setSelectedCategory(data);
+
+        // }).catch((error)=>{
+        //     if (error.response.data.message === "TokenExpiredError") {
+        //         console.log('logout');
+        //     }
+        //     else
+        //     console.log(error);
+        // });
+        dispatch(updateCategory(item));
+        console.log('cat1',cat);
+        }
+    }
+
+    useEffect(() =>{             
+        getWorkspacies();
+        getCategories();        
+    }, [CurrentPage, SortDirection])
+
+    useEffect(()=>{
+        if(cat !== null)                  
+            setSelectedCategory(cat.data)                       
+    },[cat])
+    
+    useEffect(()=>{
+        getCategories();
+    },[updateCat])
+
+    useEffect(()=>{
+        if (workspacies !== null)
+            setList(workspacies)
+    },[workspacies])
+
+    useEffect(()=>{
         if(faculty !== '')
         {
            colourOptions.forEach(({label, usedBuildings, value}) => {
@@ -99,62 +174,17 @@ const Catalog = () => {
                     setSelectedBuildings(newSelectedBuildings)
                 }
            })
-        }        
+        }           
         getWorkspacies();
-        getCategories();        
-    }, [CurrentPage])
-
-    const getWorkspacies = async () => {    
-        if(window.localStorage.getItem('accessToken') !== null)                                                  
-        await catalogService.GetWorkspaciesPaged(PageSize,CurrentPage,SortOn,SortDirection).then(({data})=>{      
-            console.log('data.workspaceDTOs',data.workspaceDTOs);     
-            console.log('data',data.workspaceDTOs);   
-            setWorkspacies(data.workspaceDTOs)        
-            setList(workspacies);
-            setPageCount(data.totalPages);                    
-        }).catch((error)=>{
-        if (error.response.data.message === "TokenExpiredError") {
-            console.log('logout');
-        }
-        else
-            console.log(error);
-        });        
-    }
-
-    const getCategories = async () => {
-        if(window.localStorage.getItem('accessToken') !== null)
-        await catalogService.GetCategories().then(({data})=>{               
-            console.log("Categories",data);
-            setSelectedCategory(data);
-
-        }).catch((error)=>{
-            if (error.response.data.message === "TokenExpiredError") {
-                console.log('logout');
-            }
-            else
-            console.log(error);
-        });           
-    }
-
-    const updateCategory = async (item) => {
-        if(window.localStorage.getItem('accessToken') !== null)
-        await catalogService.UpdateCategory(item).then(({data})=>{               
-            console.log("Categories",data);
-            //setSelectedCategory(data);
-
-        }).catch((error)=>{
-            if (error.response.data.message === "TokenExpiredError") {
-                console.log('logout');
-            }
-            else
-            console.log(error);
-        });
-    }
+        getCategories();
+    },[])
 
     useEffect(()=>{
-        if (list !== null)
+        if (list !== undefined &&
+            selectedCategory !== undefined &&
+            workspacies !== undefined)
         applyFilters();  
-        console.log('[eq',list)      
+         
     },[selectedBuildings, selectedCourse, selectedCategory, roomCapacity, locked, equipment, inputSearch])
 
     const applyFilters=()=>{                  
@@ -166,27 +196,27 @@ const Catalog = () => {
                 item.description.toLowerCase().search(inputSearch.toLocaleLowerCase().trim())!==-1);
         }
 
-        //SelectedCategoty
+        //SelectedCategoty        
         const newSelectedCategory = selectedCategory
             .filter((item)=> item.selected)
             .map((item)=>item.id);        
         if(newSelectedCategory.length){
             updatedList = updatedList.filter((item) => newSelectedCategory.includes(item.categoryId));
         }
+        
 
         //RoomCapacity
         const newselectedRoomCapacity = roomCapacity
-            if(8<newselectedRoomCapacity<9999)
-            {
-                updatedList = updatedList.filter((item) => newselectedRoomCapacity <= (item.numberOfSeats));
-            }
+        if(8<newselectedRoomCapacity<9999)
+        {
+            updatedList = updatedList.filter((item) => newselectedRoomCapacity <= (item.numberOfSeats));
+        }
 
         //SelectedBuildings
         const selectedChecked = selectedBuildings
             .filter((item) => item.checked)
             .map((item)=>item.value);
         if(selectedChecked.length){
-            console.log('selectedChecked',selectedChecked)
             updatedList = updatedList.filter((item) => selectedChecked.includes(item.campusNumber.toString()));
         }
 
@@ -216,7 +246,8 @@ const Catalog = () => {
     }   
 
     return (        
-        <div>              
+        <div>     
+            {console.log('cat', cat)}                    
             <Navbar/>
             <Header/>
             <div className='listContainer'>
@@ -241,11 +272,11 @@ const Catalog = () => {
                     />
                     </div>
                     {resultFound ? <div className='listResult'>
-                        {list.map(item=><SearchItem 
+                        {list && list.map(item=><SearchItem 
                             key={item.id} 
                             item={item}
                             list={list}  
-                            categories={categoryList}/>
+                            categories={selectedCategory}/>
                             )}                                              
                     </div> : <div className='listResult'> <img src={notFound} alt=''/> </div>}
                 </div>

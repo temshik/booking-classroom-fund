@@ -26,6 +26,7 @@ const Refresh=()=>{
     }).catch((error)=>{
         console.log("Refresh",error);
     })
+    window.location.reload();
 }
 
 instance.interceptors.request.use((config)=>{

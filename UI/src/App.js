@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import AuthServices from './services/AuthServices';
 import {REMOVE_ACTIVE_USER, SET_ACTIVE_USER}  from './redux/slice/authSlice';
 import {Route, Routes} from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
 import HomePage from "./pages/HomePage/HomePage";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
@@ -46,6 +47,7 @@ function App() {
         }
     },[])
   return (
+    <>
       <Routes>
           <Route path={'/'} element={<HomePage/>} />
           <Route path={'/signin'} element={<SignIn/>} />
@@ -63,6 +65,8 @@ function App() {
           <Route path={'/about'} element={<About/>}/>
           <Route path="*" element={<NotFound/>} />
       </Routes>
+      <ToastContainer />
+      </>
   );
 }
 

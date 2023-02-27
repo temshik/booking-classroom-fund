@@ -6,8 +6,8 @@ const FilterListButtons = ({item, selectedValues, selectToggle, select}) =>
     const {id, name}=item;
 
     const changeSelected=(value)=>{
-        selectToggle(value);        
         console.log("value", value, 'selectedValues', selectedValues);
+        selectToggle(value);                
     }
 
     return (                                      
@@ -17,7 +17,7 @@ const FilterListButtons = ({item, selectedValues, selectToggle, select}) =>
             className = { select ? 'btSelected' : 'btItem'}
             value={name}>
             {name}
-        </button>                            
+        </button>                       
     );
     
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FilterListToggle from '../FilterListToggle/FilterListToggle';
 import FilterListButtons from '../FilterListToggle/FilterListButtons';
 import FilterListBuilding from '../FilterListBuilding/FilterListBuilding';
@@ -25,7 +25,7 @@ const FilterPanel = ({
     faculty}) => {     
         
     const [openBuildingOptions, setOpenBuildingOptions] = useState(faculty ? true: false);
-        
+
     return (         
         <div className='FilterPanel'>   
             {console.log("Filter course", selectedCourse)}
@@ -42,7 +42,9 @@ const FilterPanel = ({
                 <label>Room Category</label>
                 {/* <FilterListToggle options={categoryList} value={selectedCategory} selectToggle={selectCategory}/> */}
                 <div className='categoryContainer'>     
-                    {selectedCategory.map((category)=> <FilterListButtons key={category.id} item={category} selectedValues={selectedCategory} selectToggle={selectCategory} select={category.selected}/>)}
+                    {selectedCategory && selectedCategory.map((category) => 
+                        <FilterListButtons key={category.id} item={category} selectedValues={selectedCategory} selectToggle={selectCategory} select={category.selected}/>                                               
+                   )}
                 </div>
             </div>                                    
             <div className='lsItem'>  
@@ -53,7 +55,9 @@ const FilterPanel = ({
             <div className='lsItem'>  
                 <label>Course Number:
                 <div className='categoryContainer'>
-                    {selectedCourse.map((course)=> <FilterListButtons key={course.id} item={course} selectedValues={selectedCourse} selectToggle={selectCourse} select={course.selected}/>)}
+                    {selectedCourse.map((course)=> 
+                        <FilterListButtons key={course.id} item={course} selectedValues={selectedCourse} selectToggle={selectCourse} select={course.selected}/>                        
+                    )}                    
                     {/* <FilterListButtons options={courseList} selectedValues={selectedCourse} selectToggle={selectCourse}/> */}
                 </div>
                 </label>

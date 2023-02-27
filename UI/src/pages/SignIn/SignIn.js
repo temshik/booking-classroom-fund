@@ -2,7 +2,6 @@ import React, {createRef} from 'react';
 import { Navigate, Link } from "react-router-dom";
 import store from '../../redux/store';
 import {Authorize, SET_ACTIVE_USER, selectIsLoggedIn}  from '../../redux/slice/authSlice';
-import { ToastContainer } from 'react-toastify';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import 'react-toastify/dist/ReactToastify.css';
@@ -240,8 +239,7 @@ render(){
               Forgot <Link to='/ResetPassword' style={{ color: '#14A44D' }}>password?</Link>
             </p>
           </div>
-        </form>
-        <ToastContainer />
+        </form>        
       </div>
     )
   }
