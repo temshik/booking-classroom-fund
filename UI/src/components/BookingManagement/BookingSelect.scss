@@ -1,0 +1,31 @@
+.changeBooking{
+    position: sticky;
+    top:0;
+    left:0;
+    width: 100vw;
+    height: 671px;
+    //background-color: rgba(0,0,0,0.5);    
+    //z-index: 999;   
+    display: flex;
+    justify-content:center;    
+}
+
+.changeBookingWrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;   
+    width: 410px;    
+    margin-top: 35px;
+}
+
+.close{ 
+    position: sticky;         
+    font-size: 30px;
+    margin-top: 60px;
+    color: red;
+    cursor: pointer;
+}
+
+.marginCreateContainer{
+   margin-top: -671px; 
+}

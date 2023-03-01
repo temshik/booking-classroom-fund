@@ -23,7 +23,7 @@ const Navbar = () => {
         return(
             <div className='navbar'>
                 <div className='navContainer'>
-                    <span className='logo'>Workspace booking</span>
+                    <Link to='/' className='logo'>Workspace booking</Link>
                     <div className='dropdown'>
                         <>{email}</>
                         <Link to='#' className='menu-bars'>
@@ -41,7 +41,7 @@ const Navbar = () => {
         return(
             <div className='navbar'>
             <div className='navContainer'>
-                <span className='logo'>Workspace booking</span>
+                <Link to='/' className='logo'>Workspace booking</Link>
                     <div className='navItems'>
                     <a href="/SignUp" rel="noopener noreferrer">
                         <button className='navButton'>Sign Up</button>

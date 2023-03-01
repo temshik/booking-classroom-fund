@@ -8,43 +8,25 @@
 .headerContainer{
     width: 100%;
     max-width: 1024px;
-    margin: 20px 10px -40px 10px;    
+    margin: 10px 10px 10px 10px;    
 }
 
 .headerContainer.homeMode{
     width: 100%;
     max-width: 1024px;
-    margin: 20px 10px 50px 10px;
+    margin: 10px 10px 20px 10px;
 }
 
 .headerList{
-    display: flex; 
+    display: flex;     
     gap: 35px;
-}
-
-.headerListItem {    
-    color: white;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin: 0px 0px 50px 0px;
-}
-
-.headerListItem:hover{
-    color: white;  
-    border: 1px solid white;
-    padding: 10px;       
-    border-radius: 15px;
-    text-decoration: none;
-}
-
-.headerListItem.active {    
-    color: white;  
-    border: 1px solid white;
-    padding: 10px;       
-    border-radius: 15px;       
+    height: 46px;    
 }
 
 .headerDesc{
     margin: 20px 0px;
+}
+
+.headerTitle{
+    margin-top: 15px;
 }

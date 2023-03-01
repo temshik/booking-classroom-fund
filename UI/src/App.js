@@ -10,6 +10,8 @@ import SignUp from "./pages/SignUp/SignUp";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import Catalog from "./pages/Catalog/Catalog";
 import Workspace from "./pages/Workspace/Workspace";
+import CreateWorkspace from "./pages/Service/CreateWorkspace";
+import UpdateWorkspace from "./pages/Service/UpdateWorkspace";
 import Geolocation from "./modules/Geolocation/Geolocation";
 import NotFound from "./pages/NotFound/NotFound";
 import Booking from './pages/Booking/Booking';
@@ -62,6 +64,8 @@ function App() {
               })}
           </Route>
           <Route path={'/booking'} element={<Booking/>}/>
+          <Route path={'/createworkspace'} element={<CreateWorkspace/>}/>
+          <Route path={'/updateworkspace'} element={<UpdateWorkspace/>}/>
           <Route path={'/about'} element={<About/>}/>
           <Route path="*" element={<NotFound/>} />
       </Routes>

@@ -6,6 +6,8 @@ import { ToastContainer } from 'react-toastify';
 import RadioButton from "../../components/RadioButton/RadioButton";
 import AuthServices from '../../services/AuthServices';
 import ErrorHandler from '../../modules/ErrorHandler';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './SignUp.scss'
 
 const authSevice = new AuthServices();
@@ -69,7 +71,9 @@ export default class SignUp extends React.Component{
     authSevice.SignUp(data,this.state.RoleValue).then((data) =>{
       if(data.status === 201)
       {
-        alert("Succesfuly register");
+        toast.success("Registration Successful...", {
+          position: toast.POSITION.TOP_CENTER
+        }); 
         console.log(data);
         this.setState({Redirect: true});
         this.setState({Password: ''});

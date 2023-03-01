@@ -1,10 +1,8 @@
 import React from 'react';
-import { NavLink } from "react-router-dom";
+import {listItems} from '../MenuItems/ListItems';
+import MenuItems from '../MenuItems/MenuItems';
 import Faculty  from '../Select/Faculty'
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBuildingColumns, faBookOpen, faList, faEllipsisH} from "@fortawesome/free-solid-svg-icons";
 import "./Header.scss"
-
 
 export default class Header extends React.Component{
     constructor(props) {
@@ -17,33 +15,13 @@ export default class Header extends React.Component{
 render(){    
     return (        
         <div className='header'>                             
-            <div className={this.state.homeMode ? "headerContainer homeMode" : "headerContainer"}>
-                <div className='headerList'>
-                    <NavLink to="/" end                                                 
-                        activeClassName="headerListItem--active"
-                        className="headerListItem">                        
-                            <FontAwesomeIcon icon={faBuildingColumns} />
-                            Home                
-                    </NavLink>
-                    <NavLink to='/Catalog' 
-                        activeClassName="headerListItem--active"
-                        className='headerListItem'>                                            
-                        <FontAwesomeIcon icon={faList}/> 
-                        Catalog                                      
-                    </NavLink> 
-                    <NavLink to='/Booking'  
-                        activeClassName="headerListItem--active"
-                        className='headerListItem'>
-                        <FontAwesomeIcon icon={faBookOpen} />
-                        Booking
-                    </NavLink> 
-                    <NavLink to='/About'
-                        activeClassName="headerListItem--active"
-                        className='headerListItem'>
-                        <FontAwesomeIcon icon={faEllipsisH} />
-                        About
-                    </NavLink> 
-                </div>
+            <div className={this.state.homeMode ? "headerContainer homeMode" : "headerContainer"}>                                   
+                    <div className='headerList'>
+                        {listItems.map((menu, index) => {
+                            const depthLevel = 0;
+                            return <MenuItems items={menu} key={index} depthLevel={depthLevel}/>;
+                        })}  
+                    </div>              
                 {this.state.homeMode && 
                     <div>
                         <h1 className='headerTitle'>Belarusian National Technical University</h1>

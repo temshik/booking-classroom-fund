@@ -4,7 +4,6 @@ import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import Loader from '../../components/Loader/Loader';
 import {bookingsList} from "../../docs/fillterData";
-import BookingSelect from "../../components/BookingSelect/BookingSelect";
 import { ScheduleComponent, Day, Week, WorkWeek, Month, Agenda, Inject, ViewsDirective, ViewDirective } from '@syncfusion/ej2-react-schedule';
 import './Booking.scss'
 

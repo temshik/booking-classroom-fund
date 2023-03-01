@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {useLocation} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategory, selectCat, updatedCat, getWorkspacePaged, selectWorkspacePaged, selectTotalPages, updateCategory} from '../../redux/slice/catalogSlice';
+import { selectIsCategoryLoading, selectIsWorkspaceLoading, getCategory, selectCat, updatedCat, getWorkspacePaged, selectWorkspacePaged, selectTotalPages, updateCategory} from '../../redux/slice/catalogSlice';
 import Header from '../../components/Header/Header';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
@@ -13,6 +13,7 @@ import { buildingOptions, colourOptions } from '../../docs/data.ts';
 import {courseList, categoryList, dataList} from "../../docs/fillterData";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
+import Loader from '../../components/Loader/Loader';
 import "./Catalog.scss"
 
 const Catalog = () => {
@@ -22,6 +23,9 @@ const Catalog = () => {
     const updateCat = useSelector(updatedCat);
     const workspacies = useSelector(selectWorkspacePaged);
     const pageCount = useSelector(selectTotalPages);
+    const isCategoryLoading = useSelector(selectIsCategoryLoading);
+    const isWorkspaceLoading = useSelector(selectIsWorkspaceLoading);
+    const [loading, setLoading] = useState(false);
     const [faculty, setFaculty] = useState(location.state !== null ? location.state.value : '');   
     const [PageSize, setPageSize] = useState(2);
     const [CurrentPage, setCurrentPage] = useState(1);
@@ -143,6 +147,12 @@ const Catalog = () => {
         }
     }
 
+    useEffect(()=>{
+        if(isCategoryLoading === false || isWorkspaceLoading === false)
+            setTimeout(() => {setLoading(false)}, 500);
+        else setLoading(true);
+    },[isCategoryLoading,isWorkspaceLoading])
+
     useEffect(() =>{             
         getWorkspacies();
         getCategories();        
@@ -246,8 +256,8 @@ const Catalog = () => {
     }   
 
     return (        
-        <div>     
-            {console.log('cat', cat)}                    
+        <div>    
+            {loading && <Loader/>}                                
             <Navbar/>
             <Header/>
             <div className='listContainer'>
@@ -270,8 +280,8 @@ const Catalog = () => {
                         selectCourse={handleSelectCourse}    
                         changeChecked={handleChangeChecked}                                                              
                     />
-                    </div>
-                    {resultFound ? <div className='listResult'>
+                    </div>                    
+                    {resultFound ? <div className='listResult'>                        
                         {list && list.map(item=><SearchItem 
                             key={item.id} 
                             item={item}
