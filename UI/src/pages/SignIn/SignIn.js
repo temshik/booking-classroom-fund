@@ -90,7 +90,6 @@ export default class SignIn extends React.Component {
       }
     }
     this.setState({[name]:value},
-      console.log('name', name, 'value', value)
     );
   }
 

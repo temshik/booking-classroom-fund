@@ -1,7 +1,8 @@
 import React, {useEffect} from "react";
 import { useDispatch } from "react-redux";
 import AuthServices from './services/AuthServices';
-import {REMOVE_ACTIVE_USER, SET_ACTIVE_USER}  from './redux/slice/authSlice';
+import {REMOVE_ACTIVE_USER, SET_ACTIVE_USER, selectEmail}  from './redux/slice/authSlice';
+import { useSelector } from 'react-redux';
 import {Route, Routes} from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import HomePage from "./pages/HomePage/HomePage";
@@ -23,10 +24,10 @@ const authSevice = new AuthServices();
 
 function App() {
     const dispatch = useDispatch()
+    const stateEmail = useSelector(selectEmail)
     useEffect(()=>{
         if (window.localStorage.getItem('accessToken') !== null &&
-            window.sessionStorage.getItem('email') !== null)
-        {
+            window.sessionStorage.getItem('email') !== null){
             const data = {
                 email: window.sessionStorage.getItem('email')
             };
@@ -44,10 +45,13 @@ function App() {
             }).catch((error)=>{
                 console.log(error);
                 dispatch(REMOVE_ACTIVE_USER());
-                window.location.reload(); 
             })            
         }
+        else if(window.localStorage.getItem('accessToken') !== null && stateEmail === null){
+            dispatch(REMOVE_ACTIVE_USER());
+        }
     },[])
+
   return (
     <>
       <Routes>

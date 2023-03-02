@@ -9,6 +9,9 @@ const errorHandler = new ErrorHandler();
 const initialState = {
     isCategoryLoading: false,   
     isWorkspaceLoading: false, 
+    isWorkspaceUpdated: false,
+    isWorkspaceCreated: false,
+    isWorkspaceDeleted: false,
     status: null,
     errorMessage: null,
     totalPages: 0,
@@ -64,6 +67,19 @@ export const updateWorkspace = createAsyncThunk(
         try {
             const {data} = await axios.put(Configuration.UpdateWorkspace,item)
             console.log("updateWorkspace", data);            
+            return {data};
+        } catch (error) {
+            console.log(error)
+        }
+    }
+)
+
+export const deleteWorkspace = createAsyncThunk(
+    'catalog/deleteWorkspace',
+    async (item) => {
+        try {
+            const {data} = await axios.delete(Configuration.DeleteWorkspace,{data:item})
+            console.log("deleteWorkspace", data);            
             return {data};
         } catch (error) {
             console.log(error)
@@ -198,6 +214,7 @@ export const catalogSlice = createSlice({
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
             state.updatedWorkspace = action.payload
+            state.isWorkspaceUpdated = true
         },
         [updateWorkspace.rejected]: (state, action) => {
             console.log('c')
@@ -218,8 +235,30 @@ export const catalogSlice = createSlice({
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
             state.updatedWorkspace = action.payload
+            state.isWorkspaceCreated = true
         },
         [createWorkspace.rejected]: (state, action) => {
+            console.log('c')
+            state.isWorkspaceLoading = false            
+            state.status = action.payload.status
+            state.errorMessage = action.payload.errors            
+        },
+        //----------------------------------------
+        [deleteWorkspace.pending]: (state) => {
+            console.log('a')
+            state.isWorkspaceLoading = true            
+            //state.status = null
+            //state.errorMessage = null
+        },
+        [deleteWorkspace.fulfilled]: (state, action) => {
+            console.log('b')
+            state.isWorkspaceLoading = false            
+            //state.status = action.payload.status
+            //state.errorMessage = action.payload.errors
+            state.updatedWorkspace = action.payload
+            state.isWorkspaceDeleted = action.payload !== null ? true : false
+        },
+        [deleteWorkspace.rejected]: (state, action) => {
             console.log('c')
             state.isWorkspaceLoading = false            
             state.status = action.payload.status
@@ -241,5 +280,13 @@ export const selectTotalPages = (state) => state.catalog.totalPages;
 export const selectIsCategoryLoading = (state) => state.catalog.isCategoryLoading;
 
 export const selectIsWorkspaceLoading = (state) => state.catalog.isWorkspaceLoading;
+
+export const selectUpdatedWorkspace = (state) => state.catalog.updateWorkspace;
+
+export const selectIsWorkspaceCreated = (state) => state.catalog.isWorkspaceCreated;
+
+export const selectIsWorkspaceUpdated = (state) => state.catalog.isWorkspaceUpdated;
+
+export const selectIsWorkspaceDeleted = (state) => state.catalog.isWorkspaceDeleted;
 
 export default catalogSlice.reducer

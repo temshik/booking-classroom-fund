@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {useNavigate} from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { buildingOptions } from '../../docs/data.ts';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectIsCategoryLoading, selectIsWorkspaceLoading, getCategory, selectCat, updatedCat, updateCategory, createWorkspace, updateWorkspace} from '../../redux/slice/catalogSlice';
 import Loader from '../Loader/Loader';
+import { buildingOptions } from '../../docs/data.ts';
+import { selectIsWorkspaceCreated, selectIsWorkspaceUpdated,
+  selectIsCategoryLoading, selectIsWorkspaceLoading, 
+  getCategory, selectCat,
+  createWorkspace, updateWorkspace} from '../../redux/slice/catalogSlice';
 import './WorkspaciesManagement.scss';
 
 const WorkspaciesManagement = (props) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const category = useSelector(selectCat);
     const isCategoryLoading = useSelector(selectIsCategoryLoading);
     const isWorkspaceLoading = useSelector(selectIsWorkspaceLoading);
+    const createdWorkspace = useSelector(selectIsWorkspaceCreated);
+    const updatedWorkspace = useSelector(selectIsWorkspaceUpdated);
     const [selectedCategory, setSelectedCategory] = useState([]);//
     const [form, setForm] = useState(props.form)
     const [errors, setErrors] = useState({})
@@ -27,6 +34,11 @@ const WorkspaciesManagement = (props) => {
     },[category])
 
     useEffect(()=>{
+      if(createdWorkspace || updatedWorkspace)
+        setTimeout(showMessage,500);
+    },[createdWorkspace, updatedWorkspace])
+
+    useEffect(()=>{
       if(isCategoryLoading === false || isWorkspaceLoading === false)
           setTimeout(() => {setLoading(false)}, 500);
       else setLoading(true);
@@ -36,6 +48,11 @@ const WorkspaciesManagement = (props) => {
       if(window.localStorage.getItem('accessToken') !== null){    
         dispatch(getCategory());          
       }
+    }
+
+    const showMessage =()=>{  
+      if(window.confirm(`Succesfuly ${props.managementTask}. You can redirect to catalog page.`))
+      navigate('/Catalog');
     }
 
     const setField = (field, value) => {
@@ -85,20 +102,19 @@ const WorkspaciesManagement = (props) => {
         // We got errors!
         setErrors(newErrors)
       } else {
-        // No errors! Put any logic here for the form submission! 
-        if(props.managementTask === 'Update Workspace')     
-        {
-          dispatch(updateWorkspace(form));
-          alert('Workspace updated!');                
-        }
-        else if(props.managementTask === 'Create Workspace')
-        {
+        // No errors! Put any logic here for the form submission!
+        if(window.localStorage.getItem('accessToken') !== null){ 
+          if(props.managementTask === 'Update Workspace')     
+          {
+            dispatch(updateWorkspace(form));              
+          }
+          else if(props.managementTask === 'Create Workspace')
+          {
+            dispatch(createWorkspace(form));
+          }
+          else
           console.log('form',form)
-          dispatch(createWorkspace(form));
-          alert('Workspace created!');
         }
-        else
-        console.log('form',form)
       }
     }
 

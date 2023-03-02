@@ -9,9 +9,9 @@ import "./Navbar.scss"
 
 const Navbar = () => {
     const [sidebar, setSidebar] = useState(false);
-    const email = window.sessionStorage.getItem('email');    
-    const isLoggedIn = useSelector(selectIsLoggedIn)
-
+    const stateEmail = useSelector(selectEmail)
+    const email = (stateEmail!==null)? stateEmail : window.sessionStorage.getItem('email');    
+    
     const showSidebar=()=>{
         if(sidebar === false)
         setSidebar(true);

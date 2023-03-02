@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {useParams} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {useNavigate} from 'react-router-dom';
@@ -9,8 +9,11 @@ import Loader from '../../components/Loader/Loader';
 import image1 from '../../images/noimage.png'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLocationDot, faUsers, faChalkboardUser, faLock, faLockOpen} from "@fortawesome/free-solid-svg-icons";
-import { selectIsCategoryLoading, selectIsWorkspaceLoading, getCategory, selectCat, getWorkspace, selectWorkspace, updateCategory} from '../../redux/slice/catalogSlice';
-import {courseList, categoryList, dataList} from "../../docs/fillterData";
+import {
+    selectIsWorkspaceDeleted, selectIsWorkspaceUpdated,
+    selectIsCategoryLoading, selectIsWorkspaceLoading,
+    getCategory, selectCat, getWorkspace, selectWorkspace,
+    updateWorkspace, deleteWorkspace} from '../../redux/slice/catalogSlice';
 
 import "./Workspace.scss"
 
@@ -21,10 +24,15 @@ const Worksapce = () => {
     const cat = useSelector(selectCat);
     const workspace = useSelector(selectWorkspace)
     const [item, setItem] = useState(null);
+    const [updatedItem, setUpdatedItem] = useState(null);
+    const isFirstRender = useRef(true);
     const [category, setCategory] = useState([]);
     const isCategoryLoading = useSelector(selectIsCategoryLoading);
     const isWorkspaceLoading = useSelector(selectIsWorkspaceLoading);
+    const deletedWorkspace = useSelector(selectIsWorkspaceDeleted);
+    const updatedWorkspace = useSelector(selectIsWorkspaceUpdated);
     const [loading, setLoading] = useState(false);
+
     useEffect(()=>{        
         if(window.localStorage.getItem('accessToken') !== null){    
             dispatch(getCategory());  
@@ -51,17 +59,59 @@ const Worksapce = () => {
         else setLoading(true);
     },[isCategoryLoading,isWorkspaceLoading])
 
-    const showMessage =()=>{  
+    useEffect(()=>{
+        if(deletedWorkspace)
+          setTimeout(showMessage,500);
+    },[deletedWorkspace])
+
+    useEffect(()=>{
+        if(updatedWorkspace){window.location.reload(); }
+            
+    },[updatedWorkspace])
+
+    useEffect(()=>{
+        if (isFirstRender.current) {
+            isFirstRender.current = false; // toggle flag after first render/mounting
+            return;
+          }
+        //console.log('updatedItem changed', updatedItem)
+        dispatch(updateWorkspace(updatedItem))            
+    },[updatedItem])
+
+    const editMessage =()=>{  
         if(window.confirm('You will be redirected to update workspace page.'))
         navigate('/UpdateWorkspace', {state: {value:item}});
     }
   
-    const handleEditChange = () => {      
-      setTimeout(showMessage, 500);
+    const showMessage =()=>{  
+        alert('Succesfuly deleted workspace. You will be redirected to catalog page.')
+        navigate('/Catalog');
     }
 
-    const handleDeleteChange = () => {        
-        //setTimeout(showMessage, 1000);
+    const handleEditChange = () => {      
+      setTimeout(editMessage, 500);
+    }
+
+    const handleDeleteChange = () => {      
+        if(window.localStorage.getItem('accessToken') !== null){  
+            dispatch(deleteWorkspace(item))
+        }
+    }
+
+    const handleUpdateChange=()=>{
+        if(window.localStorage.getItem('accessToken') !== null){  
+            // if(item !== null) {
+            //     setItem({...item, isAvaliable: lock});
+            //     dispatch(updateWorkspace(item))
+            // }
+            
+            
+            console.log("item", updatedItem)         
+            const lock = item.isAvailable;
+            setUpdatedItem({...item, isAvailable: !lock});
+            console.log("updateItem2",updatedItem)  
+            //dispatch(updateWorkspace(item))                  
+        }
     }
 
     return (
@@ -108,7 +158,9 @@ const Worksapce = () => {
                             <button className='siDetails'>TimeTable</button>
                             <button className='siDetails' onClick={handleEditChange}>Edit</button>
                             <button className='siDetails' onClick={handleDeleteChange} style={{backgroundColor:'#e74c3c'}}>Delete</button>
-                            {item && item.isAvailable ? <button className='siDetails'>Lock</button> : <button className='siDetails'>UnLock</button>}
+                            {item && item.isAvailable ? 
+                                <button className='siDetails' onClick={handleUpdateChange}>Lock</button> :
+                                <button className='siDetails' onClick={handleUpdateChange}>UnLock</button>}
                         </div>                                        
                         <span className='siTextDesc'>
                             <h4>Description:</h4> {item && item.description}

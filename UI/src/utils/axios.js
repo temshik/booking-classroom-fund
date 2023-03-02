@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {useDispatch} from 'react-redux';
-import {REFRESH_ACCESS_TOKEN} from '../redux/slice/authSlice'
+import {REFRESH_ACCESS_TOKEN, REMOVE_ACTIVE_USER} from '../redux/slice/authSlice'
 import AuthServices from '../services/AuthServices';
 
 const instance = axios.create({
@@ -25,6 +25,7 @@ const Refresh=()=>{
         }
     }).catch((error)=>{
         console.log("Refresh",error);
+        REMOVE_ACTIVE_USER();
     })
     window.location.reload();
 }
