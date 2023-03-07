@@ -9,7 +9,7 @@ const SubMenu = ({list}) => {
         <ul className='sub-menu'>
             {list.map(list => {
                 // return <div className='sub-menu_block'>
-                return (<li>
+                return (<li key={list.url}>                    
                         <a className='sub-menu__link' href={list.url}><FontAwesomeIcon className='sub-menu__icon' icon={faAngleUp}/> {list.title}</a>
                         {list.submenu && <SubSubMenu list={list.submenu} />}
                     </li>)

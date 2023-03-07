@@ -11,7 +11,7 @@ const Menu = () => {
         <nav className={'menus'}>
             <ul className={'menu__list'}>
                 {listItems.map(item => {
-                    return <li className={item.url === window.location.pathname ? 'menu__item' : ''}>
+                    return <li key={item.url} className={item.url === window.location.pathname ? 'menu__item' : ''}>
                         {/*<FontAwesomeIcon className='menu__icon' icon={faAngleDown}/>*/}
                         <a className={'menu__link'} href={item.url}>{item.title}</a>
                         {item.submenu && <SubMenu list={item.submenu} />}
