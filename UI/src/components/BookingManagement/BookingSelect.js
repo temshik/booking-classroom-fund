@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
-import {bookingsList} from "../../docs/fillterData";
+import React from "react";
 import { ScheduleComponent, Day, WorkWeek, Month, Agenda, Inject, ViewsDirective, ViewDirective, Resize, DragAndDrop} from '@syncfusion/ej2-react-schedule';
-import {L10n} from '@syncfusion/ej2-base';
+import {L10n, isNullOrUndefined, Internationalization} from '@syncfusion/ej2-base';
 import UpdateBooking from "./UpdateBooking";
+import Template from "./Template";
+import HeaderTemplate from "./HeaderTemplate";
+import ContentTemplate from "./ContentTemplate";
+import FooterTemplate from "./FooterTemplate";
 import './BookingSelect.scss'
 
 L10n.load({
@@ -12,110 +15,140 @@ L10n.load({
             'cancelButton': 'close',
             'deleteButton': 'remove',
             'newEvent': 'Create Booking',
-            'editEvent': 'Update Booking'
+            'editEvent': 'Update Booking',            
         }
     }
 })
 
-const BookingSelect = () => {
+const BookingSelect = ({props, selectedDate}) => {
     let scheduleObj;
+    let startObj;
+    let endObj;
+    let eventTypeObj;
+    let titleObj;
+    let notesObj;    
+    const intl = new Internationalization();
     const workDays = [1, 2, 3, 4, 5, 6];
-    const [blocked, setBlocked] = useState([]); 
-    const [currentDay, setCurrentDay] = useState(new Date());
-    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(()=>{
-        const sessionStart = new Date(2023,1,1);
-        const sessionEnd = new Date(2023,5,30);
-        const weeksBetwee = weeksBetween(sessionStart, sessionEnd);
-        const weeksRepeatNumber = weeksBetwee/2;
-
-        let newBlocked = bookingsList.map((item)=>{
-            let startDate = (new Date(item.startBookingTime));
-            console.log("startDate",startDate)
-            let day = startDate;
-            console.log('sessionStart',sessionStart)
-            if(item.dayOfWeek === 1){                                
-                day = getMonday(sessionStart);   
-                console.log('day1',day);          
-            }
-            else if(item.dayOfWeek === 2){                
-                day = getMonday(addHours(sessionStart,168));   
-                console.log('day2',day);
-            }
-
-            console.log('day0',day);
-            console.log('dayofweek needed',getDayOfWeek(startDate))
-            while(getDayOfWeek(day)!==getDayOfWeek(startDate)){
-                console.log('day w',day)
-                day=addHours(day,24);
-            }
-            console.log('day a',day)
-
-            //setStartDate(day);
-            //console.log('startdate',startDate);
-            
-            // const year = startDate.getFullYear()
-            // const month = startDate.getMonth()
-            // const date = startDate.getDate()
-            const hours = startDate.getHours()
-            const minutes = startDate.getMinutes()
-            day.setHours(hours);
-            day.setMinutes(minutes);
-            return {
-                Id: item.id,
-                User: `${item.userId}`,
-                Workspace: `${item.workspaceId}`,
-                GroupNumber: `${item.groupNumber}`,
-                StartTime: new Date(day),
-                EndTime: addHours(addMinutes(new Date(day),30), 1),
-                RecurrenceRule: `FREQ=WEEKLY;INTERVAL=2;COUNT=${weeksRepeatNumber}`,
-                NumberOfWeek: `${item.dayOfWeek}`,
-                //для учителей сделать//IsReadonly: true,
-                IsBlock: !(item.isWorkspaceAvailable),                     
-            }
-        })
-        console.log('newBlocked ',newBlocked)
-        setBlocked(newBlocked);
-    },[]);
-
-    function addHours(date, hours) {
-        date.setTime(date.getTime() + hours * 60 * 60 * 1000);
-        return date;
-    }
-
-    function addMinutes(date, minutes) {
-        return new Date(date.getTime() + minutes*60000);
-    }
-
-    function weeksBetween(d1, d2) {
-        return Math.round((d2 - d1) / (7 * 24 * 60 * 60 * 1000));
-    }
-
-    function getDayOfWeek(date) {
-        const dayOfWeek = new Date(date).getDay();    
-        return isNaN(dayOfWeek) ? null : 
-          ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek];
-      }
-
-    const getMonday=(d)=>{
-        d = new Date(d);
-        var day = d.getDay(),
-            diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-        return new Date(d.setDate(diff));
+    function template(props) {
+        return (<Template props={props}/>)
     }
 
     function editorTemplate(props) {
-        return (<UpdateBooking props = {props}/>);
+        return (<UpdateBooking props = {props} startObj={startObj}/>);        
     }
 
-    function onPopupOpen(args) {
-        args.cancel = true;
+    function headerTemplate(props) {
+        return (<HeaderTemplate 
+            props={props}             
+            intl={intl}
+        />);
+    }
+
+    function contentTemplate(props) {
+        return (<ContentTemplate 
+            props={props}
+            titleObj={titleObj} 
+            notesObj={notesObj}
+            eventTypeObj={eventTypeObj}
+        />);
+    }
+
+    function footerTemplate(props) {
+        return (<FooterTemplate 
+            props={props} 
+            scheduleObj={scheduleObj} 
+            titleObj={titleObj} 
+            notesObj={notesObj}
+            eventTypeObj={eventTypeObj}
+        />);
+    }
+
+    function onPopupOpen(args) {    
+        if (args.target && !args.target.classList.contains('e-appointment') && !isNullOrUndefined(titleObj)) {
+            titleObj.focusIn();
+        }    
+        if (args.type === 'Editor') {
+            let subjectElement = args.element.querySelector('#Subject');
+            if (subjectElement) {
+                subjectElement.value = args.data.Subject || "";
+            }
+            let descriptionElement = args.element.querySelector('#Description');
+            if (descriptionElement) {
+                descriptionElement.value = args.data.Description || "";
+            }
+        }
+        if (args.type === 'QuickInfo'){
+            console.log('QuickInfo')
+        }
+        if (args.type === 'EditEventInfo'){
+            console.log('EditEventInfo')
+        }
+        if (args.type === 'ViewEventInfo'){
+            console.log('ViewEventInfo')
+        }
+        if (args.type === 'EventContainer'){
+            console.log('EventContainer')
+        }
+        if (args.type === 'RecurrenceAlert'){
+            console.log('RecurrenceAlert')
+        }
+        if (args.type === 'DeleteAlert'){
+            console.log('DeleteAlert')
+        }
+        if (args.type === 'ValidationAlert'){
+            console.log('ValidationAlert')
+        }
+        if (args.type === 'RecurrenceValidationAlert'){
+            console.log('RecurrenceValidationAlert')
+        }
+    }
+
+    function onPopupClose(args) {
+        if (args.type === 'Editor' && !isNullOrUndefined(args.data)) {
+            let subjectElement = args.element.querySelector('#Subject');
+            if (subjectElement) {
+                args.data.Subject = subjectElement.value;
+            }
+            let locationElement = args.element.querySelector('#Location');
+            if (locationElement) {
+                args.data.Location = locationElement.value;
+            }
+            let statusElement = args.element.querySelector('#EventType');
+            if (statusElement) {
+                args.data.EventType = statusElement.value;
+            }
+            // let startTimeElement = args.element.querySelector('#StartTime');
+            // if (startTimeElement) {
+            //     args.data.StartTime = startTimeElement.value;
+            // }        
+            // args.data.StartTime = startObj;       
+            // args.data.EndTime = endObj;                     
+            let descriptionElement = args.element.querySelector('#Description');
+            if (descriptionElement) {
+                args.data.Description = descriptionElement.value;
+            }
+        }
     }
 
     //сделать разными цветами лекции лабы и практики
+    function applyCategoryColor(args, currentView) {
+        let categoryColor = args.data.CategoryColor;
+        if (!args.element || !categoryColor) {
+            return;
+        }
+        if (currentView === 'Agenda') {
+            args.element.firstChild.style.borderLeftColor = categoryColor;
+        }
+        else {
+            args.element.style.backgroundColor = categoryColor;
+        }
+    }
+
+    
     function onEventRendered(args) {
-        console.log('ПИзда')
+        console.log('Прогружает все элементы на стронице', args);
+        applyCategoryColor(args, scheduleObj.currentView);
         switch (args.data.EventType) {
             case '1':
                 args.element.style.backgroundColor = '#F57F17';
@@ -129,51 +162,51 @@ const BookingSelect = () => {
         }
         console.log({args})
     }
+
     function onActionBegin(args) {
-        console.log('ХУЙ', args)
+        console.log('action', args)
         // if (args.requestType === 'eventCreate' || args.requestType === 'eventChange') {
         //     let data = args.data instanceof Array ? args.data[0] : args.data;
         //     args.cancel = !scheduleObj.isSlotAvailable(data.StartTime, data.EndTime);
-        // }
-    }
-
-    return(        
+        // }        
+    }        
+    
+    return (
     <div>
-        {console.log('blocked1',blocked)}     
-        <ScheduleComponent
-            width='100%'
-            currentView="WorkWeek"
-            workDays={workDays}
-            selectedDate={getMonday(currentDay)}
-            editorTemplate={editorTemplate.bind(this)} 
-            //для учителей сделать//popupOpen={onPopupOpen}
-            ref={schedule => scheduleObj = schedule}
-            ctionBegin={onActionBegin.bind(this)}
-            // showQuickInfo={false}
-            eventRendered={onEventRendered.bind(this)}
-            eventSettings={{
-                dataSource: blocked,
-                fields: {
-                    id: 'Id',
-                    subject: { name: 'User'},
-                    location: { name: 'Workspace'},
-                    numberOfWeek: {name: 'NumberOfWeek'},
-                    startTime: { name: 'StartTime'},
-                    endTime: { name: 'EndTime'},
-                    description: {name: 'GroupNumber'},
-                    recurrenceRule: {name: 'RecurrenceRule'}
-                }      
-            }}>
+        {console.log('blocked1',props)}
+        <ScheduleComponent 
+        id="schedule" 
+        cssClass='quick-info-template' 
+        width='100%'
+        currentView="WorkWeek"
+        workDays={workDays}
+        selectedDate={selectedDate} 
+        allowResizing={false}
+        //для учителей сделать
+        //popupOpen={onPopupOpen}
+        popupClose={onPopupClose}
+        ref={schedule => scheduleObj = schedule}          
+        editorTemplate={editorTemplate.bind(this)}
+        actionBegin={onActionBegin.bind(this)} 
+        //showQuickInfo={false} 
+        quickInfoTemplates={{
+                        header: headerTemplate.bind(this),
+                        content: contentTemplate.bind(this),
+                        footer: footerTemplate.bind(this)
+                    }}
+        eventRendered={onEventRendered.bind(this)}
+        eventSettings={{ dataSource: props ,
+                        enableTooltip: true,
+                        tooltipTemplate: template.bind(this)}}>
             <ViewsDirective>
                 <ViewDirective option='Day' startHour='08:00' endHour='21:05'/>                    
                 <ViewDirective option='WorkWeek' startHour='08:00' endHour='21:05'/>
                 <ViewDirective option='Month' showWeekend={true}/>
                 <ViewDirective option='Agenda'/>
             </ViewsDirective>                
-            <Inject services={[Day, WorkWeek, Month, Agenda, Resize, DragAndDrop]} />
+            <Inject services={[Day, WorkWeek, Month, Agenda]}/>
         </ScheduleComponent>
-    </div>
-    )
+    </div>);
 };
 
 export default BookingSelect;

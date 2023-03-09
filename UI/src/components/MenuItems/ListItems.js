@@ -30,6 +30,7 @@ export const listItems = [
       title: <> Service</>,
       url: '/service',
       style: {
+        border:'none',
         textDecorationLine:'none',
         color:'white',
         backgroundColor: '#008a5e',  
@@ -69,27 +70,27 @@ export const listItems = [
             }
           ],
         },
-        {
-          title: 'Booking',
-          url: 'booking',
-          backstyle: {
-            backgroundColor: 'white'  
-          },
-          submenu: [
-            {
-              title: 'Create Booking',
-              url: '/CreateBooking',
-            },
-            {
-              title: 'Update Booking',
-              url: '/UpdateBooking',
-            },
-            {
-              title: 'Delete Booking',
-              url: '/DeleteBooking',
-            },
-          ],
-        },
+        // {
+        //   title: 'Booking',
+        //   url: 'booking',
+        //   backstyle: {
+        //     backgroundColor: 'white'  
+        //   },
+        //   submenu: [
+        //     {
+        //       title: 'Create Booking',
+        //       url: '/CreateBooking',
+        //     },
+        //     {
+        //       title: 'Update Booking',
+        //       url: '/UpdateBooking',
+        //     },
+        //     {
+        //       title: 'Delete Booking',
+        //       url: '/DeleteBooking',
+        //     },
+        //   ],
+        // },
       ],
     },
     {

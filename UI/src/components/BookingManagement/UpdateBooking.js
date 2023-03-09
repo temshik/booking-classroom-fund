@@ -1,16 +1,15 @@
 import { DateTimePickerComponent } from '@syncfusion/ej2-react-calendars';
 import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
 
-const UpdateBooking = ({props}) => {
-    
-    return ((props !== undefined) ? <table className="custom-event-editor" style={{ width: '100%' }} cellPadding={5}><tbody>
+const UpdateBooking = ({props, startObj}) => {
+
+  return ((props !== undefined) ? <table className="custom-event-editor" style={{ width: '100%' }} cellPadding={5}><tbody>
   <tr>{console.log('props',{props})}<td className="e-textlabel">User email</td><td colSpan={4}>
     <input 
         id="Subject" 
         className="e-field e-input" 
         type="number" 
-        onChange={console.log("[eq")} 
-        defaultValue={props.User || null} 
+        defaultValue={props.Subject || null}                
         required 
         name="Subject" 
         style={{ width: '100%' }}
@@ -20,9 +19,8 @@ const UpdateBooking = ({props}) => {
     <input 
         id="Location" 
         className="e-field e-input" 
-        type="number" 
-        onChange={console.log("[eq")} 
-        defaultValue={props.Workspace || 1} 
+        type="number"         
+        defaultValue={props.Location || null} 
         required 
         min={1} 
         max={999} 
@@ -47,23 +45,23 @@ const UpdateBooking = ({props}) => {
         id="StartTime"
         format='dd/MM/yy hh:mm a'
         data-name="StartTime"
+        //ref={(date) => { startObj = date; }}
         required
         value={new Date(props.startTime || props.StartTime)}
         className="e-field"></DateTimePickerComponent>
   </td></tr> 
   <tr><td className="e-textlabel">Group number</td><td colSpan={4}>
-  <input 
+    <input 
         id="Description" 
         className="e-field e-input" 
-        type="number" 
-        onChange={console.log("[eq")} 
-        defaultValue={props.GroupNumber || null} 
+        type="number"         
+        defaultValue={props.Description || null} 
         required 
         minLength={8} 
         maxLength={8} 
         name="Description" 
         style={{ width: '100%' }}
-  />
+    />
   </td></tr></tbody></table> : <div></div>);
 };
 

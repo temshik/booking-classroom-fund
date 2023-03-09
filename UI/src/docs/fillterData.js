@@ -81,7 +81,7 @@ export const dataList = [
 ]
 export const bookingsList = [
     {
-        "id": 0,
+        "id": 1,
         "userId": 1,
         "workspaceId": 2,
         "isWorkspaceAvailable": true,
@@ -90,12 +90,12 @@ export const bookingsList = [
         "groupNumber": 10702319
     },
     {
-        "id": 1,
-        "userId": 2,
+        "id": 2,
+        "userId": 1,
         "workspaceId": 2,
         "isWorkspaceAvailable": true,
         "dayOfWeek": 2,//numberOfWeek
-        "startBookingTime": "2023-02-21T12:30:04.256Z",
+        "startBookingTime": "2023-02-21T12:00:04.256Z",
         "groupNumber": 10702419
-      }
+    },
 ]

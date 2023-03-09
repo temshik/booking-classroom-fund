@@ -15,5 +15,11 @@ module.exports={
     GetWorkspace:"/Workspacies/GetWorkspaces",
     CreateWorkspace:"/workspacies/createworkspace",
     UpdateWorkspace:"/workspacies/updateworkspace",
-    DeleteWorkspace:"/workspacies/deleteworkspace"
+    DeleteWorkspace:"/workspacies/deleteworkspace",
+    //Booking
+    CreateBooking:"/Bookings/CreateBooking",
+    UpdateBooking:"/Bookings/UpdateBooking",
+    DeleteBooking:"/Bookings/DeleteBooking",
+    GetBookingsByWorkspace:"/Bookings/GetBookingsByWorkspace",
+    GetBookingsByUser:"/Bookings/GetBookingsByUser"
 }

@@ -1,24 +1,37 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { NavLink } from "react-router-dom";
 import './Menu.scss'
 import {listItems} from "../MenuItems/ListItems";
 import SubMenu from "../SubMenu/SubMenu";
-import {faAngleDown} from "@fortawesome/free-solid-svg-icons";
+import {faAngleUp,faAngleDown} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const Menu = () => {
     console.log('url ',window.location.pathname)
     return (
-        <nav className={'menus'}>
+        <div className={'menus'}>
             <ul className={'menu__list'}>
                 {listItems.map(item => {
                     return <li key={item.url} className={item.url === window.location.pathname ? 'menu__item' : ''}>
-                        {/*<FontAwesomeIcon className='menu__icon' icon={faAngleDown}/>*/}
-                        <a className={'menu__link'} href={item.url}>{item.title}</a>
+                        {item.submenu ? (
+                        <>
+                            <button 
+                                type="button" 
+                                style = {item.style}                                
+                            >
+                            {<><FontAwesomeIcon icon={faAngleDown}/> {item.title}</>}         
+                        </button>          
                         {item.submenu && <SubMenu list={item.submenu} />}
+                        </>
+                    ) : (
+                        <NavLink to={item.url} style={item.style}>
+                            {item.title}
+                        </NavLink>
+                    )}
                     </li>
                 })}
             </ul>
-        </nav>
+        </div>
     );
 };
 

@@ -1,5 +1,4 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import CatalogServices from "../../services/CatalogServices";
 import axios from '../../utils/axios';
 import Configuration from "../../configurations/Configuration";
 import ErrorHandler from '../../modules/ErrorHandler';
