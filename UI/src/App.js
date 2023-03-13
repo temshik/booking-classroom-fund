@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import UpdatePassword from "./pages/UpdatePassword/UpdatePassword";
 import Catalog from "./pages/Catalog/Catalog";
 import Workspace from "./pages/Workspace/Workspace";
 import CreateWorkspace from "./pages/Service/CreateWorkspace";
@@ -59,6 +60,7 @@ function App() {
           <Route path={'/signin'} element={<SignIn/>} />
           <Route path={'/signup'} element={<SignUp/>} />
           <Route path={'/resetpassword'} element={<ResetPassword/>} />
+          <Route path={'/updatepassword'} element={<UpdatePassword/>} />
           <Route path={'/catalog'} element={<Catalog/>}/>
           <Route path={'/catalog/:id'} element={<Workspace/>}/>
           <Route path={'/geolocation'} element={<Geolocation/>}/>

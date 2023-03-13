@@ -12,7 +12,8 @@ import Footer from '../../components/Footer/Footer';
 import Loader from '../../components/Loader/Loader';
 import BookingSelect from '../../components/BookingManagement/BookingSelect'
 import AuthServices from '../../services/AuthServices';
-import axios from '../../utils/axios';
+import utilsAxios from '../../utils/axios';
+import axios from 'axios';
 import Configuration from "../../configurations/Configuration";
 //import {bookingsList} from "../../docs/fillterData";
 import './Booking.scss'
@@ -98,24 +99,48 @@ const Booking = () => {
 
     const getInfoForExtendedRecord = async() =>{
         if (window.localStorage.getItem('accessToken') !== null){
-            var users=[];
+            var editBlocked = [];
+            var usersEndpoints=[];
             selectedUsers.map((id)=>{
-                users.push(axios.get(Configuration.GetUser+`/${id}`));
+                usersEndpoints.push(Configuration.GetUser+`/${id}`);
             })
-
-            console.log('users',users)
+            await Promise.allSettled(usersEndpoints.map((endpoint) => utilsAxios.get(endpoint)))
+            .then(
+                axios.spread((...allData) => {
+                    console.log({ allData });
+                    editBlocked = allData;
+                })
+            )                                    
             
-            var workspacies=[];
+            var workspaciesEndpoints=[];
             selectedWorkspace.map((id)=>{
-                workspacies.push(axios.get(Configuration.GetWorkspace+`/${id}`));
+                workspaciesEndpoints.push(Configuration.GetWorkspace+`/${id}`);
             })
+            console.log('workspacies',workspaciesEndpoints)
+            Promise.allSettled(workspaciesEndpoints.map((endpoint) => utilsAxios.get(endpoint)))
+            .then(
+                //([{data: user}])=>{console.log({user})}
+                axios.spread((...allData) => {
+                    console.log({ allData });
+                })
+            )
 
-            console.log('workspacies',workspacies)
+            console.log('editBlocked',editBlocked);
+
+            const a = blocked.map(item=>{
+                console.log('item',item);
+                editBlocked.map((value)=>{
+                    console.log('value',value.value.data)
+                    if(item.Subject === ''+value.value.data.id){
+                        console.log('v')
+                        return{...item, Subject: value.value.data.email}
+                    } else return item
+                })})
+            console.log('edit',{a});
+
             // await Promise.allSettled([users, workspacies]).then((res) => {
             //     setSelectedWorkspace(res[1].value)                      
             // })      
-
-            currentloginid(users, workspacies);
 
             // const newBlockedByUser = blocked.map((item)=>{
             //     console.log('item',item);
@@ -128,18 +153,6 @@ const Booking = () => {
             // }) 
         }
     }
-
-    async function currentloginid(users, workspacies) {
-        return await Promise.all([users, workspacies])
-          .then(function(response) {
-            return JSON.stringify(response);
-          })
-          .then(function(data) {
-            var userid = JSON.parse(data);
-            console.log(userid);
-            return userid;
-          })
-      }
 
     function prepareData(bookingsList){
         const sessionStart = new Date(2023,1,1);
