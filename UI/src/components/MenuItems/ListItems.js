@@ -7,7 +7,7 @@ export const listItems = [
       url: '/',
       style: {
         textDecorationLine:'none',
-        color:'white',  
+        color:'white',
       },
     },
     {
