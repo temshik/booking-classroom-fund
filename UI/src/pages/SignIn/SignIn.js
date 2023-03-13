@@ -95,7 +95,6 @@ export default class SignIn extends React.Component {
 
   handleCheckboxChange(event) {
     this.setState({Checked: event.target.checked});
-    console.log(this.state.Checked);
   }
 
   handleBlur = (event) => {
