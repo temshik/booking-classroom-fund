@@ -14,7 +14,6 @@ import {
     selectIsCategoryLoading, selectIsWorkspaceLoading,
     getCategory, selectCat, getWorkspace, selectWorkspace,
     updateWorkspace, deleteWorkspace} from '../../redux/slice/catalogSlice';
-
 import "./Workspace.scss"
 
 const Worksapce = () => {
@@ -78,12 +77,17 @@ const Worksapce = () => {
         dispatch(updateWorkspace(updatedItem))            
     },[updatedItem])
 
-    const editMessage =()=>{  
+    const editMessage = () => {  
         if(window.confirm('You will be redirected to update workspace page.'))
         navigate('/UpdateWorkspace', {state: {value:item}});
     }
+
+    const timeTableMessage = () => {
+        if(window.confirm('You will be redirected to booking page.'))
+        navigate('/Booking', {state: {value:item}});
+    }
   
-    const showMessage =()=>{  
+    const showMessage = () => {  
         alert('Succesfuly deleted workspace. You will be redirected to catalog page.')
         navigate('/Catalog');
     }
@@ -96,6 +100,10 @@ const Worksapce = () => {
         if(window.localStorage.getItem('accessToken') !== null){  
             dispatch(deleteWorkspace(item))
         }
+    }
+
+    const handleTimeTableChange = () => {
+        setTimeout(timeTableMessage, 500);
     }
 
     const handleUpdateChange=()=>{
@@ -155,7 +163,7 @@ const Worksapce = () => {
                         </span> 
                         <div className='workspaceActions'>                        
                             <button className='siDetails'>Book</button>                        
-                            <button className='siDetails'>TimeTable</button>
+                            <button className='siDetails' onClick={handleTimeTableChange}>TimeTable</button>
                             <button className='siDetails' onClick={handleEditChange}>Edit</button>
                             <button className='siDetails' onClick={handleDeleteChange} style={{backgroundColor:'#e74c3c'}}>Delete</button>
                             {item && item.isAvailable ? 

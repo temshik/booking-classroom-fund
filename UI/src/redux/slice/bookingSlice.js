@@ -9,7 +9,7 @@ const initialState = {
     isBookingCreated: false,    
     status: null,
     errorMessage: null,
-    bookings: [],
+    bookings: null,
     updatedBookings: null
 }
 
@@ -17,7 +17,22 @@ export const getBookingsByUser = createAsyncThunk(
     'booking/getBookingsByUser',
     async ({id}) => {
         try {
+            console.log({id})
             const {data} = await axios.get(Configuration.GetBookingsByUser+`/${id}`)
+            console.log("getBookings", data);            
+            return {data};
+        } catch (error) {
+            console.log(error)
+        }
+    }
+)
+
+export const getBookingsByWorkspace = createAsyncThunk(
+    'booking/getBookingsByWorkspace',
+    async (id) => {
+        try {
+            console.log(id)
+            const {data} = await axios.put(Configuration.GetBookingsByWorkspace+`/${id}`)
             console.log("getBookings", data);            
             return {data};
         } catch (error) {
@@ -52,6 +67,26 @@ export const bookingSlice = createSlice({
             state.errorMessage = action.payload.errors            
         },
         //----------------------------------------
+        [getBookingsByWorkspace.pending]: (state) => {
+            console.log('a')
+            state.isBookingLoading = true            
+            //state.status = null
+            //state.errorMessage = null
+        },
+        [getBookingsByWorkspace.fulfilled]: (state, action) => {
+            console.log('b')
+            state.isBookingLoading = false            
+            //state.status = action.payload.status
+            //state.errorMessage = action.payload.errors
+            state.bookings = (action.payload)
+            console.log("bookings",state.bookings)
+        },
+        [getBookingsByWorkspace.rejected]: (state, action) => {
+            console.log('c')
+            state.isBookingLoading = false            
+            state.status = action.payload.status
+            state.errorMessage = action.payload.errors            
+        },
     }
 });
 

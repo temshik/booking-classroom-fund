@@ -1,18 +1,38 @@
 import React, {useEffect, useState} from "react";
+import {useLocation} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {selectIsCategoryLoading, selectIsWorkspaceLoading,
         getCategory, getWorkspace,
         selectCat, selectWorkspace} from '../../redux/slice/catalogSlice';
-import {selectBookings, getBookingsByUser} from '../../redux/slice/bookingSlice';
+import {selectBookings, getBookingsByUser, getBookingsByWorkspace} from '../../redux/slice/bookingSlice';
+import {selectIsLoggedIn, selectEmail} from '../../redux/slice/authSlice'
 import Header from '../../components/Header/Header';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import Loader from '../../components/Loader/Loader';
 import BookingSelect from '../../components/BookingManagement/BookingSelect'
+import AuthServices from '../../services/AuthServices';
+import axios from '../../utils/axios';
+import Configuration from "../../configurations/Configuration";
 //import {bookingsList} from "../../docs/fillterData";
 import './Booking.scss'
 
+const authSevice = new AuthServices();
+
 const Booking = () => {  
+    const location = useLocation(); 
+    const item = {   
+        "id": null,     
+        "campusNumber": null,
+        "workspaceNumber": null,
+        "categoryId": null,
+        "description": null,
+        "numberOfSeats": null,
+        "courseNumber": null,
+        "specialEquipment": false,
+        "isAvailable": true
+    }
+    const [form, setForm] = useState(location.state !== null ? location.state.value : item); 
     const dispatch = useDispatch();  
     const cat = useSelector(selectCat);
     const workspace = useSelector(selectWorkspace);
@@ -22,36 +42,51 @@ const Booking = () => {
     const [blocked, setBlocked] = useState([]); 
     const [selectedCategory, setSelectedCategory] = useState([]);
     const [selectedWorkspace, setSelectedWorkspace] = useState([]);
-    const [element, setElement] = useState();
+    const [selectedUsers, setSelectedUsers] = useState([]);
+    const [element, setElement] = useState([]);
     const [currentDay, setCurrentDay] = useState(new Date());
     const [isLoading, setIsLoading] = useState(true);
+    const stateEmail = useSelector(selectEmail)
+    const email = (stateEmail!==null)? stateEmail : window.sessionStorage.getItem('email');
+    const [user, setUser] = useState(null);
     
     useEffect(()=>{
-        getBookings();
+        console.log('form', form);
+        if(email !== null)
+        {
+            authSevice.GetUserByEmail({email: email}).then((data) =>{
+                if(data.status === 200){
+                    getBookings(data.data.id);
+                }                
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }            
         getCategories();
     },[]);
 
     useEffect(()=>{
         if(bookings !== null)
-        prepareData(bookings);
+        prepareData(bookings.data);
     },[bookings])
 
-    // useEffect(()=>{
-    //     if(blocked !== null)
-    //     {
-            
-    //     }
-    // },[blocked])
-
-    const getBookings = async () => {
-        if(window.localStorage.getItem('accessToken') !== null){                                                    
-            dispatch(getBookingsByUser(1));
+    useEffect(()=>{
+        if(blocked !== null)
+        {   console.log('bloc',blocked);    
+            getInfoForExtendedRecord(selectedUsers,selectedWorkspace);    
         }
-    }
+    },[blocked])
 
-    const getWorkspacies = async (id) => {    
-        if(window.localStorage.getItem('accessToken') !== null){                                                    
-            dispatch(getWorkspace(id));
+    useEffect(()=>{console.table(selectedUsers)},[selectedUsers])
+
+    const getBookings = (id) => {
+        if(window.localStorage.getItem('accessToken') !== null){   
+            if(location.state !== null){
+                dispatch(getBookingsByWorkspace(form.id));
+            }
+            else{                                                 
+                dispatch(getBookingsByUser({id}));
+            }
         }
     }
 
@@ -61,16 +96,63 @@ const Booking = () => {
         }
     }
 
+    const getInfoForExtendedRecord = async() =>{
+        if (window.localStorage.getItem('accessToken') !== null){
+            var users=[];
+            selectedUsers.map((id)=>{
+                users.push(axios.get(Configuration.GetUser+`/${id}`));
+            })
+
+            console.log('users',users)
+            
+            var workspacies=[];
+            selectedWorkspace.map((id)=>{
+                workspacies.push(axios.get(Configuration.GetWorkspace+`/${id}`));
+            })
+
+            console.log('workspacies',workspacies)
+            // await Promise.allSettled([users, workspacies]).then((res) => {
+            //     setSelectedWorkspace(res[1].value)                      
+            // })      
+
+            currentloginid(users, workspacies);
+
+            // const newBlockedByUser = blocked.map((item)=>{
+            //     console.log('item',item);
+            //     usersList.map((value)=>{
+            //         console.log('value',value)
+            //         if(item.Subject === value.id){
+            //             return{...item, Subject: value.email}
+            //         } else return item
+            //     })
+            // }) 
+        }
+    }
+
+    async function currentloginid(users, workspacies) {
+        return await Promise.all([users, workspacies])
+          .then(function(response) {
+            return JSON.stringify(response);
+          })
+          .then(function(data) {
+            var userid = JSON.parse(data);
+            console.log(userid);
+            return userid;
+          })
+      }
+
     function prepareData(bookingsList){
         const sessionStart = new Date(2023,1,1);
         const sessionEnd = new Date(2023,5,30);
         const weeksBetwee = weeksBetween(sessionStart, sessionEnd);
-        const weeksRepeatNumber = weeksBetwee/2;        
+        const weeksRepeatNumber = weeksBetwee/2;     
+        let uniqueUserId = [];
+        let uniqueWorkspaceid = [];   
         
-        let newBlocked = bookingsList.map((item)=>{
-            console.log('item', item);            
-            getWorkspacies(item.workspaceId);
-            console.log('workspace',workspace)
+        if(bookingsList){
+        let newBlocked = bookingsList.map((item)=>{ 
+            uniqueUserId.push(item.userId);
+            uniqueWorkspaceid.push(item.workspaceId);
             let startDate = (new Date(item.startBookingTime));
             let day = startDate;
             if(item.dayOfWeek === 1){                                
@@ -89,8 +171,8 @@ const Booking = () => {
             day.setHours(hours);
             day.setMinutes(minutes);            
             return {
-                Id: item.id,
-                Subject: item.userId,
+                Id: item.id,                
+                Subject: `${item.userId}`,
                 Location: `${item.workspaceId}`,
                 Description: `${item.groupNumber}`,
                 StartTime: new Date(day),
@@ -102,8 +184,13 @@ const Booking = () => {
                 IsAllDay: false,                                                    
             }
         })
+        setSelectedUsers(uniqueUserId.filter((value, index, array) => array.indexOf(value) === index));
+        setSelectedWorkspace(uniqueWorkspaceid.filter((value, index, array) => array.indexOf(value) === index));
+        
+
         console.log('newBlocked', newBlocked)
         setBlocked(newBlocked);
+        }
     }
 
     function addHours(date, hours) {
@@ -123,7 +210,7 @@ const Booking = () => {
         const dayOfWeek = new Date(date).getDay();    
         return isNaN(dayOfWeek) ? null : 
           ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek];
-      }
+    }
 
     const getMonday=(d)=>{
         d = new Date(d);
@@ -136,7 +223,7 @@ const Booking = () => {
             {/* {isLoading && <Loader/>} */}            
             <Navbar/>
             <Header/>    
-            <BookingSelect props={blocked} selectedDate={getMonday(currentDay)}/>
+            <BookingSelect props={element} selectedDate={getMonday(currentDay)}/>
             <Footer/>
         </div>
     );

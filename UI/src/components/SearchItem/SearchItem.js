@@ -1,16 +1,26 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./SearchItem.scss"
 import image1 from '../../images/noimage.png'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLocationDot, faUsers, faChalkboardUser, faPersonDotsFromLine, faDisplay} from "@fortawesome/free-solid-svg-icons";
 
 const SearchItem = ({item, categories}) => {
+    const navigate = useNavigate();
     const {id,campusNumber, workspaceNumber,categoryId,description,numberOfSeats,courseNumber,isAvailable}=item
     console.log('categorys ',categories)
 
     const truncate=(str)=>{
         return str.length > 20 ? str.substring(0, 100) + "..." : str;
+    }
+
+    const timeTableMessage = () => {
+        if(window.confirm('You will be redirected to booking page.'))
+        navigate('/Booking', {state: {value:item}});
+    }
+
+    const handleTimeTableChange = () => {
+        setTimeout(timeTableMessage, 500);
     }
 
     return (
@@ -41,7 +51,7 @@ const SearchItem = ({item, categories}) => {
             <div className='siMore'>
                 <button className='siDetails'><Link to={{pathname:`/catalog/${id}`}} style={{color:'black', textDecoration: 'none'}}>Details</Link></button>
                 <button className='siDetails'>Book</button>
-                <button className='siDetails'>TimeTable</button>
+                <button className='siDetails' onClick={handleTimeTableChange}>TimeTable</button>
             </div>
        </div> 
     );

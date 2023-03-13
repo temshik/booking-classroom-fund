@@ -26,8 +26,7 @@ const Refresh=()=>{
     }).catch((error)=>{
         console.log("Refresh",error);
         REMOVE_ACTIVE_USER();
-    })
-    window.location.reload();
+    })    
 }
 
 instance.interceptors.request.use((config)=>{
@@ -51,7 +50,7 @@ instance.interceptors.response.use((response)=>{
             // return a request
             return instance(originalConfig);
         }
-
+        window.location.reload();
         return Promise.reject(error);
     }
 })
