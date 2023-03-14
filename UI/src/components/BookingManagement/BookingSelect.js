@@ -175,29 +175,27 @@ const BookingSelect = ({props, selectedDate}) => {
     <div>
         {console.log('blocked1',props)}
         <ScheduleComponent 
-        id="schedule" 
-        cssClass='quick-info-template' 
-        width='100%'
-        currentView="WorkWeek"
-        workDays={workDays}
-        selectedDate={selectedDate} 
-        allowResizing={false}
-        //для учителей сделать
-        //popupOpen={onPopupOpen}
-        popupClose={onPopupClose}
-        ref={schedule => scheduleObj = schedule}          
-        editorTemplate={editorTemplate.bind(this)}
-        actionBegin={onActionBegin.bind(this)} 
-        //showQuickInfo={false} 
-        quickInfoTemplates={{
-                        header: headerTemplate.bind(this),
-                        content: contentTemplate.bind(this),
-                        footer: footerTemplate.bind(this)
-                    }}
-        eventRendered={onEventRendered.bind(this)}
-        eventSettings={{ dataSource: props ,
-                        enableTooltip: true,
-                        tooltipTemplate: template.bind(this)}}>
+            id="schedule" 
+            cssClass='quick-info-template' 
+            width='100%'
+            currentView="WorkWeek"
+            workDays={workDays}
+            selectedDate={selectedDate} 
+            allowResizing={false}
+            //для учителей сделать
+            //popupOpen={onPopupOpen}
+            popupClose={onPopupClose}
+            ref={schedule => scheduleObj = schedule}          
+            editorTemplate={editorTemplate.bind(this)}
+            actionBegin={onActionBegin.bind(this)} 
+            eventRendered={onEventRendered.bind(this)}
+            //showQuickInfo={false} 
+            quickInfoTemplates={{ header: headerTemplate.bind(this),
+                                  content: contentTemplate.bind(this),
+                                  footer: footerTemplate.bind(this)}}    
+            eventSettings={{ dataSource: props ,
+                             enableTooltip: true,
+                             tooltipTemplate: template.bind(this)}}>
             <ViewsDirective>
                 <ViewDirective option='Day' startHour='08:00' endHour='21:05'/>                    
                 <ViewDirective option='WorkWeek' startHour='08:00' endHour='21:05'/>

@@ -17,7 +17,7 @@ import Loader from '../../components/Loader/Loader';
 import "./Catalog.scss"
 
 const Catalog = () => {
-    const location = useLocation();    
+    const location = useLocation();
     const dispatch = useDispatch();
     const cat = useSelector(selectCat);
     const updateCat = useSelector(updatedCat);
@@ -26,7 +26,7 @@ const Catalog = () => {
     const isCategoryLoading = useSelector(selectIsCategoryLoading);
     const isWorkspaceLoading = useSelector(selectIsWorkspaceLoading);
     const [loading, setLoading] = useState(false);
-    const [faculty, setFaculty] = useState(location.state !== null ? location.state.value : '');   
+    const [faculty, setFaculty] = useState(location.state !== null ? location.state.value : '');
     const [PageSize, setPageSize] = useState(2);
     const [CurrentPage, setCurrentPage] = useState(1);
     const [SortOn, setSortOn] = useState("categoryId");
@@ -59,8 +59,6 @@ const Catalog = () => {
         })                      
         if (newCategory !== null)
         updateCategories(newCategory[value-1]);            
-        //getCategories();
-        //setSelectedCategory(newCategory);
         console.log('Catalog SCategory RETURN', selectedCategory)
     }
 
@@ -92,38 +90,14 @@ const Catalog = () => {
     }        
 
     const getWorkspacies = async () => {    
-        if(window.localStorage.getItem('accessToken') !== null){                                            
-        // await catalogService.GetWorkspaciesPaged(PageSize,CurrentPage,SortOn,SortDirection).then(({data})=>{      
-        //     console.log('data.workspaceDTOs',data.workspaceDTOs);     
-        //     console.log('data',data.workspaceDTOs);   
-        //     setWorkspacies(data.workspaceDTOs)        
-        //     setList(workspacies);
-        //     setPageCount(data.totalPages);                    
-        // }).catch((error)=>{
-        // if (error.response.data.message === "TokenExpiredError") {
-        //     console.log('logout');
-        // }
-        // else
-        //     console.log(error);
-        // });        
+        if(window.localStorage.getItem('accessToken') !== null){                                                    
         dispatch(getWorkspacePaged({PageSize,CurrentPage,SortOn,SortDirection}));
         console.log('disp', workspacies)
         }
     }
 
     const getCategories = () => {
-        if(window.localStorage.getItem('accessToken') !== null){
-        // await catalogService.GetCategories().then(({data})=>{               
-        //     console.log("Categories",data);
-        //     setSelectedCategory(data);
-
-        // }).catch((error)=>{
-        //     if (error.response.data.message === "TokenExpiredError") {
-        //         console.log('logout');
-        //     }
-        //     else
-        //     console.log(error);
-        // });         
+        if(window.localStorage.getItem('accessToken') !== null){      
         dispatch(getCategory());  
         console.log('cat0', cat)        
         }
@@ -131,32 +105,21 @@ const Catalog = () => {
 
     const updateCategories = (item) => {
         if(window.localStorage.getItem('accessToken') !== null){
-        // await catalogService.UpdateCategory(item).then(({data})=>{               
-        //     console.log("Categories",data);
-        //     //setSelectedCategory(data);
-
-        // }).catch((error)=>{
-        //     if (error.response.data.message === "TokenExpiredError") {
-        //         console.log('logout');
-        //     }
-        //     else
-        //     console.log(error);
-        // });
         dispatch(updateCategory(item));
         console.log('cat1',cat);
         }
     }
+
+    useEffect(() =>{             
+        getWorkspacies();
+        getCategories();        
+    }, [CurrentPage, SortDirection])
 
     useEffect(()=>{
         if(isCategoryLoading === false || isWorkspaceLoading === false)
             setTimeout(() => {setLoading(false)}, 500);
         else setLoading(true);
     },[isCategoryLoading,isWorkspaceLoading])
-
-    useEffect(() =>{             
-        getWorkspacies();
-        getCategories();        
-    }, [CurrentPage, SortDirection])
 
     useEffect(()=>{
         if(cat !== null)                  
