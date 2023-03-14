@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import {useLocation} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {selectIsCategoryLoading, selectIsWorkspaceLoading,
@@ -15,7 +15,7 @@ import AuthServices from '../../services/AuthServices';
 import utilsAxios from '../../utils/axios';
 import axios from 'axios';
 import Configuration from "../../configurations/Configuration";
-//import {bookingsList} from "../../docs/fillterData";
+import {bookingsList} from "../../docs/fillterData";
 import './Booking.scss'
 
 const authSevice = new AuthServices();
@@ -35,8 +35,7 @@ const Booking = () => {
     }
     const [form, setForm] = useState(location.state !== null ? location.state.value : item); 
     const dispatch = useDispatch();  
-    const cat = useSelector(selectCat);
-    const workspace = useSelector(selectWorkspace);
+    const cat = useSelector(selectCat);    
     const bookings = useSelector(selectBookings);
     const isCategoryLoading = useSelector(selectIsCategoryLoading);
     const isWorkspaceLoading = useSelector(selectIsWorkspaceLoading);
@@ -49,7 +48,8 @@ const Booking = () => {
     const [isLoading, setIsLoading] = useState(true);
     const stateEmail = useSelector(selectEmail)
     const email = (stateEmail!==null)? stateEmail : window.sessionStorage.getItem('email');
-    const [user, setUser] = useState(null);
+    const [editBookings, setEditBookings] = useState(null);
+    const isFirstRender = useRef(true);
     
     useEffect(()=>{
         console.log('form', form);
@@ -66,19 +66,47 @@ const Booking = () => {
         getCategories();
     },[]);
 
-    useEffect(()=>{
+    useEffect(()=>{        
         if(bookings !== null)
-        prepareData(bookings.data);
+            prepareData(bookings.data);    
     },[bookings])
 
     useEffect(()=>{
         if(blocked !== null)
-        {   console.log('bloc',blocked);    
-            getInfoForExtendedRecord(selectedUsers,selectedWorkspace);    
+        {   console.log('bloc',blocked);                
+            getInfoForExtendedRecord();    
         }
     },[blocked])
 
-    useEffect(()=>{console.table(selectedUsers)},[selectedUsers])
+    useEffect(()=>{},[element])
+
+    useEffect(()=>{
+        const newBooking=blocked;
+        if(blocked !== null)
+        {                  
+            newBooking.map(item=>{
+                console.log('item',item);
+                editBookings[0].map((value)=>{
+                    console.log('value',value.email, '',item.Location)
+                    if(item.Subject === ''+value.id){
+                        console.log('v')
+                        item.Subject = value.email;
+                        return{...item, Subject: value.email}
+                    } else return item
+                })    
+                editBookings[1].map((value)=>{
+                    console.log('value',value.campusNumber,'/',value.workspaceNumber)
+                    console.log('value',value.id, '',item.Location)
+                    if(item.Location === ''+value.id){
+                        console.log('v')
+                        item.Location = `${value.workspaceNumber}`;                     
+                    }
+                })       
+            })       
+            console.log('edit',newBooking);
+            setElement(newBooking);
+        }
+    },[editBookings])
 
     const getBookings = (id) => {
         if(window.localStorage.getItem('accessToken') !== null){   
@@ -97,60 +125,48 @@ const Booking = () => {
         }
     }
 
-    const getInfoForExtendedRecord = async() =>{
+    async function getAxiosData (usersEndpoints, workspaciesEndpoints) {
+        const getUsersEndpoints = usersEndpoints.map((endpoint) => utilsAxios.get(endpoint));
+        const getWorkspaciesEndpoints = workspaciesEndpoints.map((endpoint) => utilsAxios.get(endpoint));
+        var all = [[],[]];
+        console.log(getUsersEndpoints)
+
+        await Promise.allSettled(getUsersEndpoints).then( 
+            axios.spread((...allData) => {
+                (allData.forEach((item)=>{
+                    console.log(item.value.data)
+                    all[0].push(item.value.data)
+                }))                                                             
+            }),
+            await Promise.allSettled(getWorkspaciesEndpoints).then(
+                axios.spread((...allData) => {
+                    (allData.forEach((item)=>{
+                        console.log(item.value.data)
+                        all[1].push(item.value.data)
+                    }))                                                             
+                }),
+            ),          
+        );          
+
+        return all;
+    }
+
+    const getInfoForExtendedRecord = () =>{
         if (window.localStorage.getItem('accessToken') !== null){
-            var editBlocked = [];
             var usersEndpoints=[];
             selectedUsers.map((id)=>{
                 usersEndpoints.push(Configuration.GetUser+`/${id}`);
             })
-            await Promise.allSettled(usersEndpoints.map((endpoint) => utilsAxios.get(endpoint)))
-            .then(
-                axios.spread((...allData) => {
-                    console.log({ allData });
-                    editBlocked = allData;
-                })
-            )                                    
-            
+
             var workspaciesEndpoints=[];
             selectedWorkspace.map((id)=>{
                 workspaciesEndpoints.push(Configuration.GetWorkspace+`/${id}`);
             })
-            console.log('workspacies',workspaciesEndpoints)
-            Promise.allSettled(workspaciesEndpoints.map((endpoint) => utilsAxios.get(endpoint)))
-            .then(
-                //([{data: user}])=>{console.log({user})}
-                axios.spread((...allData) => {
-                    console.log({ allData });
-                })
-            )
 
-            console.log('editBlocked',editBlocked);
-
-            const a = blocked.map(item=>{
-                console.log('item',item);
-                editBlocked.map((value)=>{
-                    console.log('value',value.value.data)
-                    if(item.Subject === ''+value.value.data.id){
-                        console.log('v')
-                        return{...item, Subject: value.value.data.email}
-                    } else return item
-                })})
-            console.log('edit',{a});
-
-            // await Promise.allSettled([users, workspacies]).then((res) => {
-            //     setSelectedWorkspace(res[1].value)                      
-            // })      
-
-            // const newBlockedByUser = blocked.map((item)=>{
-            //     console.log('item',item);
-            //     usersList.map((value)=>{
-            //         console.log('value',value)
-            //         if(item.Subject === value.id){
-            //             return{...item, Subject: value.email}
-            //         } else return item
-            //     })
-            // }) 
+            getAxiosData(usersEndpoints, workspaciesEndpoints).then((items)=>{
+                console.log(items)
+                setEditBookings(items);
+            })                        
         }
     }
 
@@ -159,8 +175,8 @@ const Booking = () => {
         const sessionEnd = new Date(2023,5,30);
         const weeksBetwee = weeksBetween(sessionStart, sessionEnd);
         const weeksRepeatNumber = weeksBetwee/2;     
-        let uniqueUserId = [];
-        let uniqueWorkspaceid = [];   
+        const uniqueUserId = [];
+        const uniqueWorkspaceid = [];   
         
         if(bookingsList){
         let newBlocked = bookingsList.map((item)=>{ 
@@ -228,7 +244,7 @@ const Booking = () => {
     const getMonday=(d)=>{
         d = new Date(d);
         var day = d.getDay(),
-            diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+            diff = d.getDate() - day + (day === 0 ? -6:1); // adjust when day is sunday
         return new Date(d.setDate(diff));
     }
     return(
