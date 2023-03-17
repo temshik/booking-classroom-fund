@@ -8,7 +8,7 @@ const UpdateBooking = ({props, startObj}) => {
     <input 
         id="Subject" 
         className="e-field e-input" 
-        type="number" 
+        type="email" 
         defaultValue={props.Subject || null}                
         required 
         name="Subject" 

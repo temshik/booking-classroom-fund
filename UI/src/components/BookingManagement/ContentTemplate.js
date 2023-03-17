@@ -27,14 +27,14 @@ const ContentTemplate = ({props, titleObj,notesObj,eventTypeObj}) => {
                 <label>Last Name:</label>
                 <span> {props.LastName}</span>
             </div>
-            {/* <div className="meeting-subject-wrap">
+            <div className="meeting-subject-wrap">
                 <label>User Name:</label>
                 <span> {props.UserName}</span>
             </div>
             <div className="meeting-subject-wrap">
                 <label>Email:</label>
                 <span> {props.Subject}</span>
-            </div>       */}
+            </div>      
             <div className="meeting-subject-wrap">
                 <label>Campus №</label>:
                 <span> {props.CampusNumber}</span>

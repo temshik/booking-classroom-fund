@@ -33,12 +33,10 @@ const Booking = () => {
         "isAvailable": true
     }
     const [form, setForm] = useState(location.state !== null ? location.state.value : item); 
-    const dispatch = useDispatch();  
-    const cat = useSelector(selectCat);    
+    const dispatch = useDispatch();     
     const bookings = useSelector(selectBookings);
     const isCategoryLoading = useSelector(selectIsCategoryLoading);
     const isWorkspaceLoading = useSelector(selectIsWorkspaceLoading);    
-    const [selectedCategory, setSelectedCategory] = useState([]);
     const [element, setElement] = useState([]);
     const [currentDay, setCurrentDay] = useState(new Date());
     const [loading, setLoading] = useState(false);
@@ -167,17 +165,13 @@ const Booking = () => {
                             } else return item
                         })    
                         items[1].map((value)=>{
-                            console.log('value',value.campusNumber,'/',value.workspaceNumber)
-                            console.log('value',value.id, '',item.Location)
                             if(item.Location === ''+value.id){
-                                console.log('v')
                                 item.CampusNumber = `${value.campusNumber}`;
                                 item.Location = `${value.workspaceNumber}`;    
                                 item.CategoryId = `${value.categoryId}`;                 
                             }
                         })       
                     })       
-                    console.log('edit',newBlocked);
                     setElement(newBlocked);
                 }
             })                        

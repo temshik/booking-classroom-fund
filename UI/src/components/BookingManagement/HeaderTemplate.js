@@ -4,7 +4,7 @@ const HeaderTemplate = ({props,intl}) => {
             return { alignItems: 'center', color: 'black' };
         }
         else {            
-            return { background: '#008a5e', height: '45px' };
+            return { background: '#008a5e' };
         }
     }
 

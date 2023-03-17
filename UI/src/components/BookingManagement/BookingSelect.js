@@ -1,12 +1,16 @@
 import React from "react";
-import { ScheduleComponent, Day, WorkWeek, Month, Agenda, Inject, ViewsDirective, ViewDirective, Resize, DragAndDrop} from '@syncfusion/ej2-react-schedule';
-import {L10n, isNullOrUndefined, Internationalization} from '@syncfusion/ej2-base';
+import { ScheduleComponent, Day, WorkWeek, Month, Agenda, Inject, ViewsDirective, ViewDirective, ResourceDirective, ResourcesDirective} from '@syncfusion/ej2-react-schedule';
+import {Browser, L10n, isNullOrUndefined, Internationalization} from '@syncfusion/ej2-base';
+import { Query, Predicate } from '@syncfusion/ej2-data';
 import UpdateBooking from "./UpdateBooking";
 import Template from "./Template";
 import HeaderTemplate from "./HeaderTemplate";
 import ContentTemplate from "./ContentTemplate";
 import FooterTemplate from "./FooterTemplate";
+import EventTemplate from "./EventTemplate";
+import AgendaTemplate from "./AgendaTemplate";
 import './BookingSelect.scss'
+import PrintSchedule from "./PrintSchedule";
 
 L10n.load({
     'en-US':{
@@ -26,7 +30,8 @@ const BookingSelect = ({props, selectedDate}) => {
     let endObj;
     let eventTypeObj;
     let titleObj;
-    let notesObj;    
+    let notesObj;   
+    let profilePopup;
     const intl = new Internationalization();
     const workDays = [1, 2, 3, 4, 5, 6];
 
@@ -61,6 +66,20 @@ const BookingSelect = ({props, selectedDate}) => {
             titleObj={titleObj} 
             notesObj={notesObj}
             eventTypeObj={eventTypeObj}
+        />);
+    }
+
+    function eventTemplate(props) {
+        return (<EventTemplate
+            props={props}             
+            intl={intl}
+        />);
+    }    
+
+    function agendaTemplate(props) {
+        return (<AgendaTemplate
+            props={props}
+            intl={intl}
         />);
     }
 
@@ -130,50 +149,84 @@ const BookingSelect = ({props, selectedDate}) => {
             }
         }
     }
-
-    //сделать разными цветами лекции лабы и практики
+    
     function applyCategoryColor(args, currentView) {
-        let categoryColor = args.data.CategoryColor;
-        if (!args.element || !categoryColor) {
-            return;
-        }
-        if (currentView === 'Agenda') {
-            args.element.firstChild.style.borderLeftColor = categoryColor;
-        }
-        else {
-            args.element.style.backgroundColor = categoryColor;
+        switch (args.data.CategoryId) {
+            case '1':
+                args.element.style.backgroundColor = '#3f51b5'; 
+                if (scheduleObj.currentView === 'Agenda') {
+                    args.element.firstChild.style.borderLeftColor = args.element.style.backgroundColor;
+                }               
+                break;
+            case '2':
+                args.element.style.backgroundColor = '#F57F17';  
+                if (scheduleObj.currentView === 'Agenda') {
+                    args.element.firstChild.style.borderLeftColor = args.element.style.backgroundColor;
+                }                   
+                break;
+            case '3':
+                args.element.style.backgroundColor = '#8e24aa';
+                if (scheduleObj.currentView === 'Agenda') {
+                    args.element.firstChild.style.borderLeftColor = args.element.style.backgroundColor;
+                }     
+                break;
+            default:
+                args.element.style.backgroundColor = '#7fa900';
+                break;
         }
     }
 
     
     function onEventRendered(args) {
         console.log('Прогружает все элементы на стронице', args);
-        applyCategoryColor(args, scheduleObj.currentView);
-        switch (args.data.EventType) {
-            case '1':
-                args.element.style.backgroundColor = '#F57F17';
-                break;
-            case '2':
-                args.element.style.backgroundColor = '#7fa900';
-                break;
-            case '3':
-                args.element.style.backgroundColor = '#8e24aa';
-                break;
-        }
+        applyCategoryColor(args, scheduleObj.currentView);      
         console.log({args})
     }
 
     function onActionBegin(args) {
         console.log('action', args)
+        if (args.requestType === 'toolbarItemRendering') {            
+            let exportItem = {
+                align: 'Center', showTextOn: 'Both', prefixIcon: 'e-icons e-export-excel',
+                text: 'Excel Export', cssClass: 'e-excel-export', click: onExportClick.bind(this)
+            };
+            let printItem = {
+                align: 'Center', showTextOn: 'Both', prefixIcon: 'e-icons e-print',
+                text: 'Print', cssClass: 'e-print-btn', click: onPrintClick.bind(this)
+            };
+            args.items.push(exportItem);
+            args.items.push(printItem)            
+            
+        }
         // if (args.requestType === 'eventCreate' || args.requestType === 'eventChange') {
         //     let data = args.data instanceof Array ? args.data[0] : args.data;
         //     args.cancel = !scheduleObj.isSlotAvailable(data.StartTime, data.EndTime);
         // }        
-    }        
-    
-    return (
-    <div>
-        {console.log('blocked1',props)}
+    }     
+
+    function onPrintClick() {
+        
+    }
+
+    function onExportClick() {
+        const exportFields = [
+            { name: 'Id', text: 'Id' },
+            { name: 'Subject', text: 'Summary' },
+            { name: 'StartTime', text: 'Start Date' },
+            { name: 'EndTime', text: 'End Date' },
+            { name: 'Location', text: 'Place' }
+        ];
+        const exportValues = { fieldsInfo: exportFields };
+        scheduleObj.exportToExcel(exportValues);
+    }
+
+    function onActionComplete(args) {
+        if (args.requestType === 'eventCreated' || args.requestType === 'eventChanged' || args.requestType === 'eventRemoved') {
+            console.log('dev', args)
+        }                       
+    }
+
+    return (<div>                  
         <ScheduleComponent 
             id="schedule" 
             cssClass='quick-info-template' 
@@ -189,6 +242,7 @@ const BookingSelect = ({props, selectedDate}) => {
             editorTemplate={editorTemplate.bind(this)}
             actionBegin={onActionBegin.bind(this)} 
             eventRendered={onEventRendered.bind(this)}
+            actionComplete={onActionComplete.bind(this)}
             //showQuickInfo={false} 
             quickInfoTemplates={{ header: headerTemplate.bind(this),
                                   content: contentTemplate.bind(this),
@@ -197,13 +251,12 @@ const BookingSelect = ({props, selectedDate}) => {
                              enableTooltip: true,
                              tooltipTemplate: template.bind(this)}}>
             <ViewsDirective>
-                <ViewDirective option='Day' startHour='08:00' endHour='21:05'/>                    
-                <ViewDirective option='WorkWeek' startHour='08:00' endHour='21:05'/>
+                <ViewDirective option={Browser.isDevice ? 'Day' : 'WorkWeek'} eventTemplate={eventTemplate.bind(this)} startHour='08:00' endHour='21:05'/>
                 <ViewDirective option='Month' showWeekend={true}/>
-                <ViewDirective option='Agenda'/>
-            </ViewsDirective>                
+                <ViewDirective option='Agenda' eventTemplate={agendaTemplate.bind(this)}/>
+            </ViewsDirective>            
             <Inject services={[Day, WorkWeek, Month, Agenda]}/>
-        </ScheduleComponent>
+        </ScheduleComponent>         
     </div>);
 };
 
