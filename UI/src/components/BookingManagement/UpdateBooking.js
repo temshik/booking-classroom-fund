@@ -9,8 +9,7 @@ const UpdateBooking = ({props, startObj}) => {
         id="Subject" 
         className="e-field e-input" 
         type="email" 
-        defaultValue={props.Subject || null}                
-        required 
+        defaultValue={props.Subject === 'Add title' ? null : props.Subject}                        
         name="Subject" 
         style={{ width: '100%' }}
     />
@@ -54,11 +53,8 @@ const UpdateBooking = ({props, startObj}) => {
     <input 
         id="Description" 
         className="e-field e-input" 
-        type="number"         
-        defaultValue={props.Description || null} 
-        required 
-        minLength={8} 
-        maxLength={8} 
+        type="number"                
+        defaultValue={props.Description || null}         
         name="Description" 
         style={{ width: '100%' }}
     />

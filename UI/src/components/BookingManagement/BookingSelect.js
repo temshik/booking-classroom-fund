@@ -11,6 +11,7 @@ import EventTemplate from "./EventTemplate";
 import AgendaTemplate from "./AgendaTemplate";
 import './BookingSelect.scss'
 import PrintSchedule from "./PrintSchedule";
+import { faTruckMedical } from "@fortawesome/free-solid-svg-icons";
 
 L10n.load({
     'en-US':{
@@ -23,6 +24,8 @@ L10n.load({
         }
     }
 })
+
+const Email_Regex = "(?:[a-zA-Z0-9]+\.)+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$";
 
 const BookingSelect = ({props, selectedDate}) => {
     let scheduleObj;
@@ -82,20 +85,50 @@ const BookingSelect = ({props, selectedDate}) => {
             intl={intl}
         />);
     }
+    
+    function onSelect(args) {
+        if (!isNullOrUndefined(document.getElementById("EventType_Error"))) {
+            document.getElementById("EventType_Error").style.display = "none";
+        }
+    }
 
     function onPopupOpen(args) {    
         if (args.target && !args.target.classList.contains('e-appointment') && !isNullOrUndefined(titleObj)) {
             titleObj.focusIn();
         }    
         if (args.type === 'Editor') {
-            let subjectElement = args.element.querySelector('#Subject');
-            if (subjectElement) {
-                subjectElement.value = args.data.Subject || "";
+            // let subjectElement = args.element.querySelector('#Subject');
+            // if (subjectElement) {
+            //     subjectElement.value = args.data.Subject || "";
+            // }
+            // let descriptionElement = args.element.querySelector('#Description');
+            // if (descriptionElement) {
+            //     descriptionElement.value = args.data.Description || "";
+            // }                       
+            if (!isNullOrUndefined(document.getElementById("Subject_Error"))) {
+                document.getElementById("Subject_Error").style.display = "none";
+                document.getElementById("Subject_Error").style.left = "351px";
             }
-            let descriptionElement = args.element.querySelector('#Description');
-            if (descriptionElement) {
-                descriptionElement.value = args.data.Description || "";
+            let subjectElement = args.element.querySelector('.e-schedule-form');
+            let subjectValidator = subjectElement.ej2_instances[0];
+            subjectValidator.addRules('Subject', { required: true,
+                regex: [Email_Regex, 'Should be a valid email address.'] });     
+            
+            if (!isNullOrUndefined(document.getElementById("Description_Error"))) {
+                document.getElementById("Description_Error").style.display = "none";
+                document.getElementById("Description_Error").style.left = "351px";
             }
+            let descriptionElement = args.element.querySelector('.e-schedule-form');
+            let descriptionValidator = descriptionElement.ej2_instances[0];
+            descriptionValidator.addRules('Description', { required: true, minLength: 8, maxLength: 8, min: 1});
+
+            if (!isNullOrUndefined(document.getElementById("EventType_Error"))) {
+                document.getElementById("EventType_Error").style.display = "none";
+                document.getElementById("EventType_Error").style.left = "351px";
+            }
+            let eventTypeElement = args.element.querySelector('.e-schedule-form');
+            let eventTypeValidator = eventTypeElement.ej2_instances[0];
+            eventTypeValidator.addRules('EventType', { required: true, min: 1, max: 2});
         }
         if (args.type === 'QuickInfo'){
             console.log('QuickInfo')
@@ -236,8 +269,8 @@ const BookingSelect = ({props, selectedDate}) => {
             selectedDate={selectedDate} 
             allowResizing={false}
             //для учителей сделать
-            //popupOpen={onPopupOpen}
-            popupClose={onPopupClose}
+            popupOpen={onPopupOpen}
+            //popupClose={onPopupClose}
             ref={schedule => scheduleObj = schedule}          
             editorTemplate={editorTemplate.bind(this)}
             actionBegin={onActionBegin.bind(this)} 
