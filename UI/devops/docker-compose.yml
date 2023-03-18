@@ -1,12 +1,27 @@
 version: '3.4'
 
+networks:
+  backend:
+
 services:
   reactclient.ui:
     container_name: react-client-ui
     image: reactclientui
     build:
       context: ./..
-      dockerfile: ./Dockerfile.dev
-
-
-
+      dockerfile: ./Dockerfile
+    ports:
+      - 3000:3000
+    networks:
+      - backend
+  
+  proxy:
+    image: nginx:mainline
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+    depends_on: 
+      - reactclient.ui
+    networks:
+      - backend
