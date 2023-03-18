@@ -42,6 +42,19 @@
       "UpstreamPathTemplate": "/Workspacies/GetWorkspaces/{id}",
       "UpstreamHttpMethod": [ "GET" ]
     },
+    //GetWorkspacesByLocation/{campusNumber}/{workspaceNUmber}
+    {
+      "DownstreamPathTemplate": "/api/Workspacies/GetWorkspacesByLocation/{campusNumber}/{workspaceNumber}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "catalogservice.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Workspacies/GetWorkspacesByLocation/{campusNumber}/{workspaceNumber}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
     //GetWorkspaciesPaged?PageSize=2&CurrentPage=1&SortOn=Id&SortDirection=ASC
     {
       "DownstreamPathTemplate": "/api/Workspacies/GetWorkspaciesPaged?{everything}",
