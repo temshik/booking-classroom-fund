@@ -4,7 +4,7 @@ import {REFRESH_ACCESS_TOKEN, REMOVE_ACTIVE_USER} from '../redux/slice/authSlice
 import AuthServices from '../services/AuthServices';
 
 const instance = axios.create({
-    baseURL: 'http://127.0.0.1:5000/Gateway/'
+    baseURL: 'http://127.0.0.1:5000'
 })
 
 const Refresh=()=>{

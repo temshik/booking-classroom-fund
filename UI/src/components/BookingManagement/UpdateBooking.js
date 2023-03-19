@@ -14,15 +14,22 @@ const UpdateBooking = ({props, startObj}) => {
         style={{ width: '100%' }}
     />
   </td></tr>
+  <tr><td className="e-textlabel">Campus number</td><td colSpan={4}>
+    <input 
+        id="CampusNumber" 
+        className="e-field e-input" 
+        type="number"         
+        defaultValue={props.CampusNumber || null} 
+        name="CampusNumber" 
+        style={{ width: '100%' }}
+    />
+  </td></tr>
   <tr><td className="e-textlabel">Workspace number</td><td colSpan={4}>
     <input 
         id="Location" 
         className="e-field e-input" 
         type="number"         
         defaultValue={props.Location || null} 
-        required 
-        min={1} 
-        max={999} 
         name="Location" 
         style={{ width: '100%' }}
     />
@@ -30,11 +37,10 @@ const UpdateBooking = ({props, startObj}) => {
   <tr><td className="e-textlabel">Number of week</td><td colSpan={4}>
     <DropDownListComponent 
         id="EventType"
-        placeholder='Choose number of week'
-        data-name='EventType'
+        data-name='EventType'        
         className="e-field"
-        value = {props.NumberOfWeek || null}
-        required
+        placeholder={'Select number of week'}
+        value = {props.NumberOfWeek || ''}                       
         style={{ width: '100%' }}
         dataSource={['1', '2']}>
     </DropDownListComponent>

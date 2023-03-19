@@ -7,7 +7,7 @@ module.exports={
     GetUser:"/Users/GetUser",
     GetUserByEmail:"/Users/GetUserByEmail",
     UpdateUser:"/Users/UpdateUser",
-    DeleteUser:"Users/DeleteUser",
+    DeleteUser:"/Users/DeleteUser",
     //Catalog
     GetCategories:"/categories/getcategories",
     UpdateCategory:"/categories/updatecategory",

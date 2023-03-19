@@ -86,25 +86,12 @@ const BookingSelect = ({props, selectedDate}) => {
         />);
     }
     
-    function onSelect(args) {
-        if (!isNullOrUndefined(document.getElementById("EventType_Error"))) {
-            document.getElementById("EventType_Error").style.display = "none";
-        }
-    }
 
     function onPopupOpen(args) {    
         if (args.target && !args.target.classList.contains('e-appointment') && !isNullOrUndefined(titleObj)) {
             titleObj.focusIn();
         }    
-        if (args.type === 'Editor') {
-            // let subjectElement = args.element.querySelector('#Subject');
-            // if (subjectElement) {
-            //     subjectElement.value = args.data.Subject || "";
-            // }
-            // let descriptionElement = args.element.querySelector('#Description');
-            // if (descriptionElement) {
-            //     descriptionElement.value = args.data.Description || "";
-            // }                       
+        if (args.type === 'Editor') {                                 
             if (!isNullOrUndefined(document.getElementById("Subject_Error"))) {
                 document.getElementById("Subject_Error").style.display = "none";
                 document.getElementById("Subject_Error").style.left = "351px";
@@ -113,7 +100,31 @@ const BookingSelect = ({props, selectedDate}) => {
             let subjectValidator = subjectElement.ej2_instances[0];
             subjectValidator.addRules('Subject', { required: true,
                 regex: [Email_Regex, 'Should be a valid email address.'] });     
-            
+            //-------------------------------------------------------------------
+            if (!isNullOrUndefined(document.getElementById("CampusNumber_Error"))) {
+                document.getElementById("CampusNumber_Error").style.display = "none";
+                document.getElementById("CampusNumber_Error").style.left = "351px";
+            }
+            let campusNumberElement = args.element.querySelector('.e-schedule-form');
+            let campusNumberValidator = campusNumberElement.ej2_instances[0];
+            campusNumberValidator.addRules('CampusNumber', { required: true, min: 1, max: 20});
+            //-------------------------------------------------------------------
+            if (!isNullOrUndefined(document.getElementById("Location_Error"))) {
+                document.getElementById("Location_Error").style.display = "none";
+                document.getElementById("Location_Error").style.left = "351px";
+            }
+            let locationElement = args.element.querySelector('.e-schedule-form');
+            let locationValidator = locationElement.ej2_instances[0];
+            locationValidator.addRules('Location', { required: true, min: 1, max: 999});
+            //-------------------------------------------------------------------
+            // if (!isNullOrUndefined(document.getElementById("EventType_Error"))) {
+            //     document.getElementById("EventType_Error").style.display = "none";
+            //     document.getElementById("EventType_Error").style.left = "351px";
+            // }
+            // let eventTypeElement = args.element.querySelector('.e-schedule-form');
+            // let eventTypeValidator = eventTypeElement.ej2_instances[0];
+            // eventTypeValidator.addRules('EventType', {min: 1, max: 2});
+            //-------------------------------------------------------------------
             if (!isNullOrUndefined(document.getElementById("Description_Error"))) {
                 document.getElementById("Description_Error").style.display = "none";
                 document.getElementById("Description_Error").style.left = "351px";
@@ -121,67 +132,39 @@ const BookingSelect = ({props, selectedDate}) => {
             let descriptionElement = args.element.querySelector('.e-schedule-form');
             let descriptionValidator = descriptionElement.ej2_instances[0];
             descriptionValidator.addRules('Description', { required: true, minLength: 8, maxLength: 8, min: 1});
-
-            if (!isNullOrUndefined(document.getElementById("EventType_Error"))) {
-                document.getElementById("EventType_Error").style.display = "none";
-                document.getElementById("EventType_Error").style.left = "351px";
-            }
-            let eventTypeElement = args.element.querySelector('.e-schedule-form');
-            let eventTypeValidator = eventTypeElement.ej2_instances[0];
-            eventTypeValidator.addRules('EventType', { required: true, min: 1, max: 2});
         }
         if (args.type === 'QuickInfo'){
             console.log('QuickInfo')
         }
-        if (args.type === 'EditEventInfo'){
-            console.log('EditEventInfo')
-        }
-        if (args.type === 'ViewEventInfo'){
-            console.log('ViewEventInfo')
-        }
-        if (args.type === 'EventContainer'){
-            console.log('EventContainer')
-        }
-        if (args.type === 'RecurrenceAlert'){
-            console.log('RecurrenceAlert')
-        }
-        if (args.type === 'DeleteAlert'){
-            console.log('DeleteAlert')
-        }
-        if (args.type === 'ValidationAlert'){
-            console.log('ValidationAlert')
-        }
-        if (args.type === 'RecurrenceValidationAlert'){
-            console.log('RecurrenceValidationAlert')
-        }
     }
 
-    function onPopupClose(args) {
-        if (args.type === 'Editor' && !isNullOrUndefined(args.data)) {
-            let subjectElement = args.element.querySelector('#Subject');
-            if (subjectElement) {
-                args.data.Subject = subjectElement.value;
-            }
-            let locationElement = args.element.querySelector('#Location');
-            if (locationElement) {
-                args.data.Location = locationElement.value;
-            }
-            let statusElement = args.element.querySelector('#EventType');
-            if (statusElement) {
-                args.data.EventType = statusElement.value;
-            }
-            // let startTimeElement = args.element.querySelector('#StartTime');
-            // if (startTimeElement) {
-            //     args.data.StartTime = startTimeElement.value;
-            // }        
-            // args.data.StartTime = startObj;       
-            // args.data.EndTime = endObj;                     
-            let descriptionElement = args.element.querySelector('#Description');
-            if (descriptionElement) {
-                args.data.Description = descriptionElement.value;
-            }
-        }
-    }
+    // function onPopupClose(args) {
+    //     if (args.type === 'Editor' && !isNullOrUndefined(args.data)) {
+    //         console.log("cc")
+    //         let subjectElement = args.element.querySelector('#Subject');
+    //         if (subjectElement) {
+    //             args.data.Subject = subjectElement.value;
+    //         }
+    //         let locationElement = args.element.querySelector('#Location');
+    //         if (locationElement) {
+    //             args.data.Location = locationElement.value;
+    //         }
+    //         let statusElement = args.element.querySelector('#EventType');
+    //         if (statusElement) {
+    //             args.data.EventType = statusElement.value;
+    //         }
+    //         // let startTimeElement = args.element.querySelector('#StartTime');
+    //         // if (startTimeElement) {
+    //         //     args.data.StartTime = startTimeElement.value;
+    //         // }        
+    //         // args.data.StartTime = startObj;       
+    //         // args.data.EndTime = endObj;                     
+    //         let descriptionElement = args.element.querySelector('#Description');
+    //         if (descriptionElement) {
+    //             args.data.Description = descriptionElement.value;
+    //         }
+    //     }
+    // }
     
     function applyCategoryColor(args, currentView) {
         switch (args.data.CategoryId) {
@@ -230,11 +213,7 @@ const BookingSelect = ({props, selectedDate}) => {
             args.items.push(exportItem);
             args.items.push(printItem)            
             
-        }
-        // if (args.requestType === 'eventCreate' || args.requestType === 'eventChange') {
-        //     let data = args.data instanceof Array ? args.data[0] : args.data;
-        //     args.cancel = !scheduleObj.isSlotAvailable(data.StartTime, data.EndTime);
-        // }        
+        } 
     }     
 
     function onPrintClick() {
@@ -254,9 +233,16 @@ const BookingSelect = ({props, selectedDate}) => {
     }
 
     function onActionComplete(args) {
-        if (args.requestType === 'eventCreated' || args.requestType === 'eventChanged' || args.requestType === 'eventRemoved') {
-            console.log('dev', args)
-        }                       
+        
+        if (args.requestType === 'eventCreated') {
+            console.log('eventCreated', args)
+        }       
+        if (args.requestType === 'eventChanged') {
+            console.log('eventChanged', args)
+        }   
+        if (args.requestType === 'eventRemoved') {
+            console.log('eventRemoved', args)
+        }            
     }
 
     return (<div>                  
