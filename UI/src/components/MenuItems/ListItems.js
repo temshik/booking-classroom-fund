@@ -64,10 +64,6 @@ export const listItems = [
               title: 'Update Category',
               url: '/UpdateCategory',
             },
-            {
-              title: 'Delete Category',
-              url: '/DeleteCategory',
-            }
           ],
         },
         // {

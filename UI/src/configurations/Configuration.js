@@ -11,6 +11,8 @@ module.exports={
     //Catalog
     GetCategories:"/categories/getcategories",
     UpdateCategory:"/categories/updatecategory",
+    CreateCategory:"/categories/createcategory",
+    DeleteCategory:"/categories/deletecategory",
     GetWorkspaciesPaged:"/Workspacies/GetWorkspaciesPaged",
     GetWorkspace:"/Workspacies/GetWorkspaces",
     CreateWorkspace:"/workspacies/createworkspace",

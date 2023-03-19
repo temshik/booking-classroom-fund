@@ -22,17 +22,17 @@ const Sidebar = ({ isSidebar }) => {
     return (                
         <div className={`menu ${isSidebar ? 'menu-active' : ''}`}>
             <li className="nav-item">
-                    <Link className="nav-item-link" to="/table">
+                    <Link className="nav-item-link" to="/EditAccount">
                             Edit Account
                     </Link>
             </li>
             <li className="nav-item">
-                    <Link className="nav-item-link" to="/profile">
+                    <Link className="nav-item-link" to="/DeleteUser">
                             Delete Account
                     </Link>
             </li>
             <li className="nav-item">
-                    <Link className="nav-item-link" to="/profile">
+                    <Link className="nav-item-link" to="/UpdatePassword">
                             <span>Update Password</span>
                     </Link>
             </li>

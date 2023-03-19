@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import {selectIsLoggedIn, selectEmail} from '../../redux/slice/authSlice'
+import {selectEmail} from '../../redux/slice/authSlice'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUserCheck, faUserXmark} from "@fortawesome/free-solid-svg-icons";
 import Sidebar from '../Sidebar/Sidebar';

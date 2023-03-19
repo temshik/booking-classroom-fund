@@ -17,6 +17,17 @@ import Loader from '../../components/Loader/Loader';
 import "./Catalog.scss"
 
 const Catalog = () => {
+    const [form, setForm] = useState( 
+    {
+        "campusNumber": 0,
+        "workspaceNumber": 0,
+        "categoryId": 0,
+        "description": "string",
+        "numberOfSeats": 0,
+        "courseNumber": 0,
+        "specialEquipment": true,
+        "isAvailable": true
+    });
     const location = useLocation();
     const dispatch = useDispatch();
     const cat = useSelector(selectCat);
@@ -39,8 +50,14 @@ const Catalog = () => {
     const [equipment, setEquipment] = useState(false);
     const [roomCapacity, setRoomCapacity] = useState(8);
     const [list, setList] = useState([]);//
-    const [resultFound, setResultFound] = useState(true);
-
+    const [resultFound, setResultFound] = useState(true);    
+    
+    const setField = (field, value) => {
+        setForm({
+          ...form,
+          [field]: value
+        })
+    }
 
     const handlePageClick=(data)=>{
         console.log(data.selected+1);
@@ -90,8 +107,9 @@ const Catalog = () => {
     }        
 
     const getWorkspacies = async () => {    
-        if(window.localStorage.getItem('accessToken') !== null){                                                    
-        dispatch(getWorkspacePaged({PageSize,CurrentPage,SortOn,SortDirection}));
+        if(window.localStorage.getItem('accessToken') !== null){  
+            console.log(form)                                                  
+        dispatch(getWorkspacePaged({PageSize,CurrentPage,SortOn,SortDirection, form}));
         console.log('disp', workspacies)
         }
     }
@@ -110,7 +128,8 @@ const Catalog = () => {
         }
     }
 
-    useEffect(() =>{             
+    useEffect(() =>{    
+        console.log("form", form)         
         getWorkspacies();
         getCategories();        
     }, [CurrentPage, SortDirection])
@@ -165,57 +184,66 @@ const Catalog = () => {
 
         //InputSearch
         if(inputSearch){
-            updatedList=updatedList.filter((item)=>
-                item.description.toLowerCase().search(inputSearch.toLocaleLowerCase().trim())!==-1);
+            // updatedList=updatedList.filter((item)=>
+            //     item.description.toLowerCase().search(inputSearch.toLocaleLowerCase().trim())!==-1);
+            setField('description', inputSearch.toLocaleLowerCase());
         }
 
         //SelectedCategoty        
-        const newSelectedCategory = selectedCategory
-            .filter((item)=> item.selected)
-            .map((item)=>item.id);        
-        if(newSelectedCategory.length){
-            updatedList = updatedList.filter((item) => newSelectedCategory.includes(item.categoryId));
-        }
+        // const newSelectedCategory = selectedCategory
+        //     .filter((item)=> item.selected)
+        //     .map((item)=>item.id);        
+        // if(newSelectedCategory.length){
+        //     //updatedList = updatedList.filter((item) => newSelectedCategory.includes(item.categoryId));
+        //     setField('categoryId', item.categoryId)
+        // }
         
 
         //RoomCapacity
         const newselectedRoomCapacity = roomCapacity
         if(8<newselectedRoomCapacity<9999)
         {
-            updatedList = updatedList.filter((item) => newselectedRoomCapacity <= (item.numberOfSeats));
+            //updatedList = updatedList.filter((item) => newselectedRoomCapacity <= (item.numberOfSeats));
+            setField('numberOfSeats', newselectedRoomCapacity)
         }
 
         //SelectedBuildings
-        const selectedChecked = selectedBuildings
-            .filter((item) => item.checked)
-            .map((item)=>item.value);
-        if(selectedChecked.length){
-            updatedList = updatedList.filter((item) => selectedChecked.includes(item.campusNumber.toString()));
-        }
+        // const selectedChecked = selectedBuildings
+        //     .filter((item) => item.checked)
+        //     .map((item)=>item.value);
+        // if(selectedChecked.length){
+        //     //updatedList = updatedList.filter((item) => selectedChecked.includes(item.campusNumber.toString()));
+        //     setField('campusNumber', item.campusNumber)
+        // }
 
         //SelectedCourse
-        const newSelectedCourse = selectedCourse
-            .filter((item) => item.selected)
-            .map((item)=>item.name);
-        if(newSelectedCourse.length){
-            updatedList = updatedList.filter((item)=> newSelectedCourse.includes(item.courseNumber));
-        }
+        // const newSelectedCourse = selectedCourse
+        //     .filter((item) => item.selected)
+        //     .map((item)=>item.name);
+        // if(newSelectedCourse.length){
+        //     //updatedList = updatedList.filter((item)=> newSelectedCourse.includes(item.courseNumber));
+        //     setField('courseNumber', item.courseNumber)
+        // }
 
         //Locked
         if(locked){
-            updatedList = updatedList.filter((item)=> locked === (!item.isAvailable));
+            //updatedList = updatedList.filter((item)=> locked === (!item.isAvailable));
+            setField('isAvailable', locked)
         }      
         
         //SpecialEquipment
         if(equipment)
         {                                
-            updatedList = updatedList.filter((item) => equipment === (item.specialEquipment))                
+            //updatedList = updatedList.filter((item) => equipment === (item.specialEquipment))       
+            setField('specialEquipment', equipment)         
         }
 
-        if(updatedList !== list){
-            setList(updatedList);                   
-            !updatedList.length ? setResultFound(false) : setResultFound(true);   
-        }     
+        // if(updatedList !== list){
+        //     setList(updatedList);                   
+        //     !updatedList.length ? setResultFound(false) : setResultFound(true);   
+        // }     
+
+        setResultFound(true)
     }   
 
     return (        

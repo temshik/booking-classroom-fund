@@ -14,12 +14,16 @@ import Catalog from "./pages/Catalog/Catalog";
 import Workspace from "./pages/Workspace/Workspace";
 import CreateWorkspace from "./pages/Service/CreateWorkspace";
 import UpdateWorkspace from "./pages/Service/UpdateWorkspace";
+import CreateCategory from "./pages/Service/CreateCaregory";
+import UpdateCategory from "./pages/Service/UpdateCategory";
 import Geolocation from "./modules/Geolocation/Geolocation";
 import NotFound from "./pages/NotFound/NotFound";
 import Booking from './pages/Booking/Booking';
 import About from "./pages/About/About";
 import {mapMarkers} from "./docs/data.ts";
 import Geo from "./modules/Geolocation/Geo";
+import EditAccount from "./pages/EditAccount/EditAccount";
+import DeleteUser from "./pages/DeleteUser/DeleteUser";
 
 const authSevice = new AuthServices();
 
@@ -56,11 +60,13 @@ function App() {
   return (
     <>
       <Routes>
-          <Route path={'/'} element={<HomePage/>} />
-          <Route path={'/signin'} element={<SignIn/>} />
-          <Route path={'/signup'} element={<SignUp/>} />
-          <Route path={'/resetpassword'} element={<ResetPassword/>} />
-          <Route path={'/updatepassword'} element={<UpdatePassword/>} />
+          <Route path={'/'} element={<HomePage/>}/>
+          <Route path={'/signin'} element={<SignIn/>}/>
+          <Route path={'/signup'} element={<SignUp/>}/>
+          <Route path={'/resetpassword'} element={<ResetPassword/>}/>
+          <Route path={'/updatepassword'} element={<UpdatePassword/>}/>
+          <Route path={'/editaccount'} element={<EditAccount/>}/>
+          <Route path={'/deleteuser'} element={<DeleteUser/>}/>
           <Route path={'/catalog'} element={<Catalog/>}/>
           <Route path={'/catalog/:id'} element={<Workspace/>}/>
           <Route path={'/geolocation'} element={<Geolocation/>}/>
@@ -72,6 +78,8 @@ function App() {
           <Route path={'/booking'} element={<Booking/>}/>
           <Route path={'/createworkspace'} element={<CreateWorkspace/>}/>
           <Route path={'/updateworkspace'} element={<UpdateWorkspace/>}/>
+          <Route path={'/createcategory'} element={<CreateCategory/>}/>
+          <Route path={'/updatecategory'} element={<UpdateCategory/>}/>
           <Route path={'/about'} element={<About/>}/>
           <Route path="*" element={<NotFound/>} />
       </Routes>

@@ -31,4 +31,7 @@ export default class AuthServices {
     DeleteUser(data){
         return axiosService.delete(Configuration.DeleteUser, data)
     }
+    EditAccount(data){
+        return axiosService.put(Configuration.UpdateUser, data)
+    }
 }
