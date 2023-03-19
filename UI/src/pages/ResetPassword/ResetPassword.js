@@ -1,10 +1,13 @@
 import React, {createRef} from 'react';
-import '../SignIn/SignIn.scss'
+import {Navigate} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import AuthServices from '../../services/AuthServices';
-import { Navigate } from "react-router-dom";
+import store from '../../redux/store';
+import {REMOVE_ACTIVE_USER}  from '../../redux/slice/authSlice';
+import {toast} from 'react-toastify';
 import ErrorHandler from '../../modules/ErrorHandler';
+import '../SignIn/SignIn.scss'
 
 const authSevice = new AuthServices();
 const errorHandler = new ErrorHandler();
@@ -43,7 +46,12 @@ export default class ResetPassword extends React.Component {
         {
           console.log("Succesfuly reset password by: " + data.data.Email);   
           console.log(data);    
-          alert("Password successfuly reset")   
+          store.dispatch(REMOVE_ACTIVE_USER());            
+          toast.success("Password successfuly reset", {
+            position: toast.POSITION.TOP_CENTER
+          });
+          this.setState({Password: ''});
+          this.setState({Redirect: true});
         }
         else{
           console.log(data);       
@@ -119,11 +127,10 @@ export default class ResetPassword extends React.Component {
   }
 
 render(){
-  console.log('Reset_State: ', this.state) 
     return (
       <div className="SignIn">
         {this.state.Redirect && (
-          <Navigate to="/" replace={true} />
+          <Navigate to="/SignIn" replace={true} />
         )}
         <form className="SignIn__Auth-form" onSubmit={this.handleSubmit}>
           <div className="SignIn__Sub-Container">
@@ -155,6 +162,7 @@ render(){
               <label>New password</label>
               <div className="input-group">
               <input
+              checked={this.state.PasswordValid}
                 type={this.state.PasswordShow ? "text" : "password"}
                 name='Password'
                 className="form-control mt-1"

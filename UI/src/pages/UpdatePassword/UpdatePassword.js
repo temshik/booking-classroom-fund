@@ -1,10 +1,13 @@
 import React, {createRef} from 'react';
-import '../SignIn/SignIn.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import AuthServices from '../../services/AuthServices';
-import { Navigate } from "react-router-dom";
+import {Navigate} from "react-router-dom";
+import store from '../../redux/store';
+import {toast} from 'react-toastify';
+import {REMOVE_ACTIVE_USER}  from '../../redux/slice/authSlice';
 import ErrorHandler from '../../modules/ErrorHandler';
+import '../SignIn/SignIn.scss'
 
 const authSevice = new AuthServices();
 const errorHandler = new ErrorHandler();
@@ -13,43 +16,49 @@ const Password_Regex = "^(?=.*[_+-/?:;№!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[^
 
 export default class UpdatePassword extends React.Component {
     constructor(props) {
-        super(props);
-        this.state = {    
-        Email: "",   
-        EmailValid: false,  
-        EmailFocus: false,
+      super(props);
+      this.state = {    
+      Email: "",   
+      EmailValid: false,  
+      EmailFocus: false,
 
-        newPassword: "",      
-        newPasswordValid: false,
-        newPasswordFocus: false,
-        newPasswordShow: false,
+      newPassword: "",      
+      newPasswordValid: false,
+      newPasswordFocus: false,
+      newPasswordShow: false,
 
-        Password: "",      
-        PasswordValid: false,
-        PasswordFocus: false,
-        PasswordShow: false,
+      Password: "",      
+      PasswordValid: false,
+      PasswordFocus: false,
+      PasswordShow: false,
 
-        Redirect: false,
-        }
-        this.handleValues = this.handleValues.bind(this);   
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.ref = createRef();
-        this.handleBlur = this.handleBlur.bind(this);
+      Redirect: false,
+      }
+      this.handleValues = this.handleValues.bind(this);   
+      this.handleSubmit = this.handleSubmit.bind(this);
+      this.ref = createRef();
+      this.handleBlur = this.handleBlur.bind(this);
     }
 
     handleSubmit(e) {
       e.preventDefault();    
       const data = {
-        Email: this.state.Email,
+        email: this.state.Email,
         newPassword: this.state.newPassword,
-        Password: this.state.Password,
+        oldPassword: this.state.Password,
       };
       authSevice.UpdatePassword(data).then((data) =>{
         if(data.status === 200)
         {
           console.log("Succesfuly reset password by: " + data.data.Email);   
           console.log(data);    
-          alert("Password successfuly updated")   
+          store.dispatch(REMOVE_ACTIVE_USER());
+          toast.success("Password successfuly updated", {
+            position: toast.POSITION.TOP_CENTER
+          });            
+          this.setState({Password: ''});
+          this.setState({newPassword: ''});
+          this.setState({Redirect: true});
         }
         else{
           console.log(data);       
@@ -57,88 +66,87 @@ export default class UpdatePassword extends React.Component {
       }).catch(errorHandler.httpErrorHandler) 
     }
 
-  handleValues(event) {
-      const {name, value} = event.target
-      const newValueIsValid = !event.target.validity.patternMismatch;
-      if (event.target.checked) {
-        if (newValueIsValid) {
-          this.setField(event.target.name, false, false); 
+    handleValues(event) {
+        const {name, value} = event.target
+        const newValueIsValid = !event.target.validity.patternMismatch;
+        if (event.target.checked) {
+          if (newValueIsValid) {
+            this.setField(event.target.name, false, false); 
+          }
         }
-      }
-      this.setState({[name]:value},
-      );
+        this.setState({[name]:value},
+        );
     }
 
-  handleBlur = (event) => {
-      if(!event.target.checked) {
-        if (event.target.validity.patternMismatch) {
-          this.ref.current.focus();
-          this.setField(event.target.name, true, true); 
+    handleBlur = (event) => {
+        if(!event.target.checked) {
+          if (event.target.validity.patternMismatch) {
+            this.ref.current.focus();
+            this.setField(event.target.name, true, true); 
+          }
         }
+        if(event.target.checked) {
+          this.setField(event.target.name, "", false)    
+        }
+    }
+
+    handleFocus = (event) =>{     
+      if(event.target.checked){
+          this.setField(event.target.name, "", true)
       }
-      if(event.target.checked) {
-        this.setField(event.target.name, "", false)    
+    }
+
+    style(error) {
+      if (error) {
+        return {
+          backgroundColor: "rgba(255, 0, 0, 0.5)" 
+        };
       }
     }
 
-  handleFocus = (event) =>{     
-    if(event.target.checked){
-        this.setField(event.target.name, "", true)
-    }
+    setField(name, value1, value2) {
+      switch(name) {      
+          case 'Email':
+              if (value1 === ""){
+              this.setState({EmailFocus: value2})          
+              }
+              else{
+              this.setState({
+              EmailValid: value1,
+              EmailFocus: value2
+              })}
+              break;
+          case 'newPassword':
+              if (value1 === ""){
+              this.setState({newPasswordFocus: value2})          
+              }
+              else{
+              this.setState({
+              newPasswordValid: value1,
+              newPasswordFocus: value2
+              })}
+              break;
+          case 'Password':
+              if (value1 === ""){
+              this.setState({PasswordFocus: value2})          
+              }
+              else{
+              this.setState({
+              PasswordValid: value1,
+              PasswordFocus: value2
+              })}
+              break;
+          default:
+              console.log("Somthing goes wrong in setField");      
+              break;
+      }
   }
 
-  style(error) {
-    if (error) {
-      return {
-        backgroundColor: "rgba(255, 0, 0, 0.5)" 
-      };
-    }
-  }
-
-  setField(name, value1, value2) {
-    switch(name) {      
-        case 'Email':
-            if (value1 === ""){
-            this.setState({EmailFocus: value2})          
-            }
-            else{
-            this.setState({
-            EmailValid: value1,
-            EmailFocus: value2
-            })}
-            break;
-        case 'newPassword':
-            if (value1 === ""){
-            this.setState({newPasswordFocus: value2})          
-            }
-            else{
-            this.setState({
-            newPasswordValid: value1,
-            newPasswordFocus: value2
-            })}
-            break;
-        case 'Password':
-            if (value1 === ""){
-            this.setState({PasswordFocus: value2})          
-            }
-            else{
-            this.setState({
-            PasswordValid: value1,
-            PasswordFocus: value2
-            })}
-            break;
-        default:
-            console.log("Somthing goes wrong in setField");      
-            break;
-    }
-  }
-
-render(){
-  console.log('Reset_State: ', this.state) 
+render(){   
     return (
       <div className="SignIn">
         {this.state.Redirect && (
-          <Navigate to="/" replace={true} />
+          <Navigate to="/SignIn" replace={true} />
         )}
         <form className="SignIn__Auth-form" onSubmit={this.handleSubmit}>
           <div className="SignIn__Sub-Container">
@@ -170,6 +178,7 @@ render(){
               <label>New password</label>
               <div className="input-group">
               <input
+                checked={this.state.newPasswordValid}
                 type={this.state.newPasswordShow ? "text" : "password"}
                 name='newPassword'
                 className="form-control mt-1"
@@ -196,10 +205,11 @@ render(){
               <label>Old password</label>
               <div className="input-group">
               <input
+                checked={this.state.PasswordValid}
                 type={this.state.PasswordShow ? "text" : "password"}
                 name='Password'
                 className="form-control mt-1"
-                placeholder="Enter password"
+                placeholder="Enter old password"
                 value={this.state.Password}
                 pattern={Password_Regex}              
                 onBlur={this.handleBlur}

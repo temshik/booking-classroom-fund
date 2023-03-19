@@ -54,7 +54,7 @@ const Booking = () => {
                 console.log(error);
             })
         }            
-        getCategories();
+        //getCategories();
     },[]);
 
     useEffect(()=>{        

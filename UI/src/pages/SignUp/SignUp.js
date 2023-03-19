@@ -2,7 +2,6 @@ import React, {createRef} from 'react';
 import { Navigate, Link } from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
-import { ToastContainer } from 'react-toastify';
 import RadioButton from "../../components/RadioButton/RadioButton";
 import AuthServices from '../../services/AuthServices';
 import ErrorHandler from '../../modules/ErrorHandler';
@@ -384,8 +383,7 @@ render(){
               </button>
             </div>
           </div>
-        </form>
-        <ToastContainer />
+        </form>        
       </div>      
     )
   }

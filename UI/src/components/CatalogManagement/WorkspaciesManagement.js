@@ -141,7 +141,7 @@ const WorkspaciesManagement = (props) => {
               <Form.Label>Campus number</Form.Label> 
                 <Form.Control as='select' 
                   onChange={ e => setField('campusNumber', e.target.value) }
-                  isInvalid={ !!errors.campusNumber }>
+                  isInvalid={ !!errors.campusNumber }>                    
                   defaultValue={form.campusNumber}
                   {buildingOptions && buildingOptions.map((buildingOption)=>{
                     return <option key={buildingOption.id} value={buildingOption.value}>{buildingOption.value}</option>
@@ -167,8 +167,8 @@ const WorkspaciesManagement = (props) => {
               <Form.Label>Category</Form.Label>
                 <Form.Control as='select' 
                   onChange={ e => setField('categoryId', e.target.value) }
-                  isInvalid={ !!errors.categoryId }>   
-                  defaultValue={form.categoryId}            
+                  isInvalid={ !!errors.categoryId }>                         
+                  <option>Select category...</option>        
                   {selectedCategory && selectedCategory.map((category) =>{
                       return <option key={category.id} value={category.id}>{category.name}</option>
                   })}</Form.Control>

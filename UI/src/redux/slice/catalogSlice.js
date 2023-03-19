@@ -6,7 +6,10 @@ import ErrorHandler from '../../modules/ErrorHandler';
 const errorHandler = new ErrorHandler();
 
 const initialState = {
-    isCategoryLoading: false,   
+    isCategoryLoading: false,
+    isCategoryUpdated: false,
+    isCategoryDeleted: false,  
+    isCategoryCreated: false,
     isWorkspaceLoading: false, 
     isWorkspaceUpdated: false,
     isWorkspaceCreated: false,
@@ -15,6 +18,7 @@ const initialState = {
     errorMessage: null,
     totalPages: 0,
     categories: [],
+    category: null,
     workspacies: [],
     workspace:[],
     updatedCategoty: null,
@@ -112,6 +116,32 @@ export const updateCategory = createAsyncThunk(
     }
 )
 
+export const createCategory = createAsyncThunk(
+    'catalog/createCategory',
+    async (item) => {
+        try {
+            const {data} = await axios.post(Configuration.CreateCategory,item)
+            console.log("crateCategory", data);            
+            return {data};
+        } catch (error) {
+            console.log(error)
+        }     
+    }
+)
+
+export const deleteCategory = createAsyncThunk(
+    'catalog/deleteCategory',
+    async (id) => {
+        try {
+            const {data} = await axios.delete(Configuration.DeleteCategory+`/${id}`)
+            console.log("crateCategory", data);            
+            return {data};
+        } catch (error) {
+            console.log(error)
+        }     
+    }
+)
+
 export const catalogSlice = createSlice({
     name: 'catalog',
     initialState,
@@ -183,20 +213,58 @@ export const catalogSlice = createSlice({
         //----------------------------------------
         [updateCategory.pending]: (state) => {
             console.log('a')
-            state.isCategoryLoading = true            
+            state.isCategoryUpdated = true            
             //state.status = null
             //state.errorMessage = null
         },
         [updateCategory.fulfilled]: (state, action) => {
             console.log('b')
-            state.isCategoryLoading = false            
+            state.isCategoryUpdated = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
             state.updatedCategoty = action.payload
         },
         [updateCategory.rejected]: (state, action) => {
             console.log('c')
-            state.isCategoryLoading = false            
+            state.isCategoryUpdated = false            
+            state.status = action.payload.status
+            state.errorMessage = action.payload.errors            
+        },
+        [createCategory.pending]: (state) => {
+            console.log('a')
+            state.isCategoryCreated = true            
+            //state.status = null
+            //state.errorMessage = null
+        },
+        [createCategory.fulfilled]: (state, action) => {
+            console.log('b')
+            state.isCategoryCreated = false            
+            //state.status = action.payload.status
+            //state.errorMessage = action.payload.errors
+            state.category = action.payload
+        },
+        [createCategory.rejected]: (state, action) => {
+            console.log('c')
+            state.isCategoryCreated = false            
+            state.status = action.payload.status
+            state.errorMessage = action.payload.errors            
+        },
+        [deleteCategory.pending]: (state) => {
+            console.log('a')
+            state.isCategoryDeleted = true            
+            //state.status = null
+            //state.errorMessage = null
+        },
+        [deleteCategory.fulfilled]: (state, action) => {
+            console.log('b')
+            state.isCategoryDeleted = false            
+            //state.status = action.payload.status
+            //state.errorMessage = action.payload.errors
+            state.category = action.payload
+        },
+        [deleteCategory.rejected]: (state, action) => {
+            console.log('c')
+            state.isCategoryDeleted = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            
         },
@@ -268,6 +336,8 @@ export const catalogSlice = createSlice({
 
 export const selectCat = (state) => state.catalog.categories;
 
+export const selectCategory = (state) => state.catalog.category;
+
 export const updatedCat = (state) => state.catalog.updatedCategoty
 
 export const selectWorkspacePaged = (state) => state.catalog.workspacies;
@@ -277,6 +347,12 @@ export const selectWorkspace = (state) => state.catalog.workspace;
 export const selectTotalPages = (state) => state.catalog.totalPages;
 
 export const selectIsCategoryLoading = (state) => state.catalog.isCategoryLoading;
+
+export const selectIsCategoryCreated = (state) => state.catalog.isCategoryCreated;
+
+export const selectIsCategoryDeleted = (state) => state.catalog.isCategoryDeleted;
+
+export const selectIsCategoryUpdated = (state) => state.catalog.isCategoryUpdated;
 
 export const selectIsWorkspaceLoading = (state) => state.catalog.isWorkspaceLoading;
 
