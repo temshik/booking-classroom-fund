@@ -221,8 +221,7 @@ namespace IdentityService.Api.Controllers
         /// <param name="token">Cancellation token</param>
         /// <returns>Id of the user who reset the password</returns>
         [Route("[action]")]
-        [HttpPut]
-        [Authorize]
+        [HttpPut]        
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ResetPassword([FromBody] PasswordRequestReset userRequest)
