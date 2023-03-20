@@ -26,7 +26,7 @@ namespace CatalogService.BusinessLogic.Exceptions
             }
         }
 
-        private static Task HandleExceptionMessageAsync(HttpContext context, Exception exception, string enviromnetName)
+        private static Task HandleExceptionMessageAsync(HttpContext context, Exception exception, string environmentName)
         {
             HttpStatusCode status;
             string message;
@@ -47,7 +47,7 @@ namespace CatalogService.BusinessLogic.Exceptions
             {
                 status = HttpStatusCode.InternalServerError;
                 message = exception.Message;
-                if (enviromnetName == "Development")
+                if (environmentName == "Development")
                     stackTrace = exception.StackTrace;
                 else
                     stackTrace = String.Empty;
