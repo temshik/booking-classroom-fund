@@ -7,10 +7,12 @@ namespace IdentityService.BusinessLogic.Exceptions
     public class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
+        string _environmentName;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next)
+        public ExceptionHandlerMiddleware(RequestDelegate next, string environmentName)
         {
             _next = next;
+            _environmentName = environmentName;
         }
 
         public async Task Invoke(HttpContext context)
@@ -21,11 +23,11 @@ namespace IdentityService.BusinessLogic.Exceptions
             }
             catch (Exception ex)
             {
-                await HandleExceptionMessageAsync(context, ex).ConfigureAwait(false);
+                await HandleExceptionMessageAsync(context, ex, _environmentName).ConfigureAwait(false);
             }
         }
 
-        private static Task HandleExceptionMessageAsync(HttpContext context, Exception exception)
+        private static Task HandleExceptionMessageAsync(HttpContext context, Exception exception, string environmentName)
         {
             HttpStatusCode status;
             string message;
@@ -45,8 +47,11 @@ namespace IdentityService.BusinessLogic.Exceptions
             else
             {
                 status = HttpStatusCode.InternalServerError;
-                message = exception.Message;                
-                stackTrace = exception.StackTrace;
+                message = exception.Message;
+                if (environmentName == "Development")
+                    stackTrace = exception.StackTrace;
+                else
+                    stackTrace = String.Empty;
             }
             
             var result = JsonConvert.SerializeObject(new

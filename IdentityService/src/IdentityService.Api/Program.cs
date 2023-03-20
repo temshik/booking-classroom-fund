@@ -24,7 +24,7 @@ if (app.Environment.IsDevelopment())
 
 app.Configure();
 
-app.UseExceptionHandlerMiddleware();
+app.UseExceptionHandlerMiddleware(app.Environment.EnvironmentName);
 
 DatabaseMigrator.MigrationInitialisation(app);
 
