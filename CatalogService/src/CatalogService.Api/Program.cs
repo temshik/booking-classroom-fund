@@ -18,11 +18,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
-    app.UseExceptionHandlerMiddleware();
+    app.UseSwaggerUI();    
 }
 
 app.Configure();
+
+app.UseExceptionHandlerMiddleware(app.Environment.EnvironmentName);
 
 DatabaseMigrator.MigrationInitialisation(app);
 

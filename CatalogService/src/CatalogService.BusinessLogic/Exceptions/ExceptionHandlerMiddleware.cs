@@ -7,10 +7,11 @@ namespace CatalogService.BusinessLogic.Exceptions
     public class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-
-        public ExceptionHandlerMiddleware(RequestDelegate next)
+        string _environmentName;
+        public ExceptionHandlerMiddleware(RequestDelegate next, string environmentName)
         {
             _next = next;
+            _environmentName = environmentName;
         }
 
         public async Task Invoke(HttpContext context)
@@ -21,11 +22,11 @@ namespace CatalogService.BusinessLogic.Exceptions
             }
             catch (Exception ex)
             {
-                await HandleExceptionMessageAsync(context, ex).ConfigureAwait(false);
+                await HandleExceptionMessageAsync(context, ex, _environmentName).ConfigureAwait(false);
             }
         }
 
-        private static Task HandleExceptionMessageAsync(HttpContext context, Exception exception)
+        private static Task HandleExceptionMessageAsync(HttpContext context, Exception exception, string enviromnetName)
         {
             HttpStatusCode status;
             string message;
@@ -46,14 +47,18 @@ namespace CatalogService.BusinessLogic.Exceptions
             {
                 status = HttpStatusCode.InternalServerError;
                 message = exception.Message;
-                stackTrace = exception.StackTrace;
+                if (enviromnetName == "Development")
+                    stackTrace = exception.StackTrace;
+                else
+                    stackTrace = String.Empty;
             }
 
             var result = JsonConvert.SerializeObject(new
             {
                 status = (int)status,
-                errors = message,
+                errors = message,                 
                 stackTrace = stackTrace
+                
             });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)status;
