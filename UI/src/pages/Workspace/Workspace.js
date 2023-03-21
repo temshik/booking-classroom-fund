@@ -165,7 +165,7 @@ const Worksapce = () => {
                             <button className='siDetails'>Book</button>                        
                             <button className='siDetails' onClick={handleTimeTableChange}>TimeTable</button>
                             <button className='siDetails' onClick={handleEditChange}>Edit</button>
-                            {/* <button className='siDetails' onClick={handleDeleteChange} style={{backgroundColor:'#e74c3c'}}>Delete</button> */}
+                            <button className='siDetails' onClick={handleDeleteChange} style={{backgroundColor:'#e74c3c'}}>Delete</button>
                             {item && item.isAvailable ? 
                                 <button className='siDetails' onClick={handleUpdateChange}>Lock</button> :
                                 <button className='siDetails' onClick={handleUpdateChange}>UnLock</button>}
