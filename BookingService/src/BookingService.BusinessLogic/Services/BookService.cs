@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookingService.BusinessLogic.DTOs;
+using BookingService.BusinessLogic.Exceptions;
 using BookingService.DataAccess.Models;
 using BookingService.DataAccess.Repositories;
 using CatalogService.DataAccess.Repositories;
@@ -47,7 +48,7 @@ namespace BookingService.BusinessLogic.Services
             {
                 _logger.LogError("Workspace already exists");
 
-                return null;
+                throw new AlreadyExistException("This booking is already exists");
             }
 
             _repository.AddBooking(bookingMapped);
@@ -69,6 +70,8 @@ namespace BookingService.BusinessLogic.Services
             if (bookingDatabase == null)
             {
                 _logger.LogError("Booking dosen't exist");
+
+                throw new NotFoundException("The booking was not found");
             }
 
             _repository.DeleteBooking(bookingMapped);
@@ -91,6 +94,8 @@ namespace BookingService.BusinessLogic.Services
             if (list == null)
             {
                 _logger.LogError("Workspace dosen't exist");
+
+                throw new NotFoundException("The boooking was not found");
             }
 
             var listDTO = _mapper.Map<List<BookingDTO>>(list);
@@ -111,6 +116,8 @@ namespace BookingService.BusinessLogic.Services
             if (list == null)
             {
                 _logger.LogError("Workspace dosen't exist");
+
+                throw new NotFoundException("The booking was not found");
             }
 
             var listDTO = _mapper.Map<List<BookingDTO>>(list);
@@ -130,6 +137,9 @@ namespace BookingService.BusinessLogic.Services
             if (bookingDatabase == null)
             {
                 _logger.LogError("Booking dosen't exist");
+
+
+                throw new NotFoundException("The booking was not found");
             }
 
             _repository.UpdateBooking(bookingMapped);
