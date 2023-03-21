@@ -48,9 +48,9 @@ instance.interceptors.response.use((response)=>{
             console.log("запрос на ревреш токе после:",window.localStorage.getItem('accessToken'))
             // Do something, call refreshToken() request for example;
             // return a request
+            window.location.reload();
             return instance(originalConfig);
-        }
-        window.location.reload();
+        }        
         return Promise.reject(error);
     }
 })
