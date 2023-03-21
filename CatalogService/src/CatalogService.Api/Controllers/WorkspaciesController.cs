@@ -60,6 +60,30 @@ namespace CatalogService.Api.Controllers
         }
 
         /// <summary>
+        /// Get a specific workspace by the workspace number & campus number.
+        /// </summary>
+        /// <param name="campusNumber">campus number.</param>
+        /// <param name="workspaceNumber">workspace number.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>Desired workspace.</returns>
+        [Route("[action]/{campusNumber}/{workspaceNumber}")]
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetWorkspacesByLocation(int campusNumber, int workspaceNumber, CancellationToken cancellationToken)
+        {
+            var list = await _service.GetWorkspaceByLocationAsync(campusNumber, workspaceNumber, cancellationToken);
+
+            if (list == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(list);
+        }
+
+        /// <summary>
         /// Get paged workspace data.
         /// </summary>        
         /// <param name="cancellationToken">Cancellation token.</param>
@@ -69,9 +93,9 @@ namespace CatalogService.Api.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetWorkspaciesPaged([FromQuery] PagedQueryBase query, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetWorkspaciesPaged([FromQuery] PagedQueryBase query, [FromBody] WorkspaceRequestCreate workspaceRequest, CancellationToken cancellationToken)
         {
-            var list = await _service.GetWorkspaciesPagedAsync(query, cancellationToken);            
+            var list = await _service.GetWorkspaciesPagedAsync(query, _mapper.Map<WorkspaceDTO>(workspaceRequest), cancellationToken);            
 
             if (list == null)
             {

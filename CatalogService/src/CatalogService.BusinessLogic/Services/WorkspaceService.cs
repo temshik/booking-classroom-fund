@@ -81,6 +81,26 @@ namespace CatalogService.BusinessLogic.Services
         }
 
         /// <summary>
+        /// Function to get a workspace from the database.
+        /// </summary>
+        /// <param name="campusNumber">The workspace campus number that we want to get.</param>
+        /// <param name="workspaceNumber">The workspace number that we want to get.</param>
+        /// <returns>Task</returns>
+        public async Task<WorkspaceDTO> GetWorkspaceByLocationAsync(int campusNumber, int workspaceNumber, CancellationToken cancellationToken)
+        {
+            var list = await _repository.GetWorkspaceByLocationAsync(campusNumber, workspaceNumber, cancellationToken);
+
+            if (list == null)
+            {
+                _logger.LogError("Workspace dosen't exist");
+            }
+
+            var listDTO = _mapper.Map<WorkspaceDTO>(list);
+
+            return listDTO;
+        }
+
+        /// <summary>
         /// Function to get a workspaces from the database.
         /// </summary>
         /// <param name="workspace">The workspace that we want to get.</param>
@@ -114,11 +134,12 @@ namespace CatalogService.BusinessLogic.Services
         /// </summary>
         /// <param name="number">The number of the course.</param>
         /// <returns>A PagedList of <see cref="WorkspaceDTO"/>.</returns>
-        public async Task<PagedWorkspaceDTO> GetWorkspaciesPagedAsync(PagedQueryBase query, CancellationToken cancellationToken)
+        public async Task<PagedWorkspaceDTO> GetWorkspaciesPagedAsync(PagedQueryBase query, WorkspaceDTO workspace, CancellationToken cancellationToken)
         {
             try
             {
-                var list = await _repository.GetWorkspaciesPagedAsync(query, cancellationToken);
+                var workspaceMapped = _mapper.Map<Workspace>(workspace);
+                var list = await _repository.GetWorkspaciesPagedAsync(query, workspaceMapped, cancellationToken);
                 var mapWorkspaces = _mapper.Map<List<WorkspaceDTO>>(list);
                 var workspacesDTO = new PagedList<WorkspaceDTO>(mapWorkspaces, list.TotalCount, list.CurrentPage, list.PageSize);
                 var pagedWorkspaceDTO = new PagedWorkspaceDTO(workspacesDTO, list.TotalPages);
