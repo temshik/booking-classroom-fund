@@ -1,5 +1,7 @@
 import React from "react";
-import { ScheduleComponent, Day, WorkWeek, Month, Agenda, Inject, ViewsDirective, ViewDirective, ResourceDirective, ResourcesDirective} from '@syncfusion/ej2-react-schedule';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { ScheduleComponent, Day, WorkWeek, Month, Agenda, Inject, ViewsDirective, ViewDirective} from '@syncfusion/ej2-react-schedule';
 import {Browser, L10n, isNullOrUndefined, Internationalization} from '@syncfusion/ej2-base';
 import { Query, Predicate } from '@syncfusion/ej2-data';
 import UpdateBooking from "./UpdateBooking";
@@ -14,7 +16,8 @@ import PrintSchedule from "./PrintSchedule";
 import { faTruckMedical } from "@fortawesome/free-solid-svg-icons";
 import Configuration from "../../configurations/Configuration";
 import utilsAxios from '../../utils/axios';
-import axios from "axios";
+import ErrorHandler from "../../modules/ErrorHandler";
+import {createBooking, updateBooking, deleteBooking} from '../../redux/slice/bookingSlice';
 
 L10n.load({
     'en-US':{
@@ -28,6 +31,7 @@ L10n.load({
     }
 })
 
+const errorHandler = new ErrorHandler();
 const Email_Regex = "(?:[a-zA-Z0-9]+\.)+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$";
 
 const BookingSelect = ({props, selectedDate}) => {
@@ -40,6 +44,7 @@ const BookingSelect = ({props, selectedDate}) => {
     let profilePopup;
     const intl = new Internationalization();
     const workDays = [1, 2, 3, 4, 5, 6];
+    const dispatch = useDispatch();     
 
     function template(props) {
         return (<Template props={props}/>)
@@ -216,6 +221,14 @@ const BookingSelect = ({props, selectedDate}) => {
             args.items.push(exportItem);
             args.items.push(printItem)                        
         } 
+        if (args.requestType === 'eventRemove') {
+            console.log('eventRemoved', args)
+            getAxiosData(args).then((items)=>{
+                console.log(items)
+                dispatch(deleteBooking(items))  
+            })                                     
+            //window.location.reload();
+        }   
     }     
 
     function onPrintClick() {
@@ -235,42 +248,48 @@ const BookingSelect = ({props, selectedDate}) => {
     }
 
     function onActionComplete(args) {        
-
         if (args.requestType === 'eventCreated') {
-            console.log('eventCreated', args)
-            if(getAxiosData(args.data))
-            {
-                console.log("NEWWWWWWWWWWWWWWWWWWW")
-            }
+            console.log('eventCreated')       
+            getAxiosData(args).then((items)=>{
+                console.log(items)
+                dispatch(createBooking(items))  
+            })                                     
+            window.location.reload();  
         }       
         if (args.requestType === 'eventChanged') {
             console.log('eventChanged', args)
-        }   
-        if (args.requestType === 'eventRemoved') {
-            console.log('eventRemoved', args)
-        }            
+            getAxiosData(args).then((items)=>{
+                console.log(items)
+                dispatch(updateBooking(items))  
+            })                                     
+            window.location.reload();
+        }                    
     }
 
     async function getAxiosData (args) {     
         var item;     
-        args.forEach(element => {
-            item = element            
+        args.data.forEach(element => {
+            item = element          
         });   
         const data = { email: item.Subject}
+        const result = {
+            id: args.requestType === 'eventCreated' ? 0 : item.Id,
+            userId: 0,
+            workspaceId: 0,
+            isWorkspaceAvailable: true,
+            dayOfWeek: +item.EventType,
+            startBookingTime: item.StartTime,
+            groupNumber: item.Description
+        }           
            
-        const getUser = utilsAxios.post(Configuration.GetUserByEmail, data)
-        const getWorkspace = utilsAxios.get(Configuration.GetWorkspaceByLocation+`/${item.CampusNumber}`+`/${item.Location}`)
-
-        await Promise.allSettled([getUser, getWorkspace]).then(
-            axios.spread((...allData) =>{
-                if (allData[0] !== null && allData[1] !== null)
-                {
-                    return true;
-                }
-                else
-                    return false;
-            })
-        )
+        await utilsAxios.post(Configuration.GetUserByEmail, data).then((data)=>
+            result.userId=data.data.id,
+            await utilsAxios.get(Configuration.GetWorkspaceByLocation+`/${item.CampusNumber}`+`/${item.Location}`).then((el)=>
+                result.workspaceId = el.data.id
+            ).catch(error=>console.log(error))                 
+        ).catch(errorHandler.httpErrorHandler)     
+        
+        return result
     }
 
     return (<div>                  
