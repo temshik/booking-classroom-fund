@@ -21,6 +21,7 @@ const UpdateBooking = ({props, startObj}) => {
         type="number"         
         defaultValue={props.CampusNumber || null} 
         name="CampusNumber" 
+        min={1}
         style={{ width: '100%' }}
     />
   </td></tr>
@@ -31,6 +32,7 @@ const UpdateBooking = ({props, startObj}) => {
         type="number"         
         defaultValue={props.Location || null} 
         name="Location" 
+        min={1}
         style={{ width: '100%' }}
     />
   </td></tr>
@@ -62,6 +64,7 @@ const UpdateBooking = ({props, startObj}) => {
         type="number"                
         defaultValue={props.Description || null}         
         name="Description" 
+        min={1}
         style={{ width: '100%' }}
     />
   </td></tr></tbody></table> : <div></div>);

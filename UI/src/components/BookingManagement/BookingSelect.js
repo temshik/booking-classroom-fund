@@ -12,6 +12,9 @@ import AgendaTemplate from "./AgendaTemplate";
 import './BookingSelect.scss'
 import PrintSchedule from "./PrintSchedule";
 import { faTruckMedical } from "@fortawesome/free-solid-svg-icons";
+import Configuration from "../../configurations/Configuration";
+import utilsAxios from '../../utils/axios';
+import axios from "axios";
 
 L10n.load({
     'en-US':{
@@ -211,8 +214,7 @@ const BookingSelect = ({props, selectedDate}) => {
                 text: 'Print', cssClass: 'e-print-btn', click: onPrintClick.bind(this)
             };
             args.items.push(exportItem);
-            args.items.push(printItem)            
-            
+            args.items.push(printItem)                        
         } 
     }     
 
@@ -232,10 +234,14 @@ const BookingSelect = ({props, selectedDate}) => {
         scheduleObj.exportToExcel(exportValues);
     }
 
-    function onActionComplete(args) {
-        
+    function onActionComplete(args) {        
+
         if (args.requestType === 'eventCreated') {
             console.log('eventCreated', args)
+            if(getAxiosData(args.data))
+            {
+                console.log("NEWWWWWWWWWWWWWWWWWWW")
+            }
         }       
         if (args.requestType === 'eventChanged') {
             console.log('eventChanged', args)
@@ -243,6 +249,22 @@ const BookingSelect = ({props, selectedDate}) => {
         if (args.requestType === 'eventRemoved') {
             console.log('eventRemoved', args)
         }            
+    }
+
+    async function getAxiosData (args) {        
+        const getUser = utilsAxios.post(Configuration.GetUserByEmail, args.Subject)
+        const getWorkspace = utilsAxios.get(Configuration.GetWorkspaceByLocation+`/${args.CampusNumber}`+`/${args.Location}`)
+
+        await Promise.allSettled([getUser, getWorkspace]).then(
+            axios.spread((...allData) =>{
+                if (allData[0] !== null && allData[1] !== null)
+                {
+                    return true;
+                }
+                else
+                    return false;
+            })
+        )
     }
 
     return (<div>                  

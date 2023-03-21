@@ -14,10 +14,12 @@ module.exports={
     CreateCategory:"/categories/createcategory",
     DeleteCategory:"/categories/deletecategory",
     GetWorkspaciesPaged:"/Workspacies/GetWorkspaciesPaged",
+    GetWorkspaceByLocation:"/workspacies/getworkspacesbylocation",
     GetWorkspace:"/Workspacies/GetWorkspaces",
     CreateWorkspace:"/workspacies/createworkspace",
     UpdateWorkspace:"/workspacies/updateworkspace",
     DeleteWorkspace:"/workspacies/deleteworkspace",
+    LockWorkspace:"/workspacies/lockworkspace",
     //Booking
     CreateBooking:"/Bookings/CreateBooking",
     UpdateBooking:"/Bookings/UpdateBooking",
