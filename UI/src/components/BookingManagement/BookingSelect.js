@@ -251,9 +251,15 @@ const BookingSelect = ({props, selectedDate}) => {
         }            
     }
 
-    async function getAxiosData (args) {        
-        const getUser = utilsAxios.post(Configuration.GetUserByEmail, args.Subject)
-        const getWorkspace = utilsAxios.get(Configuration.GetWorkspaceByLocation+`/${args.CampusNumber}`+`/${args.Location}`)
+    async function getAxiosData (args) {     
+        var item;     
+        args.forEach(element => {
+            item = element            
+        });   
+        const data = { email: item.Subject}
+           
+        const getUser = utilsAxios.post(Configuration.GetUserByEmail, data)
+        const getWorkspace = utilsAxios.get(Configuration.GetWorkspaceByLocation+`/${item.CampusNumber}`+`/${item.Location}`)
 
         await Promise.allSettled([getUser, getWorkspace]).then(
             axios.spread((...allData) =>{

@@ -16,6 +16,7 @@ import utilsAxios from '../../utils/axios';
 import axios from 'axios';
 import Configuration from "../../configurations/Configuration";
 import './Booking.scss'
+import ErrorHandler from "../../modules/ErrorHandler";
 
 const authSevice = new AuthServices();
 
@@ -196,7 +197,7 @@ const Booking = () => {
                     }))                                                             
                 }),
             ),          
-        );          
+        ).catch((error)=>{console.log(error)});          
 
         return all;
     }
