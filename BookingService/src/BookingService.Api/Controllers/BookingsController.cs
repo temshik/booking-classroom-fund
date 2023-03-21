@@ -78,21 +78,15 @@ namespace BookingService.Api.Controllers
         /// <param name="id">Specific booking id</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Updated list of bookings</returns>
-        [Route("[action]")]
+        [Route("[action]/{id}")]
         [HttpDelete]
         [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteBooking([FromBody] BookingRequest bookingRequest, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteBooking(int id, CancellationToken cancellationToken)
         {
-            var result = await _bookService.DeleteAsync(_mapper.Map<BookingDTO>(bookingRequest), cancellationToken);
+            await _bookService.DeleteAsync(id, cancellationToken);
 
-            if (result != null)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest();
+            return Ok(id);            
         }
 
         /// <summary>

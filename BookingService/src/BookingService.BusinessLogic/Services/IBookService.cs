@@ -17,7 +17,7 @@ namespace BookingService.BusinessLogic.Services
         /// Function to delete a booking from the database.
         /// </summary>
         /// <param name="booking">The booking that we want to delete</param>
-        Task<BookingDTO> DeleteAsync(BookingDTO booking, CancellationToken cancellationToken);
+        Task DeleteAsync(int id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Function to get the information about booking a classroom fund by WorkspaceId from the database.
