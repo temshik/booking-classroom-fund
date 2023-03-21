@@ -89,7 +89,7 @@ namespace CatalogService.Api.Controllers
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Desired workspace.</returns>
         [Route("[action]")]
-        [HttpGet]
+        [HttpPost]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
