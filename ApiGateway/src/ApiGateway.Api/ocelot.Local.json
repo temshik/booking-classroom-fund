@@ -204,7 +204,7 @@
         }
       ],
       "UpstreamPathTemplate": "/Bookings/{everything}",
-      "UpstreamHttpMethod": [ "POST", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "POST", "PUT" ]
     },
     //GetBookingsByWorkspace/{workspaceId}
     {
@@ -231,6 +231,18 @@
       ],
       "UpstreamPathTemplate": "/Bookings/GetBookingsByUser/{userId}",
       "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Bookings/DeleteBooking/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": "7000"
+        }
+      ],
+      "UpstreamPathTemplate": "/Bookings/DeleteBooking/{id}",
+      "UpstreamHttpMethod": [ "DELETE" ]
     }
   ],
   "GlobalConfiguration": {
