@@ -229,6 +229,7 @@ const BookingSelect = ({props, selectedDate}) => {
             }); 
             dispatch(deleteBooking(id))                                                 
         }   
+        
     }     
 
     function onPrintClick() {
