@@ -18,7 +18,7 @@ namespace ApiGateway.AppDependenciesConfiguration
 
             builder.Services.AddOcelot(configuration);
             builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
-                builder.WithOrigins("http://localhost:3000", "http://localhost")
+                builder.WithOrigins("http://localhost:3000", "http://localhost", "http://anydeals.norwayeast.cloudapp.azure.com")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials()));
