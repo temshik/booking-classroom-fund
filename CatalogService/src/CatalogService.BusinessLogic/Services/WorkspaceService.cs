@@ -73,6 +73,8 @@ namespace CatalogService.BusinessLogic.Services
             if (list == null)
             {
                 _logger.LogError("Workspace dosen't exist");
+
+                throw new NotFoundException("The workspace was not found");
             }
 
             var listDTO = _mapper.Map<WorkspaceDTO>(list);
@@ -93,6 +95,8 @@ namespace CatalogService.BusinessLogic.Services
             if (list == null)
             {
                 _logger.LogError("Workspace dosen't exist");
+
+                throw new NotFoundException("The workspace was not found");
             }
 
             var listDTO = _mapper.Map<WorkspaceDTO>(list);
@@ -150,9 +154,7 @@ namespace CatalogService.BusinessLogic.Services
 
                     throw new NotFoundException("The workspace was not found");
                 }
-
-                //var listDTO = _mapper.Map<List<WorkspaceDTO>>(list);                
-
+               
                 return pagedWorkspaceDTO;
             }
             catch(Exception ex)
