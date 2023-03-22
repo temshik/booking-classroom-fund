@@ -102,6 +102,28 @@ namespace IdentityService.Api.Controllers
         }
 
         /// <summary>
+        /// Get user role by email
+        /// </summary>        
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>User</returns>
+        [Route("[action]")]
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetUserRoleByEmail([FromBody] UserRequestGet userRequestGet, CancellationToken token)
+        {
+            var result = await _userService.GetUserRoleByEmailAsync(userRequestGet.Email, token);
+
+            if (result == null)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Exiting the user from the app
         /// </summary>
         /// <param name="email">User email</param>

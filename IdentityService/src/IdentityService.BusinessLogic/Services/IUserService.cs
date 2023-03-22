@@ -66,6 +66,12 @@ namespace IdentityService.BusinessLogic.Services
         Task<List<Role>> GetRolesAsync(CancellationToken cancellationToken);
 
         /// <summary>
+        /// Function to get the role from the database.
+        /// </summary>
+        /// <returns>A <see cref="Role"/>.</returns>
+        Task<string> GetUserRoleByEmailAsync(string email, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Get user by id.
         /// </summary>
         /// <param name="id"></param>

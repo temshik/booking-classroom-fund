@@ -96,6 +96,28 @@ namespace IdentityService.BusinessLogic.Services
         }
 
         /// <summary>
+        /// Get user role by email
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <returns><see cref="User"/></returns>
+        public async Task<string> GetUserRoleByEmailAsync(string email, CancellationToken cancellationToken)
+        {
+            var result = await _userManager.FindByEmailAsync(email);            
+
+            if (result == null)
+            {
+                _logger.LogError("An error occured the user were not found by id");
+
+                throw new NotFoundException("User was not found");
+            }
+
+            var userRole = await _userManager.GetRolesAsync(result);
+            var role = userRole.First();
+
+            return role;
+        }
+
+        /// <summary>
         /// Creates a new user
         /// </summary>
         /// <param name="user">The user that we want to add</param>
