@@ -1,0 +1,49 @@
+.headerListItem {    
+    color: black;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    //margin: 0px 0px 50px 0px;
+}
+
+.headerListItem:hover{
+    color: black;  
+    border: 1px solid white;
+    padding: 10px;       
+    border-radius: 15px;
+    text-decoration: none;
+}
+
+.headerListItem--active {    
+    color: black;      
+    border: 1px solid white;
+    padding: 10px;       
+    border-radius: 15px;    
+    margin: 0px 0px 50px 0px;
+    height: 46px;     
+}
+
+.headerButton{
+    border: none;
+    border-radius: 15px; 
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
+.headerButton:hover{
+    background-color: white;
+    color: black;
+    border: 1px solid white;
+}
+
+.headerButton--active{
+    border: none;
+    border-radius: 15px;
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    border: 1px solid white;
+}

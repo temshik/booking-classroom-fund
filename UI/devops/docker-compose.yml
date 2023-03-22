@@ -1,15 +1,27 @@
-# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
-
 version: '3.4'
 
+networks:
+  backend:
+
 services:
-  reactserverwebui:
-    container_name: react-web-ui
-    image: reactserverwebui
+  reactclient.ui:
+    container_name: react-client-ui
+    image: reactclientui
     build:
-      context: .
-      dockerfile: UI/src/Dockerfile
+      context: ./..
+      dockerfile: ./Dockerfile
     ports:
-      - 8002:80
+      - 3000:3000
     networks:
-      - frontend
+      - backend
+  
+  proxy:
+    image: nginx:mainline
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+    depends_on: 
+      - reactclient.ui
+    networks:
+      - backend

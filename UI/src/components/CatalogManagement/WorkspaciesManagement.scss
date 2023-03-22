@@ -1,0 +1,24 @@
+.CreateWorkspace{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin: 10px 0px 0px 0px;
+}
+
+.Form{
+    width: max-content;
+    height: max-content;
+    display:flex;
+    align-items: center;    
+    flex-direction: column;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 15px;
+}
+
+
+.workspaceImage{
+    width: 60%;
+    display: flex;
+    object-fit: cover;
+}

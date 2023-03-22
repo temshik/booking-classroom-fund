@@ -1,0 +1,43 @@
+.menus {}
+.menus a{
+  text-decoration: none;
+}
+.menus a.parent{
+  margin: 0px 30px 0px 0px;
+}
+
+.menus li{
+  min-width: 70px;
+  position: relative;
+  list-style: none;
+  padding: 10px;
+  border-radius: 15px;
+}
+.menus li:hover {
+  border: 1px solid white;
+}
+.menu__link {
+  color: white;
+}
+.menu__link:hover {
+  color: white;
+}
+.menu__list{
+  display: flex;
+  align-items: center;
+  gap: 35px;
+}
+.menu__icon {
+  display: inline-block;
+  opacity: 0;
+}
+.menu__item{
+  border: 1px solid white;
+  border-radius: 15px;
+}
+.menu__list>li:hover .sub-menu{
+    display: block;
+}
+.menu__list>li:hover .menu__icon{
+  opacity: 1;
+}

@@ -1,16 +1,21 @@
 import React, {createRef} from 'react';
-import './SignIn.scss'
-import AuthServices from '../../services/AuthServices';
 import { Navigate, Link } from "react-router-dom";
+import store from '../../redux/store';
+import {SET_ACTIVE_USER}  from '../../redux/slice/authSlice';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
+import 'react-toastify/dist/ReactToastify.css';
+import AuthServices from '../../services/AuthServices';
 import ErrorHandler from '../../modules/ErrorHandler';
+import './SignIn.scss'
 
 const authSevice = new AuthServices();
 const errorHandler = new ErrorHandler();
+
 const Email_Regex = "(?:[a-zA-Z0-9]+\.)+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$";
 const Password_Regex = "^(?=.*[_+-/?:;№!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Zа-яА-Я])(?=.*[0-9]).{6,}$";
 
 export default class SignIn extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {          
@@ -21,6 +26,7 @@ export default class SignIn extends React.Component {
       Password: "",      
       PasswordValid: false,
       PasswordFocus: false,
+      PasswordShow:false,
 
       Redirect: false,
       Checked: false
@@ -40,16 +46,21 @@ export default class SignIn extends React.Component {
       RememberMe: this.state.Checked,
       ReturnUrl: "string"
     };
-    authSevice.SignIn(data).then((data) =>{
-      console.log(data.data);  
+    authSevice.SignIn(data).then((data) =>{       
       if(data.status === 200)
       { 
-        console.log(JSON.stringify(data.data.accessToken)); 
-        console.log(JSON.stringify(data.data.refreshToken)); 
-        console.log(JSON.stringify(data.data.tokenLifeTimeInMinutes)); 
-        this.setState({Redirect: true});
+        store.dispatch(SET_ACTIVE_USER({          
+          email: this.state.Email,
+          accessToken: data.data.accessToken,
+          refreshToken: data.data.refreshToken,
+          tokenLifeTimeInMinutes: data.data.tokenLifeTimeInMinutes,
+          RememberMe: this.state.Checked,
+          ReturnUrl: "string"          
+        }))
+        this.setState({Password: ''});
+        this.setState({Redirect: true});     
       }
-    }).catch(errorHandler.httpErrorHandler) 
+    }).catch(errorHandler.httpErrorHandler)               
   }
 
   handleValues(event) {
@@ -61,13 +72,11 @@ export default class SignIn extends React.Component {
       }
     }
     this.setState({[name]:value},
-      console.log('name', name, 'value', value)
     );
   }
 
   handleCheckboxChange(event) {
     this.setState({Checked: event.target.checked});
-    console.log(this.state.Checked);
   }
 
   handleBlur = (event) => {
@@ -119,17 +128,16 @@ export default class SignIn extends React.Component {
         })}      
         break;
       default:
-        console.log("Somthing goes wrong in setField");   
+        alert("Somthing goes wrong in setField");   
         break;
     }
   }
 
 render(){
-  console.log('SignIn_State: ', this.state)  
     return (
       <div className="SignIn">
         {this.state.Redirect && (
-          <Navigate to="/" replace={true} />
+          <Navigate to="/" replace={true}/>
         )}
         <form className="SignIn__Auth-form" onSubmit={this.handleSubmit}>
           <div className="SignIn__Sub-Container">
@@ -165,9 +173,10 @@ render(){
             </div>
             <div className="form-group mt-3">
               <label>Password</label>
-              <input
+              <div className="input-group">
+              <input                
                 checked={this.state.PasswordValid}
-                type="password"
+                type={this.state.PasswordShow ? "text" : "password"}
                 name='Password'
                 className="form-control mt-1"
                 placeholder="Enter password"
@@ -177,8 +186,12 @@ render(){
                 onChange={this.handleValues}
                 onFocus={this.handleFocus}
                 style={this.style(this.state.PasswordValid)}
-                required
+                required                
               />
+              <div className="input-group-btn" style={{width:"30px", height:"38px", marginTop:"4px", border:"1px solid black", borderTopRightRadius:"5px", borderBottomRightRadius:"5px", alignItems:'center', justifyContent:"center", display:'flex'}}>
+                <FontAwesomeIcon  onClick={() => this.setState({PasswordShow: !this.state.PasswordShow})} style={{color:'black'}} icon={this.state.PasswordShow ? faEye : faEyeSlash}/>
+              </div>
+              </div>
               {this.state.PasswordFocus && (
                 <p role="alert" style={{ color: "rgb(255, 0, 0)" }}>
                   Password must contain more then 6 elements and include at least 1 lower case and 1 upper case letter, 1 numeric value and 1 special character!
@@ -206,7 +219,7 @@ render(){
               Forgot <Link to='/ResetPassword' style={{ color: '#14A44D' }}>password?</Link>
             </p>
           </div>
-        </form>
+        </form>        
       </div>
     )
   }

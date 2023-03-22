@@ -1,0 +1,32 @@
+.header{
+    background-color: #008a5e;
+    color: white;
+    display: flex;
+    justify-content: center;    
+}
+
+.headerContainer{
+    width: 100%;
+    max-width: 1024px;
+    margin: 0px 10px -5px 10px;    
+}
+
+.headerContainer.homeMode{
+    width: 100%;
+    max-width: 1024px;
+    margin: 10px 10px 20px 10px;
+}
+
+.headerList{
+    display: flex;     
+    gap: 35px;
+    height: 46px;    
+}
+
+.headerDesc{
+    margin: 20px 0px;
+}
+
+.headerTitle{
+    margin-top: 15px;
+}

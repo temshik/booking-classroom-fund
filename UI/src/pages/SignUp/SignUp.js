@@ -1,9 +1,13 @@
 import React, {createRef} from 'react';
-import './SignUp.scss'
+import { Navigate, Link } from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import RadioButton from "../../components/RadioButton/RadioButton";
 import AuthServices from '../../services/AuthServices';
-import { Navigate, Link } from "react-router-dom";
 import ErrorHandler from '../../modules/ErrorHandler';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './SignUp.scss'
 
 const authSevice = new AuthServices();
 const errorHandler = new ErrorHandler();
@@ -36,10 +40,12 @@ export default class SignUp extends React.Component{
       Password: "",      
       PasswordValid: false,
       PasswordFocus: false,
+      PasswordShow:false,
 
       ConfirmPassword: "",
       ConfirmPasswordValid: false,
       ConfirmPasswordFocus: false,
+      ConfirmPasswordShow: false,
 
       RoleValue: "Teacher",
       Redirect: false,
@@ -59,13 +65,17 @@ export default class SignUp extends React.Component{
       Email: this.state.Email,
       Password: this.state.Password,
       ConfirmedPassword: this.state.ConfirmPassword,
+      Role: this.state.RoleValue
     };
     authSevice.SignUp(data,this.state.RoleValue).then((data) =>{
       if(data.status === 201)
       {
-        alert("Succesfuly register");
-        console.log(data);
-        this.setState({Redirect: true})
+        toast.success("Registration Successful...", {
+          position: toast.POSITION.TOP_CENTER
+        }); 
+        this.setState({Redirect: true});
+        this.setState({Password: ''});
+        this.setState({ConfirmPassword: ''});
       }
       else{
        console.log(data);
@@ -81,9 +91,7 @@ export default class SignUp extends React.Component{
         this.setField(event.target.name, false, false); 
       }
     }
-    this.setState({[name]:value},
-      console.log('name', name, 'value', value)
-    );
+    this.setState({[name]:value});
   }
 
 	radioChangeHandler = (event) => {
@@ -179,17 +187,16 @@ export default class SignUp extends React.Component{
         })}
         break;
       default:
-        console.log("Somthing goes wrong in setField");
+        alert("Somthing goes wrong in setField");
         break;  
     }
   }
 
-render(){
-  console.log('SignUp_State: ', this.state)  
+render(){  
     return (     
       <div className="SignUp">
         {this.state.Redirect && (
-          <Navigate to="/" replace={true} />
+          <Navigate to="/SignIn" replace={true} />
         )}
         <form className="SignUp__Auth-form" onSubmit={this.handleRegister}>
           <div className="SignUp__SubContainer">
@@ -291,9 +298,10 @@ render(){
             </div>
             <div className="form-group mt-3">
               <label>Password</label>
+              <div className="input-group">
               <input
                 checked={this.state.PasswordValid}
-                type="password"
+                type={this.state.PasswordShow ? "text" : "password"}
                 name='Password'
                 className="form-control mt-1"
                 placeholder="Password"
@@ -305,6 +313,10 @@ render(){
                 style={this.style(this.state.PasswordValid)}          
                 required      
               />
+              <div className="input-group-btn" style={{width:"30px", height:"38px", marginTop:"4px", border:"1px solid black", borderTopRightRadius:"5px", borderBottomRightRadius:"5px", alignItems:'center', justifyContent:"center", display:'flex'}}>
+                <FontAwesomeIcon  onClick={() => this.setState({PasswordShow: !this.state.PasswordShow})} style={{color:'black'}} icon={this.state.PasswordShow ? faEye : faEyeSlash}/>
+              </div>
+              </div>
               {this.state.PasswordFocus && (
                 <p role="alert" style={{ color: "rgb(255, 0, 0)" }}>
                   Password must contain more then 6 elements and include at least 1 lower case and 1 upper case letter, 1 numeric value and 1 special character!
@@ -313,9 +325,10 @@ render(){
             </div>
             <div className="form-group mt-3">
               <label>Confirm Password</label>
+              <div className="input-group">
               <input
                 checked={this.state.ConfirmPasswordValid}
-                type="password"
+                type={this.state.ConfirmPasswordShow ? "text" : "password"}
                 name='ConfirmPassword'
                 className="form-control mt-1"
                 placeholder="Password"
@@ -327,6 +340,10 @@ render(){
                 style={this.style(this.state.ConfirmPasswordValid)}            
                 required    
               />
+              <div className="input-group-btn" style={{width:"30px", height:"38px", marginTop:"4px", border:"1px solid black", borderTopRightRadius:"5px", borderBottomRightRadius:"5px", alignItems:'center', justifyContent:"center", display:'flex'}}>
+                <FontAwesomeIcon  onClick={() => this.setState({ConfirmPasswordShow: !this.state.ConfirmPasswordShow})} style={{color:'black'}} icon={this.state.ConfirmPasswordShow ? faEye : faEyeSlash}/>
+              </div>
+              </div>
               {this.state.ConfirmPasswordFocus && (
                 <p role="alert" style={{ color: "rgb(255, 0, 0)" }}>
                   Password don't match!
@@ -362,8 +379,8 @@ render(){
               </button>
             </div>
           </div>
-        </form>
-      </div>
+        </form>        
+      </div>      
     )
   }
 }

@@ -1,12 +1,18 @@
 import React from 'react';
+import Navbar from '../../components/Navbar/Navbar';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import Slider from '../../components/Slider/Slider';
 
-const HomePage = () => {
+
+const HomePage = () => {    
     return (
-        <nav class="navbar navbar-dark bg-primary">
-            <div className="row col-12 d-flex justify-content-center text-white">
-            <span className="h3">Register</span>
-            </div>
-        </nav>
+        <div>
+            <Navbar/>
+            <Header homeMode={true} />
+            <Slider/>
+            <Footer/>
+        </div>
     );
 };
 

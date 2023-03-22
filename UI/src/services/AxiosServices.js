@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../utils/axios"
 
 export default class AxiosServices {
     post(url,data) {
@@ -6,5 +6,11 @@ export default class AxiosServices {
     }
     put(url,data){
         return axios.put(url, data)
+    }
+    get(url){
+        return axios.get(url)
+    }
+    delete(url,data){
+        return axios.delete(url,data)
     }
 }

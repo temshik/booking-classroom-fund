@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  reactclient.ui:
+    container_name: react-client-ui
+    image: reactclientui
+    build:
+      context: ./..
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - 3000:3000
+    volumes:
+      - ./../src:/app/src
+    environment:
+      - CHOKIDAR_USEPOLLING=true

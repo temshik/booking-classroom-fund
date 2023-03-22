@@ -1,0 +1,43 @@
+.workspaceContainer{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.workspaceWrapper{
+    width: 100%;
+    max-width: 1024px;
+    display: flex;
+    gap: 10px;
+}
+
+.siPic{
+    flex:1;
+    flex-direction: column;
+    gap: 10px;
+    flex:1;
+}
+
+.siFunc{
+    padding: 40px;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    flex:1;
+}
+
+.workspaceTitle{
+    font-size: 24px;
+}
+
+.workspaceActions{
+    padding: 10px;
+    gap: 10px;
+    display: flex;
+}
+
+.workspaceImage{
+    width: 100%;
+    display: flex;
+    object-fit: cover;
+}

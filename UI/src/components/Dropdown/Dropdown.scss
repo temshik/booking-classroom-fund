@@ -1,0 +1,44 @@
+.dropdowm {
+  width: max-content;
+  height: max-content;
+  list-style: none;
+  position: absolute;
+  top: 146px;
+  opacity: 0;
+  display: none;
+  border: 4px solid #016646;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: white;
+}
+.dropdowm-active {
+  width: max-content;
+  height: max-content;
+  list-style: none;
+  position: absolute;
+  top: 146px;
+  box-shadow: 0 10px 15px -3px rgba(46, 41, 51, 0.08),
+    0 4px 6px -2px rgba(71, 63, 79, 0.16);
+  opacity: 0;
+  display: none;
+  border: 4px solid #016646;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: white;
+  display: block;
+  opacity: 1;
+  z-index: 1;
+}
+.dropdowm-item-link {
+  color: black;
+  text-decoration: none;
+}
+.dropdowm-item-link:hover {
+  color: #008a5e;
+  text-decoration: none;
+}
+
+.dropdown-submenu-active{
+  position: absolute;
+  height: 200px;
+}

@@ -1,5 +1,30 @@
 module.exports={
-    SignIn:"http://127.0.0.1:5000/Authorization/Authorize",
-    SignUp:"http://127.0.0.1:5000/Users/CreateUser",
-    ResetPassword:"http://127.0.0.1:5000/Users/ResetPassword"
+    SignIn:"/Authorization/Authorize",
+    SignUp:"/Users/CreateUser",
+    UpdatePassword:"/Users/UpdatePassword",
+    ResetPassword:"/Users/ResetPassword",
+    RefreshToken:"/Authorization/RefreshToken",    
+    GetUser:"/Users/GetUser",
+    GetUserByEmail:"/Users/GetUserByEmail",
+    GetUserRoleByEmail:"/Users/GetUserRoleByEmail",
+    UpdateUser:"/Users/UpdateUser",
+    DeleteUser:"/Users/DeleteUser",
+    //Catalog
+    GetCategories:"/categories/getcategories",
+    UpdateCategory:"/categories/updatecategory",
+    CreateCategory:"/categories/createcategory",
+    DeleteCategory:"/categories/deletecategory",
+    GetWorkspaciesPaged:"/Workspacies/GetWorkspaciesPaged",
+    GetWorkspaceByLocation:"/workspacies/getworkspacesbylocation",
+    GetWorkspace:"/Workspacies/GetWorkspaces",
+    CreateWorkspace:"/workspacies/createworkspace",
+    UpdateWorkspace:"/workspacies/updateworkspace",
+    DeleteWorkspace:"/workspacies/deleteworkspace",
+    LockWorkspace:"/workspacies/lockworkspace",
+    //Booking
+    CreateBooking:"/Bookings/CreateBooking",
+    UpdateBooking:"/Bookings/UpdateBooking",
+    DeleteBooking:"/Bookings/DeleteBooking",
+    GetBookingsByWorkspace:"/Bookings/GetBookingsByWorkspace",
+    GetBookingsByUser:"/Bookings/GetBookingsByUser"
 }
