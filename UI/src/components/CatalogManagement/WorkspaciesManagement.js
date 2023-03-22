@@ -174,7 +174,7 @@ const WorkspaciesManagement = (props) => {
                   onChange={ e => setField('categoryId', e.target.value) }
                   isInvalid={ !!errors.categoryId }>                         
                   <option>Select category...</option>        
-                  {selectedCategory && selectedCategory.map((category) =>{
+                  {selectedCategory !== [] && selectedCategory.map((category) =>{
                       return <option key={category.id} value={category.id}>{category.name}</option>
                   })}</Form.Control>
                 <Form.Control.Feedback type='invalid'>
