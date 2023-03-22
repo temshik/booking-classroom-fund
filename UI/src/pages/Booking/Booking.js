@@ -34,28 +34,20 @@ const Booking = () => {
         "isAvailable": true
     }
     const [form, setForm] = useState(location.state !== null ? location.state.value : item); 
+    //const [props, setProps] = useState(location.state !== null ? location.state.bookValue : null)
     const dispatch = useDispatch();     
     const bookings = useSelector(selectBookings);
     const isCategoryLoading = useSelector(selectIsCategoryLoading);
     const isWorkspaceLoading = useSelector(selectIsWorkspaceLoading);    
     const [element, setElement] = useState([]);
     const [currentDay, setCurrentDay] = useState(new Date());
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const stateEmail = useSelector(selectEmail)
     const email = (stateEmail!==null)? stateEmail : window.sessionStorage.getItem('email');
     
-    useEffect(()=>{        
-        if(email !== null)
-        {
-            authSevice.GetUserByEmail({email: email}).then((data) =>{
-                if(data.status === 200){
-                    getBookings(data.data.id);
-                }                
-            }).catch((error)=>{
-                console.log(error);
-            })
-        }            
-        //getCategories();
+    useEffect(()=>{ 
+        console.log(form)      
+        getData()
     },[]);
 
     useEffect(()=>{        
@@ -71,7 +63,7 @@ const Booking = () => {
 
     const getBookings = (id) => {
         if(window.localStorage.getItem('accessToken') !== null){   
-            if(location.state !== null){
+            if(form.id !== null){
                 dispatch(getBookingsByWorkspace(form.id));
             }
             else{                                                 
@@ -80,10 +72,17 @@ const Booking = () => {
         }
     }
 
-    const getCategories = () => {
-        if(window.localStorage.getItem('accessToken') !== null){  
-            dispatch(getCategory());       
-        }
+    const getData = () => {
+        if(email !== null)
+        {
+            authSevice.GetUserByEmail({email: email}).then((data) =>{
+                if(data.status === 200){
+                    getBookings(data.data.id);
+                }                
+            }).catch((error)=>{
+                console.log(error);
+            })
+        } 
     }    
 
     function prepareData(bookingsList) {
@@ -144,12 +143,14 @@ const Booking = () => {
     const getInfoForExtendedRecord = (selectedUsers, selectedWorkspace, newBlocked) =>{
         if (window.localStorage.getItem('accessToken') !== null){
             var usersEndpoints=[];
-            selectedUsers.map((id)=>{
+            selectedUsers.map((id)=>{    
+                if(id !== 0)            
                 usersEndpoints.push(Configuration.GetUser+`/${id}`);
             })
 
             var workspaciesEndpoints=[];
             selectedWorkspace.map((id)=>{
+                if(id !== 0)
                 workspaciesEndpoints.push(Configuration.GetWorkspace+`/${id}`);
             })
 
@@ -232,7 +233,7 @@ const Booking = () => {
             {loading && <Loader/>}           
             <Navbar/>
             <Header/>    
-            <BookingSelect props={element} selectedDate={getMonday(currentDay)}/>
+            <BookingSelect props={element} bookValue={form} selectedDate={getMonday(currentDay)} selectData={getData}/>
             <Footer/>
         </div>
     );

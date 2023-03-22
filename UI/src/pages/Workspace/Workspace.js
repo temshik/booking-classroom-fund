@@ -14,11 +14,16 @@ import {
     selectIsCategoryLoading, selectIsWorkspaceLoading,
     getCategory, selectCat, getWorkspace, selectWorkspace,
     updateWorkspace, deleteWorkspace} from '../../redux/slice/catalogSlice';
+import {GetUserRoleByEmail, selectRole, selectEmail} from '../../redux/slice/authSlice';
 import "./Workspace.scss"
 
 const Worksapce = () => {
     const {id} = useParams()
     const dispatch = useDispatch();
+    const stateEmail = useSelector(selectEmail);
+    const role = useSelector(selectRole);
+    const [userRole, setUserRole] = useState('Teacher');
+    const email = (stateEmail !== null)? stateEmail : window.sessionStorage.getItem('email');   
     const navigate = useNavigate();
     const cat = useSelector(selectCat);
     const workspace = useSelector(selectWorkspace)
@@ -32,14 +37,26 @@ const Worksapce = () => {
     const updatedWorkspace = useSelector(selectIsWorkspaceUpdated);
     const [loading, setLoading] = useState(false);
 
+    useEffect(()=>{
+        if(window.localStorage.getItem('accessToken') !== null){  
+            dispatch(GetUserRoleByEmail(email))            
+        }
+    },[])
+
+    useEffect(()=>{
+        if(role !== null)
+        setUserRole(role)
+    },[role])
+
     useEffect(()=>{        
-        if(window.localStorage.getItem('accessToken') !== null){    
+        if(window.localStorage.getItem('accessToken') !== null){  
+            dispatch(GetUserRoleByEmail(email))
             dispatch(getCategory());  
             console.log('cat0', cat) 
             dispatch(getWorkspace({id})) 
             console.log('disp', workspace)
         }
-    },[id])
+    },[id])    
 
     useEffect(()=>{
         if(cat !== null)                  
@@ -161,15 +178,15 @@ const Worksapce = () => {
                                 (<div><FontAwesomeIcon icon={faLockOpen}/> Workspace can be booked</div>) : 
                                 (<div><FontAwesomeIcon icon={faLock}/> Workspace is blocked</div>)}
                         </span> 
-                        <div className='workspaceActions'>                        
-                            <button className='siDetails'>Book</button>                        
-                            <button className='siDetails' onClick={handleTimeTableChange}>TimeTable</button>
+                        { userRole!=='Teacher' && <div className='workspaceActions'>                        
+                            <button className='siDetails' onClick={handleTimeTableChange}>Book</button>                        
+                            <button className='siDetails' onClick={handleTimeTableChange}>TimeTable</button>                            
                             <button className='siDetails' onClick={handleEditChange}>Edit</button>
                             <button className='siDetails' onClick={handleDeleteChange} style={{backgroundColor:'#e74c3c'}}>Delete</button>
                             {item && item.isAvailable ? 
                                 <button className='siDetails' onClick={handleUpdateChange}>Lock</button> :
-                                <button className='siDetails' onClick={handleUpdateChange}>UnLock</button>}
-                        </div>                                        
+                                <button className='siDetails' onClick={handleUpdateChange}>UnLock</button>}                        
+                        </div>}                                        
                         <span className='siTextDesc'>
                             <h4>Description:</h4> {item && item.description}
                         </span>   

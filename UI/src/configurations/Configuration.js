@@ -6,6 +6,7 @@ module.exports={
     RefreshToken:"/Authorization/RefreshToken",    
     GetUser:"/Users/GetUser",
     GetUserByEmail:"/Users/GetUserByEmail",
+    GetUserRoleByEmail:"/Users/GetUserRoleByEmail",
     UpdateUser:"/Users/UpdateUser",
     DeleteUser:"/Users/DeleteUser",
     //Catalog

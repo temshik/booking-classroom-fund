@@ -1,7 +1,7 @@
 import { DateTimePickerComponent } from '@syncfusion/ej2-react-calendars';
 import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
 
-const UpdateBooking = ({props, value, startObj}) => {
+const UpdateBookingByWorkspace = ({props, value, startObj}) => {
 
   return ((props !== undefined) ? <table className="custom-event-editor" style={{ width: '100%' }} cellPadding={5}><tbody>
   <tr>{console.log('props',{props}, {value})}<td className="e-textlabel">User email</td><td colSpan={4}>
@@ -19,7 +19,7 @@ const UpdateBooking = ({props, value, startObj}) => {
         id="CampusNumber" 
         className="e-field e-input" 
         type="number"         
-        defaultValue={props.CampusNumber || null} 
+        defaultValue={props.CampusNumber? props.CampusNumber : value.campusNumber || null} 
         name="CampusNumber" 
         min={1}
         style={{ width: '100%' }}
@@ -30,7 +30,7 @@ const UpdateBooking = ({props, value, startObj}) => {
         id="Location" 
         className="e-field e-input" 
         type="number"         
-        defaultValue={props.Location || null} 
+        defaultValue={props.Location? props.Location : value.workspaceNumber || null} 
         name="Location" 
         min={1}
         style={{ width: '100%' }}
@@ -70,4 +70,4 @@ const UpdateBooking = ({props, value, startObj}) => {
   </td></tr></tbody></table> : <div></div>);
 };
 
-export default UpdateBooking;
+export default UpdateBookingByWorkspace;

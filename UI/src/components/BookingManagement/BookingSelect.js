@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import { ScheduleComponent, Day, WorkWeek, Month, Agenda, Inject, ViewsDirective, ViewDirective} from '@syncfusion/ej2-react-schedule';
 import {Browser, L10n, isNullOrUndefined, Internationalization} from '@syncfusion/ej2-base';
 import { Query, Predicate } from '@syncfusion/ej2-data';
 import UpdateBooking from "./UpdateBooking";
+import UpdateBookingByWorkspace from "./UpdateBookingByWorkspace";
 import Template from "./Template";
 import HeaderTemplate from "./HeaderTemplate";
 import ContentTemplate from "./ContentTemplate";
@@ -17,7 +17,11 @@ import { faTruckMedical } from "@fortawesome/free-solid-svg-icons";
 import Configuration from "../../configurations/Configuration";
 import utilsAxios from '../../utils/axios';
 import ErrorHandler from "../../modules/ErrorHandler";
-import {createBooking, updateBooking, deleteBooking} from '../../redux/slice/bookingSlice';
+import Loader from '../../components/Loader/Loader';
+import {createBooking, updateBooking, deleteBooking, 
+        selectIsBookingLoading, selectIsBookingUpdated, selectIsBookingDeleted,
+        selectCreatedBookings, selectUpdatedBookings} from '../../redux/slice/bookingSlice';
+import WorkspaceHandler from "../../modules/WorkspaceHandler";
 
 L10n.load({
     'en-US':{
@@ -32,9 +36,10 @@ L10n.load({
 })
 
 const errorHandler = new ErrorHandler();
+const errorWorkspace = new WorkspaceHandler();
 const Email_Regex = "(?:[a-zA-Z0-9]+\.)+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$";
 
-const BookingSelect = ({props, selectedDate}) => {
+const BookingSelect = ({props, bookValue, selectedDate, selectData}) => {
     let scheduleObj;
     let startObj;
     let endObj;
@@ -45,13 +50,34 @@ const BookingSelect = ({props, selectedDate}) => {
     const intl = new Internationalization();
     const workDays = [1, 2, 3, 4, 5, 6];
     const dispatch = useDispatch();     
+    const isBookingUpdated = useSelector(selectIsBookingUpdated);
+    const isBookingLoading = useSelector(selectIsBookingLoading);
+    const isBookingDeleted = useSelector(selectIsBookingDeleted);
+    const updaedBooking = useSelector(selectUpdatedBookings);
+    const creactedBooking = useSelector(selectCreatedBookings);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(()=>{
+        if(isBookingDeleted === false || isBookingLoading === false || isBookingUpdated === false)
+            setTimeout(() => {setLoading(false)}, 500);
+        else setLoading(true);
+    },[isBookingUpdated, isBookingLoading, isBookingDeleted])
+
+    useEffect(()=>{
+        if(updaedBooking !== null || creactedBooking !== null)
+            selectData();
+    },[updaedBooking, creactedBooking])
 
     function template(props) {
         return (<Template props={props}/>)
     }
 
     function editorTemplate(props) {
-        return (<UpdateBooking props = {props} startObj={startObj}/>);        
+        if (bookValue.id !== null) {
+            return (<UpdateBookingByWorkspace props = {props} value={bookValue} startObj={startObj}/>);        
+        }
+        else
+            return (<UpdateBooking props = {props} startObj={startObj}/>);
     }
 
     function headerTemplate(props) {
@@ -254,7 +280,7 @@ const BookingSelect = ({props, selectedDate}) => {
                 console.log(items)
                 dispatch(createBooking(items))  
             })                                     
-            window.location.reload();  
+            //window.location.reload();  
         }       
         if (args.requestType === 'eventChanged') {
             console.log('eventChanged', args)
@@ -262,7 +288,7 @@ const BookingSelect = ({props, selectedDate}) => {
                 console.log(items)
                 dispatch(updateBooking(items))  
             })                                     
-            window.location.reload();
+            //window.location.reload();
         }                    
     }
 
@@ -286,13 +312,14 @@ const BookingSelect = ({props, selectedDate}) => {
             result.userId=data.data.id,
             await utilsAxios.get(Configuration.GetWorkspaceByLocation+`/${item.CampusNumber}`+`/${item.Location}`).then((el)=>
                 result.workspaceId = el.data.id
-            ).catch(error=>console.log(error))                 
+            ).catch(errorWorkspace.httpErrorHandler)                 
         ).catch(errorHandler.httpErrorHandler)     
         
         return result
     }
 
-    return (<div>                  
+    return (<div>     
+        {loading && <Loader/>}             
         <ScheduleComponent 
             id="schedule" 
             cssClass='quick-info-template' 

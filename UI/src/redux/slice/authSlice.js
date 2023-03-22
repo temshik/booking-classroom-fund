@@ -10,9 +10,11 @@ const errorHandler = new ErrorHandler();
 const initialState = {
     isLoading: false,
     isLoggedIn: false,
+    isRoleLoading: false,
     status: null,
     errorMessage: null,
     email: null,
+    role: null,
     //userName: null,
     //userId: null,
     // accessToken: null,
@@ -65,6 +67,19 @@ export const Authorize = createAsyncThunk(
             errorHandler.httpErrorHandler(error);            
         }
     },
+)
+
+export const GetUserRoleByEmail = createAsyncThunk(
+    'auth/GetUserRoleByEmail',
+    async (email)=>{
+        try{            
+            const {data} = await axios.post(Configuration.GetUserRoleByEmail,{email})            
+            console.log('data',data);
+            return data;  
+        } catch (error) {
+            errorHandler.httpErrorHandler(error);            
+        }
+    }
 )
 
 const authSlice = createSlice({
@@ -129,6 +144,27 @@ const authSlice = createSlice({
         }
     },
     extraReducers: {
+        [GetUserRoleByEmail.pending]: (state) => {
+            console.log('a')
+            state.isRoleLoading = true            
+            //state.status = null
+            //state.errorMessage = null
+        },
+        [GetUserRoleByEmail.fulfilled]: (state, action) => {
+            console.log('b')
+            state.isRoleLoading = false            
+            //state.status = action.payload.status
+            //state.errorMessage = action.payload.errors
+            state.role = action.payload
+            console.log("categories",state.role)
+        },
+        [GetUserRoleByEmail.rejected]: (state, action) => {
+            console.log('c')
+            state.isRoleLoading = false            
+            state.status = action.payload.status
+            state.errorMessage = action.payload.errors            
+        },
+        //----------------------------------------
         //запрос отправляется
         [Authorize.pending]: (state) => {
             state.isLoading = true
@@ -165,6 +201,8 @@ export const {SET_ACTIVE_USER, REMOVE_ACTIVE_USER, REFRESH_ACCESS_TOKEN} = authS
 export const selectIsLoggedIn = (state) => state.auth.isLoggedIn;
 
 export const selectEmail = (state) => state.auth.email;
+
+export const selectRole = (state) => state.auth.role;
 
 export const selectAccessToken = (state) => state.auth.accessToken;
 

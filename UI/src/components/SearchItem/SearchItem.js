@@ -5,7 +5,7 @@ import image1 from '../../images/noimage.png'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLocationDot, faUsers, faChalkboardUser, faPersonDotsFromLine, faDisplay} from "@fortawesome/free-solid-svg-icons";
 
-const SearchItem = ({item, categories}) => {
+const SearchItem = ({item, userRole, categories}) => {
     const navigate = useNavigate();
     const {id,campusNumber, workspaceNumber,categoryId,description,numberOfSeats,courseNumber,isAvailable}=item
     console.log('categorys ',categories)
@@ -22,6 +22,7 @@ const SearchItem = ({item, categories}) => {
     const handleTimeTableChange = () => {
         setTimeout(timeTableMessage, 500);
     }
+
 
     return (
        <div className='searchItem'>
@@ -50,7 +51,7 @@ const SearchItem = ({item, categories}) => {
             </div> 
             <div className='siMore'>
                 <button className='siDetails'><Link to={{pathname:`/catalog/${id}`}} style={{color:'black', textDecoration: 'none'}}>Details</Link></button>
-                <button className='siDetails'>Book</button>
+                <button className='siDetails' disabled={userRole ==='Teacher'} onClick={handleTimeTableChange}>Book</button>
                 <button className='siDetails' onClick={handleTimeTableChange}>TimeTable</button>
             </div>
        </div> 

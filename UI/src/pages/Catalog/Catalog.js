@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {useLocation} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsCategoryLoading, selectIsWorkspaceLoading, getCategory, selectCat, updatedCat, getWorkspacePaged, selectWorkspacePaged, selectTotalPages, updateCategory} from '../../redux/slice/catalogSlice';
+import {GetUserRoleByEmail, selectRole, selectEmail} from '../../redux/slice/authSlice';
 import Header from '../../components/Header/Header';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
@@ -30,6 +31,10 @@ const Catalog = () => {
     });
     const location = useLocation();
     const dispatch = useDispatch();
+    const stateEmail = useSelector(selectEmail);
+    const role = useSelector(selectRole);
+    const [userRole, setUserRole] = useState('Teacher');
+    const email = (stateEmail !== null)? stateEmail : window.sessionStorage.getItem('email');
     const cat = useSelector(selectCat);
     const updateCat = useSelector(updatedCat);
     const workspacies = useSelector(selectWorkspacePaged);
@@ -121,6 +126,12 @@ const Catalog = () => {
         }
     }
 
+    const getRole = () => {
+        if(window.localStorage.getItem('accessToken') !== null){  
+            dispatch(GetUserRoleByEmail(email))            
+        }
+    }
+
     const updateCategories = (item) => {
         if(window.localStorage.getItem('accessToken') !== null){
         dispatch(updateCategory(item));
@@ -129,7 +140,8 @@ const Catalog = () => {
     }
 
     useEffect(() =>{    
-        console.log("form", form)         
+        console.log("form", form) 
+        getRole();        
         getWorkspacies();
         getCategories();        
     }, [CurrentPage, SortDirection])
@@ -139,6 +151,11 @@ const Catalog = () => {
             setTimeout(() => {setLoading(false)}, 500);
         else setLoading(true);
     },[isCategoryLoading,isWorkspaceLoading])
+
+    useEffect(()=>{
+        if(role !== null)
+        setUserRole(role)
+    },[role])
 
     useEffect(()=>{
         if(cat !== null)                  
@@ -274,6 +291,7 @@ const Catalog = () => {
                         {list && list.map(item=><SearchItem 
                             key={item.id} 
                             item={item}
+                            userRole={userRole}
                             list={list}  
                             categories={selectedCategory}/>
                             )}                                              

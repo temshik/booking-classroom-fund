@@ -202,5 +202,11 @@ export const selectUpdatedBookings = (state) => state.booking.updatedBookings;
 
 export const selectDeletedBookings = (state) => state.booking.deletedBookings;
 
+export const selectIsBookingLoading = (state) => state.booking.isBookingLoading;
+
+export const selectIsBookingUpdated = (state) => state.booking.isBookingUpdated;
+
+export const selectIsBookingDeleted = (state) => state.booking.isBookingDeleted;
+
 
 export default bookingSlice.reducer

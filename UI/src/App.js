@@ -1,6 +1,7 @@
 import React, {useEffect} from "react";
 import { useDispatch } from "react-redux";
 import AuthServices from './services/AuthServices';
+import ErrorHandler from './modules/ErrorHandler';
 import {REMOVE_ACTIVE_USER, SET_ACTIVE_USER, selectEmail}  from './redux/slice/authSlice';
 import { useSelector } from 'react-redux';
 import {Route, Routes} from "react-router-dom";
@@ -26,6 +27,7 @@ import EditAccount from "./pages/EditAccount/EditAccount";
 import DeleteUser from "./pages/DeleteUser/DeleteUser";
 
 const authSevice = new AuthServices();
+const errorHandler = new ErrorHandler();
 
 function App() {
     const dispatch = useDispatch()
@@ -47,10 +49,9 @@ function App() {
                         ReturnUrl: "string"          
                       }));
                 }                
-            }).catch((error)=>{
-                console.log(error);
-                dispatch(REMOVE_ACTIVE_USER());
-            })            
+            }).catch(errorHandler.httpErrorHandler,            
+                dispatch(REMOVE_ACTIVE_USER())
+            )            
         }
         else if(window.localStorage.getItem('accessToken') !== null && stateEmail === null){
             dispatch(REMOVE_ACTIVE_USER());
