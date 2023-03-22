@@ -6,18 +6,18 @@
     public class UserRequestUpdate
     {
         /// <summary>
-        /// The user name at the application
+        /// User first name
         /// </summary>
-        public string UserName { get; set; }
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// User surname
+        /// </summary>
+        public string LastName { get; set; }
 
         /// <summary>
         /// The email of the user
         /// </summary>
         public string Email { get; set; }
-
-        /// <summary>
-        /// The password of the user
-        /// </summary>
-        public string Password { get; set; }
     }
 }

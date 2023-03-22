@@ -1,5 +1,4 @@
-﻿using CatalogService.BusinessLogic.DTOs;
-using CatalogService.DataAccess.Models;
+﻿using CatalogService.DataAccess.Models;
 
 namespace CatalogService.Api.Requests
 {
@@ -42,6 +41,11 @@ namespace CatalogService.Api.Requests
         /// The number of the course for which it is intended a workspace.
         /// </summary>
         public CourseNumbers CourseNumber { get; set; }
+
+        /// <summary>
+        /// Availability flag of workspaces special equipment.
+        /// </summary>
+        public bool SpecialEquipment { get; set; }
 
         /// <summary>
         /// Falg for the workspace umder renovation or not, any other problems with the audience

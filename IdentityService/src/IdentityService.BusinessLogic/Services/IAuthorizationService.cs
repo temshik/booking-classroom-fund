@@ -14,7 +14,7 @@ namespace IdentityService.BusinessLogic.Services
         /// <param name="user">The user that wants to get authorization</param>
         /// <param name="password">The password of the user</param>
         /// <returns>Token</returns>
-        Task<TokenDTO> AuthorizeAsync(string email, string password, CancellationToken cancellationToken);
+        Task<TokenDTO> AuthorizeAsync(string email, string password, bool rememberMe, CancellationToken cancellationToken);
 
         /// <summary>
         /// Function to refresh a token that has expired

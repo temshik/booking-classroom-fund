@@ -24,6 +24,7 @@ namespace CatalogService.Api.Profiles
                 .ForMember(dest => dest.Description, src => src.MapFrom(x => x.Description))
                 .ForMember(dest => dest.NumberOfSeats, src => src.MapFrom(x => x.NumberOfSeats))
                 .ForMember(dest => dest.CourseNumber, src => src.MapFrom(x => x.CourseNumber))
+                .ForMember(dest => dest.SpecialEquipment, src => src.MapFrom(x => x.SpecialEquipment))
                 .ReverseMap();
 
             CreateMap<WorkspaceRequestCreate, WorkspaceDTO>()
@@ -34,6 +35,7 @@ namespace CatalogService.Api.Profiles
                 .ForMember(dest => dest.Description, src => src.MapFrom(x => x.Description))
                 .ForMember(dest => dest.NumberOfSeats, src => src.MapFrom(x => x.NumberOfSeats))
                 .ForMember(dest => dest.CourseNumber, src => src.MapFrom(x => x.CourseNumber))
+                .ForMember(dest => dest.SpecialEquipment, src => src.MapFrom(x => x.SpecialEquipment))
                 .ReverseMap();
 
             CreateMap<WorkspaceRequestUpdate, WorkspaceDTO>()
@@ -44,6 +46,7 @@ namespace CatalogService.Api.Profiles
                 .ForMember(dest => dest.Description, src => src.MapFrom(x => x.Description))
                 .ForMember(dest => dest.NumberOfSeats, src => src.MapFrom(x => x.NumberOfSeats))
                 .ForMember(dest => dest.CourseNumber, src => src.MapFrom(x => x.CourseNumber))
+                .ForMember(dest => dest.SpecialEquipment, src => src.MapFrom(x => x.SpecialEquipment))
                 .ReverseMap();
         }
     }

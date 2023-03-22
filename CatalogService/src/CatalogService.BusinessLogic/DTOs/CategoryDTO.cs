@@ -12,8 +12,8 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// Availability flag of special equipment.
+        /// Availability flag of selected category.
         /// </summary>
-        public bool SpecialEquipment { get; set; }
+        public bool Selected { get; set; }
     }
 }

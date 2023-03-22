@@ -46,6 +46,11 @@
         public CourseNumbers CourseNumber { get; set; }
 
         /// <summary>
+        /// Availability flag of workspaces special equipment.
+        /// </summary>
+        public bool SpecialEquipment { get; set; }
+
+        /// <summary>
         /// Falg for the workspace umder renovation or not, any other problems with the audience
         /// </summary>
         public bool IsAvailable { get; set; }

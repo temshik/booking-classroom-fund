@@ -1,5 +1,6 @@
 ﻿using IdentityService.DataAccess.Models;
 using IdentityService.DataAccess.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace IdentityService.DataAccess.DataAccessDependenciesConfiguration
@@ -16,7 +17,8 @@ namespace IdentityService.DataAccess.DataAccessDependenciesConfiguration
         public static IServiceCollection AddIdentityServicesConfiguration(this IServiceCollection services)
         {
             services.AddIdentity<User, Role>()
-            .AddEntityFrameworkStores<IdentityContext>();
+            .AddEntityFrameworkStores<IdentityContext>()
+            .AddDefaultTokenProviders();
 
             services.AddScoped<IUserClaimRepository, UserClaimRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();

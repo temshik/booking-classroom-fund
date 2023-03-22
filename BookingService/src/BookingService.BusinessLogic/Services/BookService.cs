@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookingService.BusinessLogic.DTOs;
+using BookingService.BusinessLogic.Exceptions;
 using BookingService.DataAccess.Models;
 using BookingService.DataAccess.Repositories;
 using CatalogService.DataAccess.Repositories;
@@ -13,11 +14,8 @@ namespace BookingService.BusinessLogic.Services
     public class BookService : IBookService
     {
         private readonly IBookingRepository _repository;
-
         private readonly IMapper _mapper;
-
         private readonly ILogger<BookService> _logger;
-
         private readonly ISaveChangesRepository _saveChangesRepository;
 
         /// <summary>
@@ -50,7 +48,7 @@ namespace BookingService.BusinessLogic.Services
             {
                 _logger.LogError("Workspace already exists");
 
-                return null;
+                throw new AlreadyExistException("This booking is already exists");
             }
 
             _repository.AddBooking(bookingMapped);
@@ -64,21 +62,20 @@ namespace BookingService.BusinessLogic.Services
         /// Function to delete a booking from the database.
         /// </summary>
         /// <param name="booking">The booking that we want to delete</param>
-        public async Task<BookingDTO> DeleteAsync(BookingDTO booking, CancellationToken cancellationToken)
-        {
-            var bookingMapped = _mapper.Map<Booking>(booking);
-            var bookingDatabase = await _repository.GetBookingAsync(bookingMapped.Id, cancellationToken);
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
+        {           
+            var bookingDatabase = await _repository.GetBookingAsync(id, cancellationToken);
 
             if (bookingDatabase == null)
             {
                 _logger.LogError("Booking dosen't exist");
+
+                throw new NotFoundException("The booking was not found");
             }
 
-            _repository.DeleteBooking(bookingMapped);
+            _repository.DeleteBooking(_mapper.Map<Booking>(bookingDatabase));
             await _saveChangesRepository.SaveChangesAsync(cancellationToken);
-            _logger.LogInformation("Removed booking from the database");
-
-            return booking;
+            _logger.LogInformation($"Removed booking with Id:{id} from the database");
         }
 
         /// <summary>
@@ -87,13 +84,15 @@ namespace BookingService.BusinessLogic.Services
         /// <param name="workspaceId">The workspace identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A <see cref="Booking"/></returns>
-        public async Task<List<BookingDTO>> GetBookingsAsync(List<int> workspaceId, CancellationToken cancellationToken)
+        public async Task<List<BookingDTO>> GetBookingsByWorkspaceAsync(int workspaceId, CancellationToken cancellationToken)
         {
-            var list = await _repository.GetBookingsAsync(workspaceId, cancellationToken);
+            var list = await _repository.GetBookingsByWorkspacePagedAsync(workspaceId, cancellationToken);
 
             if (list == null)
             {
                 _logger.LogError("Workspace dosen't exist");
+
+                throw new NotFoundException("The boooking was not found");
             }
 
             var listDTO = _mapper.Map<List<BookingDTO>>(list);
@@ -107,13 +106,15 @@ namespace BookingService.BusinessLogic.Services
         /// <param name="userId">The user identifier</param>
         /// /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A List of <see cref="Booking"/></returns>
-        public async Task<List<BookingDTO>> GetBookingsPagedAsync(int userId, CancellationToken cancellationToken)
+        public async Task<List<BookingDTO>> GetBookingsByUserAsync(int userId, CancellationToken cancellationToken)
         {
-            var list = await _repository.GetBookingsPagedAsync(userId, cancellationToken);
+            var list = await _repository.GetBookingsByUserPagedAsync(userId, cancellationToken);
 
             if (list == null)
             {
                 _logger.LogError("Workspace dosen't exist");
+
+                throw new NotFoundException("The booking was not found");
             }
 
             var listDTO = _mapper.Map<List<BookingDTO>>(list);
@@ -133,6 +134,9 @@ namespace BookingService.BusinessLogic.Services
             if (bookingDatabase == null)
             {
                 _logger.LogError("Booking dosen't exist");
+
+
+                throw new NotFoundException("The booking was not found");
             }
 
             _repository.UpdateBooking(bookingMapped);
@@ -140,6 +144,39 @@ namespace BookingService.BusinessLogic.Services
             _logger.LogInformation("Updated booking from the database");
 
             return booking;
+        }
+
+        /// <summary>
+        /// Function to check if external workspace identifier is already exists in our list of models
+        /// </summary>
+        /// <param name="externalWorkspaceId">The external identifier of workspace</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>A <see cref="Booking"/></returns>
+        /// <returns>Boolean result</returns>
+        public bool IsExternalWorkspaceExists(int externalWorkspaceId)
+        {
+            return _repository.IsWorkspaceExists(externalWorkspaceId);
+        }
+
+        /// <summary>
+        /// Bulk updates for updating workspaces in the database 
+        /// </summary>
+        /// <param name="workspaceId">The external identifier of workspace</param>
+        /// <param name="value">Boolean value</param>
+        public void ExecuteUpdateAsync(int workspaceId, bool value)
+        {
+            _repository.ExecuteUpdatingBlockedWorkspaces(workspaceId, value);
+            _logger.LogInformation("Bookings updated in the database");
+        }
+
+        /// <summary>
+        /// Bulk updates for deleting workspaces in the database 
+        /// </summary>
+        /// <param name="workspaceId">The external identifier of workspace</param>
+        public void ExecuteDeleteAsync(int workspaceId)
+        {
+            _repository.ExecuteDeletingWorkspaces(workspaceId);
+            _logger.LogInformation("Bookings updated in the database");
         }
     }
 }

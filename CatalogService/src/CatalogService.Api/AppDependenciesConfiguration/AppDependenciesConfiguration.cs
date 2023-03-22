@@ -16,11 +16,12 @@ namespace CatalogService.Api.AppDependenciesConfiguration
         {
             var configuration = builder.Configuration;
 
-            builder.Services               
+            builder.Services
                 .AddServices(configuration)
+                .AddConfigureJWT(builder)
                 .AddSerilogServices(configuration)
                 .ConfigureValidationApplication()
-                //.AddMassTransitWithRabbitMq(configuration)                
+                .AddMessageBusWithRabbitMq()
                 .ConfigureValidationApplication()
                 .AddMappings()
                 .ConfigureService()
@@ -30,7 +31,7 @@ namespace CatalogService.Api.AppDependenciesConfiguration
 
             builder.Services.AddHttpClient<IBookingDataClient, HttpBookingDataClient>();
 
-            builder.AddLogger(configuration);     
+            builder.AddLogger(configuration);
 
             return builder;
         }

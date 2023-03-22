@@ -1,4 +1,5 @@
 ﻿using CatalogService.BusinessLogic.DTOs;
+using CatalogService.DataAccess.Pagination;
 
 namespace CatalogService.BusinessLogic.Services
 {
@@ -30,6 +31,14 @@ namespace CatalogService.BusinessLogic.Services
         Task<WorkspaceDTO> GetWorkspaceAsync(int id, CancellationToken cancellationToken);
 
         /// <summary>
+        /// Function to get a workspace from the database.
+        /// </summary>
+        /// <param name="campusNumber">The workspace campus number that we want to get.</param>
+        /// <param name="workspaceNumber">The workspace number that we want to get.</param>
+        /// <returns>Task</returns>
+        Task<WorkspaceDTO> GetWorkspaceByLocationAsync(int campusNumber, int workspaceNumber, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Function to get a workspaces from the database by by The theory ot timetable.
         /// </summary>
         /// <param name="categoryId">Workspace category</param>
@@ -40,11 +49,10 @@ namespace CatalogService.BusinessLogic.Services
         Task<WorkspaceDTO> GetWorkspaceAsync(WorkspaceDTO workspace, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Function to get a workspace by the course number.
+        /// Function to get a workspace paged.
         /// </summary>
-        /// <param name="number">The number of the course.</param>
-        /// <returns>A List of <see cref="WorkspaceDTO"/>.</returns>
-        Task<List<WorkspaceDTO>> GetWorkspaciesByCourseNumberAsync(string number, CancellationToken cancellationToken);
+        /// <returns>A PagedList of <see cref="WorkspaceDTO"/>.</returns>
+        Task<PagedWorkspaceDTO> GetWorkspaciesPagedAsync(PagedQueryBase query, WorkspaceDTO workspace, CancellationToken cancellationToken);
 
         /// <summary>
         /// Function to update the workspace to the database.

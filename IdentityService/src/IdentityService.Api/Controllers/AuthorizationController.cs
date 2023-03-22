@@ -1,6 +1,6 @@
-﻿using FluentValidation;
-using IdentityService.Api.Requests;
+﻿using IdentityService.Api.Requests;
 using IdentityService.BusinessLogic.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityService.Api.Controllers
@@ -12,13 +12,13 @@ namespace IdentityService.Api.Controllers
     [Route("api/[controller]")]
     public class AuthorizationController : ControllerBase
     {
-        private readonly IAuthorizationService _authorization;
+        private readonly IAuthorizeService _authorization;
 
         /// <summary>
         /// Initialzez a new instance of the <see cref="AuthorizationController" /> class.
         /// </summary>
         /// <param name="authorization">Authorization service</param>
-        public AuthorizationController(IAuthorizationService authorization)
+        public AuthorizationController(IAuthorizeService authorization)
         {
             _authorization = authorization;
         }
@@ -37,7 +37,7 @@ namespace IdentityService.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Authorize([FromBody] UserRequestLogin userRequest, CancellationToken cancellationToken)
         {
-            var tokenAccess = await _authorization.AuthorizeAsync(userRequest.Email, userRequest.Password, cancellationToken);
+            var tokenAccess = await _authorization.AuthorizeAsync(userRequest.Email, userRequest.Password, userRequest.RememberMe, cancellationToken);
 
             if (tokenAccess == null)
             {
@@ -53,13 +53,13 @@ namespace IdentityService.Api.Controllers
         /// <param name="id">Specific user id</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        [Route("[action]/{refreshToken}")]
-        [HttpGet]
+        [Route("[action]")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> RefreshToken(string refreshToken, CancellationToken cancellationToken)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshToken, CancellationToken cancellationToken)
         {
-            var newToken = await _authorization.RefreshTokenAsync(refreshToken, cancellationToken);
+            var newToken = await _authorization.RefreshTokenAsync(refreshToken.RefreshToken, cancellationToken);
 
             if (newToken == null)
             {
@@ -76,6 +76,7 @@ namespace IdentityService.Api.Controllers
         /// <param name="cancellationToken">cancellation token from the HTTP request</param>
         /// <returns>the claim of the </returns>
         [HttpGet("[action]/{id}")]
+        [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetUserClaim(int id, CancellationToken cancellationToken)
@@ -87,7 +88,7 @@ namespace IdentityService.Api.Controllers
                 return BadRequest();
             }
 
-            return Ok(claims);
+            return Ok();
         }
     }
 }

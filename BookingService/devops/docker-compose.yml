@@ -1,6 +1,9 @@
 # Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
 
-version: '3.4'
+version: '2.1'
+
+networks:
+  backend:
 
 services:
   mssql-server:
@@ -9,6 +12,8 @@ services:
         ACCEPT_EULA: "Y"
         SA_PASSWORD: "QQQzzz_7584424"
         MSSQL_PID: "Express"
+    networks:
+      - backend
     ports:
         - "1433:1433" 
   bookingservice.api:
@@ -23,6 +28,37 @@ services:
       DatabaseUser: "sa"
       DatabasePassword: "QQQzzz_7584424"
       DatabaseName: "workspaceBooking"
+      RabbitMQHost: "rabbitmq"
+      RabbitMQPort: "5672"
+      RabbitMQUser: "user"
+      RabbitMQPassword: "mypass"
     ports:
       - "7000:80"
       - "7001:443"
+    networks:
+      - backend
+    depends_on:
+        mssql-server:
+            condition: service_started
+        rabbitmq:
+          condition: service_healthy
+  rabbitmq:
+    build: rabbitmq/.
+    hostname: rabbitmq
+    container_name: rabbitmq
+    environment:
+        - RABBITMQ_DEFAULT_USER=user
+        - RABBITMQ_DEFAULT_PASS=mypass
+        - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
+    networks:
+      - backend
+    ports:
+        # RabbitMQ instance
+        - "5672:5672"
+        # Web interface
+        - "15672:15672"
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:15672"]
+        interval: 5s
+        timeout: 15s
+        retries: 3

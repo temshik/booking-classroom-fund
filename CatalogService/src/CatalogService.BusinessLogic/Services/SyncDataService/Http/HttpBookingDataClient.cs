@@ -1,5 +1,4 @@
-﻿using CatalogService.BusinessLogic.DTOs;
-using CatalogService.DataAccess.Models;
+﻿using CatalogService.DataAccess.Models;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 using System.Text.Json;
@@ -27,8 +26,8 @@ namespace CatalogService.BusinessLogic.Services.SyncDataService.Http
             var response = await _httpClient.PostAsync($"{_configuration["BookingService"]}", httpContent);
 
             if (response.IsSuccessStatusCode)
-            { 
-                
+            {
+
             }
         }
     }

@@ -1,6 +1,4 @@
-﻿using CatalogService.BusinessLogic.DTOs;
-
-namespace CatalogService.Api.Requests
+﻿namespace CatalogService.Api.Requests
 {
     /// <summary>
     /// The category for update request 
@@ -14,9 +12,9 @@ namespace CatalogService.Api.Requests
         public string Name { get; set; }
 
         /// <summary>
-        /// Availability flag of special equipment.
+        /// Availability flag of selected category.
         /// </summary>
-        public bool SpecialEquipment { get; set; }
+        public bool Selected { get; set; }
 
         /// <summary>
         /// Navigation property for workspace.

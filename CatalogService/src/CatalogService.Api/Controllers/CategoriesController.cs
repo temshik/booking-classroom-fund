@@ -2,7 +2,7 @@ using AutoMapper;
 using CatalogService.Api.Requests;
 using CatalogService.BusinessLogic.DTOs;
 using CatalogService.BusinessLogic.Services;
-using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CatalogService.Api.Controllers
@@ -37,6 +37,7 @@ namespace CatalogService.Api.Controllers
         /// <returns>List of categories</returns>
         [Route("[action]")]
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCategories(CancellationToken cancellationToken)
         {
@@ -44,7 +45,7 @@ namespace CatalogService.Api.Controllers
 
             if (result == null)
             {
-                return BadRequest(); 
+                return BadRequest();
             }
 
             return Ok(result);
@@ -57,6 +58,7 @@ namespace CatalogService.Api.Controllers
         /// <returns>New category.</returns>
         [Route("[action]")]
         [HttpPost]
+        [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateCategory([FromBody] CategoryRequestCreate categoryRequest, CancellationToken cancellationToken)
         {
@@ -70,7 +72,9 @@ namespace CatalogService.Api.Controllers
         /// </summary>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Updated category.</returns>
-        [HttpPut("[action]")]
+        [Route("[action]")]
+        [HttpPut]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateCategory([FromBody] CategoryRequestUpdate categoryRequest, CancellationToken cancellationToken)
         {
@@ -86,6 +90,7 @@ namespace CatalogService.Api.Controllers
         /// <returns>Updated list of categories.</returns>
         [Route("[action]/{id}")]
         [HttpDelete]
+        [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteCategory(int id, CancellationToken cancellationToken)
         {

@@ -1,4 +1,5 @@
 using BookingService.Api.AppDependenciesConfiguration;
+using BookingService.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,9 +20,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandlerMiddleware(app.Environment.EnvironmentName);
+
 DatabaseMigrate.MigrationInitialisation(app);
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

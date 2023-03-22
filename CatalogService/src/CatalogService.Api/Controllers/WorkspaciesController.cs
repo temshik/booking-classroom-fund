@@ -2,9 +2,12 @@
 using CatalogService.Api.Requests;
 using CatalogService.BusinessLogic.DTOs;
 using CatalogService.BusinessLogic.Services;
-using CatalogService.Contracts.Events;
+using CatalogService.DataAccess.Pagination;
+using EventBus.Messages.Events;
+using EventBus.Messages.Events.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RabbitMQ.Producer;
+using RabbitMQ.Producer.AsyncDataService;
 
 namespace CatalogService.Api.Controllers
 {
@@ -17,6 +20,7 @@ namespace CatalogService.Api.Controllers
     {
         private readonly IWorkspaceService _service;
         private readonly IMapper _mapper;
+        private readonly IMessageProducer _messageProducer;
 
         /// <summary>
         /// Initializes a new instance of <see cref="WorkspaciesController"/> class.
@@ -24,9 +28,11 @@ namespace CatalogService.Api.Controllers
         /// <param name="service">Workspace service.</param>
         /// <param name="mapper">AutoMapper registration.</param>
         public WorkspaciesController(IWorkspaceService service,
+            IMessageProducer messageProducer,
             IMapper mapper)
         {
             _service = service;
+            _messageProducer = messageProducer;
             _mapper = mapper;
         }
 
@@ -38,6 +44,7 @@ namespace CatalogService.Api.Controllers
         /// <returns>Desired workspace.</returns>
         [Route("[action]/{id}")]
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetWorkspaces(int id, CancellationToken cancellationToken)
@@ -53,18 +60,42 @@ namespace CatalogService.Api.Controllers
         }
 
         /// <summary>
-        /// Get a specific workspace data.
+        /// Get a specific workspace by the workspace number & campus number.
         /// </summary>
-        /// <param name="number">Course number.</param>
+        /// <param name="campusNumber">campus number.</param>
+        /// <param name="workspaceNumber">workspace number.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Desired workspace.</returns>
-        [Route("[action]/{number}")]
+        [Route("[action]/{campusNumber}/{workspaceNumber}")]
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get(string number, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetWorkspacesByLocation(int campusNumber, int workspaceNumber, CancellationToken cancellationToken)
         {
-            var list =  _service.GetWorkspaciesByCourseNumberAsync(number, cancellationToken);
+            var list = await _service.GetWorkspaceByLocationAsync(campusNumber, workspaceNumber, cancellationToken);
+
+            if (list == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(list);
+        }
+
+        /// <summary>
+        /// Get paged workspace data.
+        /// </summary>        
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>Desired workspace.</returns>
+        [Route("[action]")]
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetWorkspaciesPaged([FromQuery] PagedQueryBase query, [FromBody] WorkspaceRequestCreate workspaceRequest, CancellationToken cancellationToken)
+        {
+            var list = await _service.GetWorkspaciesPagedAsync(query, _mapper.Map<WorkspaceDTO>(workspaceRequest), cancellationToken);            
 
             if (list == null)
             {
@@ -81,12 +112,13 @@ namespace CatalogService.Api.Controllers
         /// <returns>New workspace.</returns>
         [Route("[action]")]
         [HttpPost]
+        [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateWorkspace([FromBody] WorkspaceRequestCreate workspaceRequest, CancellationToken cancellationToken)
         {
             await _service.AddAsync(_mapper.Map<WorkspaceDTO>(workspaceRequest), cancellationToken);
 
-            return Ok(workspaceRequest);          
+            return Ok(workspaceRequest);
         }
 
         /// <summary>
@@ -94,7 +126,9 @@ namespace CatalogService.Api.Controllers
         /// </summary>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Updated workspace.</returns>
-        [HttpPut("[action]")]
+        [Route("[action]")]
+        [HttpPut]
+        [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateWorkspace([FromBody] WorkspaceRequestUpdate workspaceRequest, CancellationToken cancellationToken)
         {
@@ -115,6 +149,7 @@ namespace CatalogService.Api.Controllers
         /// <returns>Updated list of workspaces.</returns>
         [Route("[action]")]
         [HttpDelete]
+        [Authorize(Roles = "Dispacher, Employee")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteWorkspace([FromBody] WorkspaceRequestUpdate workspaceRequest, CancellationToken cancellationToken)
         {
@@ -128,13 +163,27 @@ namespace CatalogService.Api.Controllers
             return BadRequest();
         }
 
-        [Route("[action]/{workspaceId}/{workspaceNumber}/{isAvailable}")]
+        [Route("[action]/{workspaceId}/{eventType}")]
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [Authorize(Roles = "Dispacher, Employee")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public void LockWorkspace(int workspaceId, int workspaceNumber, bool isAvailable, CancellationToken cancellationToken)
+        public async Task<IActionResult> LockWorkspace(int workspaceId, EventType eventType, CancellationToken cancellationToken)
         {
-            MessageSenderRabbitMQ.SendMessage<WorkspaceUpdatedEvent>(new WorkspaceUpdatedEvent(workspaceId, workspaceNumber, isAvailable));
+            var result = await _service.GetWorkspaceAsync(workspaceId, cancellationToken);
+
+            if (result != null)
+            {
+                _messageProducer.PublishUpdatedEvent(new WorkspaceUpdatedEvent()
+                {
+                    WorkspaceId = workspaceId,
+                    Event = eventType.ToString()
+                });
+
+                return Ok(result);
+            }
+
+            return BadRequest();
         }
     }
 }

@@ -26,7 +26,7 @@ namespace CatalogService.BusinessLogic.Services
         /// Function to get the category from the database.
         /// </summary>
         /// <returns>A List of <see cref="CategoryDTO"/>.</returns>
-        Task<List<Category>> GetCategoriesAsync(CancellationToken cancellationToken);
+        Task<List<CategoryDTO>> GetCategoriesAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Function to update a category from the database.
