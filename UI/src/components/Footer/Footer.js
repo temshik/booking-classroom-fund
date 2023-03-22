@@ -21,11 +21,12 @@ const Footer = () => {
                 <div className='col'>                      
                     <div className='fList'>   
                         <p className='fListHeading'>Services</p>              
-                        <li className='fListItem'>Home</li>
-                        <li className='fListItem'>Catalog</li>
-                        <li className='fListItem'>Booking</li>
-                        <li className='fListItem'>Account</li>
-                        <li className='fListItem'>About</li>
+                        <li className='fListItem'><a style={{color: 'green'}} target="_blank" href="/">Home</a></li>
+                        <li className='fListItem'><a style={{color: 'green'}} target="_blank" href="/Catalog">Catalog</a></li>
+                        <li className='fListItem'><a style={{color: 'green'}} target="_blank" href="/Booking">Booking</a></li>
+                        <li className='fListItem'><a style={{color: 'green'}} target="_blank" href="/editaccount">Edit Account</a></li>
+                        <li className='fListItem'><a style={{color: 'green'}} target="_blank" href="/deleteuser">Delete Account</a></li>
+                        <li className='fListItem'><a style={{color: 'green'}} target="_blank" href="/About">About</a></li>
                     </div>     
                 </div>     
                 <div className='col'>                    

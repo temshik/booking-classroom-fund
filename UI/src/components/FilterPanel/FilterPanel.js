@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import FilterListToggle from '../FilterListToggle/FilterListToggle';
+import React, { useState } from 'react';
 import FilterListButtons from '../FilterListToggle/FilterListButtons';
-import FilterListBuilding from '../FilterListBuilding/FilterListBuilding';
 import CheckboxBuildings from '../FilterListBuilding/CheckboxBuildings';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlusSquare, faMinusSquare} from "@fortawesome/free-solid-svg-icons";
@@ -28,8 +26,6 @@ const FilterPanel = ({
 
     return (         
         <div className='FilterPanel'>   
-            {console.log("Filter course", selectedCourse)}
-            {console.log("Filter category", selectedCategory)}
             <h1 className='lsTitle'>Filter by:</h1>                                 
             <input 
                 type="text" 

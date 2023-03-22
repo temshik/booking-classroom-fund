@@ -1,9 +1,7 @@
 import React, {useEffect, useState, useRef} from "react";
 import {useLocation} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import {selectIsCategoryLoading, selectIsWorkspaceLoading,
-        getCategory, getWorkspace,
-        selectCat, selectWorkspace} from '../../redux/slice/catalogSlice';
+import {selectIsCategoryLoading, selectIsWorkspaceLoading} from '../../redux/slice/catalogSlice';
 import {selectBookings, getBookingsByUser, getBookingsByWorkspace} from '../../redux/slice/bookingSlice';
 import {GetUserRoleByEmail, selectEmail, selectRole} from '../../redux/slice/authSlice'
 import Header from '../../components/Header/Header';
@@ -16,7 +14,6 @@ import utilsAxios from '../../utils/axios';
 import axios from 'axios';
 import Configuration from "../../configurations/Configuration";
 import './Booking.scss'
-import ErrorHandler from "../../modules/ErrorHandler";
 
 const authSevice = new AuthServices();
 
@@ -46,8 +43,7 @@ const Booking = () => {
     const stateEmail = useSelector(selectEmail)
     const email = (stateEmail!==null)? stateEmail : window.sessionStorage.getItem('email');
     
-    useEffect(()=>{ 
-        console.log(form)     
+    useEffect(()=>{              
         getRole() 
         getData()
     },[]);

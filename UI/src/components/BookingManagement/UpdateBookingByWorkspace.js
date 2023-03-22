@@ -4,7 +4,7 @@ import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
 const UpdateBookingByWorkspace = ({props, value, startObj}) => {
 
   return ((props !== undefined) ? <table className="custom-event-editor" style={{ width: '100%' }} cellPadding={5}><tbody>
-  <tr>{console.log('props',{props}, {value})}<td className="e-textlabel">User email</td><td colSpan={4}>
+  <tr><td className="e-textlabel">User email</td><td colSpan={4}>
     <input 
         id="Subject" 
         className="e-field e-input" 

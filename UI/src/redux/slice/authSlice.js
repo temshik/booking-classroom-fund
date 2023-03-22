@@ -35,8 +35,7 @@ export const CreateUser = createAsyncThunk(
                 Email,
                 Password,
                 ConfirmedPassword,
-            })    
-            console.log(data);        
+            })                        
             return data;
         } catch (error) {
             errorHandler.httpErrorHandler(error);
@@ -55,13 +54,9 @@ export const Authorize = createAsyncThunk(
                 ReturnUrl
             })
             if(data.accessToken)
-            { 
-                console.log(data.accessToken); 
-                window.localStorage.setItem('accessToken',data.accessToken);
-                console.log(data.refreshToken); 
-                console.log(data.tokenLifeTimeInMinutes);                                                              
-            } 
-            console.log('data',data);
+            {                 
+                window.localStorage.setItem('accessToken',data.accessToken);                                                                                             
+            }             
             return data;  
         } catch (error) {
             errorHandler.httpErrorHandler(error);            
@@ -73,8 +68,7 @@ export const GetUserRoleByEmail = createAsyncThunk(
     'auth/GetUserRoleByEmail',
     async (email)=>{
         try{            
-            const {data} = await axios.post(Configuration.GetUserRoleByEmail,{email})            
-            console.log('data',data);
+            const {data} = await axios.post(Configuration.GetUserRoleByEmail,{email})                        
             return data;  
         } catch (error) {
             errorHandler.httpErrorHandler(error);            
@@ -86,8 +80,7 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        SET_ACTIVE_USER: (state, action)=>{
-            console.log("SET_ACTIVE_USER",action.payload);
+        SET_ACTIVE_USER: (state, action)=>{            
             const {email,
                 accessToken,
                 refreshToken,
@@ -107,8 +100,7 @@ const authSlice = createSlice({
             else
             {
                 state.email = email;
-            }            
-            console.log("SET_ACTIVE_USER isLoggedIn",state.isLoggedIn);
+            }                       
         },
         REMOVE_ACTIVE_USER:(state, action)=>{            
             state.isLoggedIn = false;
@@ -121,23 +113,18 @@ const authSlice = createSlice({
             window.localStorage.removeItem('accessToken');
             window.sessionStorage.removeItem('email');
             window.localStorage.removeItem('refreshToken');
-            window.localStorage.removeItem('tokenLifeTimeInMinutes');
-            console.log('REMOVE_ACTIVE_USER isLoggedIn =',state.isLoggedIn);
+            window.localStorage.removeItem('tokenLifeTimeInMinutes');            
         },
         REFRESH_ACCESS_TOKEN:(state, action)=>{
             const authSevice = new AuthServices();
             const data = {refreshToken: window.localStorage.getItem('refreshToken')}
-            authSevice.RefreshToken(data).then((data)=>{
-                console.log(data.data);  
-                //if(data.status === 200)
-                {                     
-                    console.log(JSON.stringify(data.data.accessToken)); 
-                    window.localStorage.setItem('accessToken',data.data.accessToken);
-                    console.log(JSON.stringify(data.data.refreshToken)); 
-                    window.localStorage.setItem('refreshToken',data.data.refreshToken);
-                    console.log(JSON.stringify(data.data.tokenLifeTimeInMinutes)); 
-                    window.localStorage.setItem('tokenLifeTimeInMinutes',data.data.tokenLifeTimeInMinutes);
-                }
+            authSevice.RefreshToken(data).then((data)=>{                                    
+                console.log(JSON.stringify(data.data.accessToken)); 
+                window.localStorage.setItem('accessToken',data.data.accessToken);
+                console.log(JSON.stringify(data.data.refreshToken)); 
+                window.localStorage.setItem('refreshToken',data.data.refreshToken);
+                console.log(JSON.stringify(data.data.tokenLifeTimeInMinutes)); 
+                window.localStorage.setItem('tokenLifeTimeInMinutes',data.data.tokenLifeTimeInMinutes);                
             }).catch((error)=>{
                 console.log("Refresh",error);
             })

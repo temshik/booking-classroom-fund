@@ -11,13 +11,11 @@ export default class ErrorHandler {
           const request = error?.request
           const config = error?.config //here we have access the config used to make the api call (we can make a retry using this conf)
       
-          if (error.code === 'ERR_NETWORK') {
-            console.log('connection problems..')
+          if (error.code === 'ERR_NETWORK') {            
             toast.error("Connection problems..", {
               position: toast.POSITION.TOP_CENTER
             }); 
-          } else if (error.code === 'ERR_CANCELED') {
-            console.log('connection canceled..')
+          } else if (error.code === 'ERR_CANCELED') {           
             toast.error("Connection canceld..", {
               position: toast.POSITION.TOP_CENTER
             }); 
@@ -25,31 +23,26 @@ export default class ErrorHandler {
           if (response) {
             //The request was made and the server responded with a status code that falls out of the range of 2xx the http status code mentioned above
             const statusCode = response?.status
-            if (statusCode === 500) {
-              console.log('The requested resource does not exist or has been deleted')
+            if (statusCode === 500) {              
               toast.error("The requested resource does not exist or has been deleted", {
                 position: toast.POSITION.TOP_CENTER
               });               
-            } else if (statusCode === 409) {
-              console.log('Request failed with status code 409');
+            } else if (statusCode === 409) {              
               toast.info("Perhaps a user with this user name or email already exists try changing them", {
                 position: toast.POSITION.TOP_CENTER
               }); 
-            } else if (statusCode === 401) {
-              console.log('Please login to access this resource')
+            } else if (statusCode === 401) {              
               toast.error("Please login to access this resource", {
                 position: toast.POSITION.TOP_CENTER
               }); 
               //redirect user to login
-            } else if (statusCode === 404) {
-              console.log('User not found')
+            } else if (statusCode === 404) {              
               toast.warn("User not found", {
                 position: toast.POSITION.TOP_CENTER
               }); 
             }
           } else if (request) {
-            //The request was made but no response was received, `error.request` is an instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in Node.js
-            console.log("Client never received a response, or request never left");
+            //The request was made but no response was received, `error.request` is an instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in Node.js           
             toast.error("Client never received a response, or request never left", {
               position: toast.POSITION.TOP_CENTER
             }); 

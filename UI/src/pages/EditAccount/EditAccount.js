@@ -49,8 +49,7 @@ export default class EditAccount extends React.Component{
           {
             toast.success("User Account successfuly updated", {
               position: toast.POSITION.TOP_CENTER
-            }); 
-            console.log(data);
+            });            
             this.setState({Redirect: true});
           }
           else{
@@ -67,9 +66,7 @@ export default class EditAccount extends React.Component{
             this.setField(event.target.name, false, false); 
           }
         }
-        this.setState({[name]:value},
-          console.log('name', name, 'value', value)
-        );
+        this.setState({[name]:value});
     }
     
     handleBlur = (event) =>{
@@ -131,7 +128,7 @@ export default class EditAccount extends React.Component{
             })}
             break;          
           default:
-            console.log("Somthing goes wrong in setField");
+            alert("Somthing goes wrong in setField");
             break;  
         }
     }

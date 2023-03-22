@@ -39,8 +39,7 @@ export default class DeleteUser extends React.Component {
     handleResult(data) {        
         authSevice.DeleteUser({data}).then((data) =>{            
         if(data.status === 200)
-        { 
-            console.log(data);    
+        {            
             if(window.sessionStorage.getItem('email') === this.state.Email){
                 store.dispatch(REMOVE_ACTIVE_USER());
             }                  
@@ -126,7 +125,7 @@ export default class DeleteUser extends React.Component {
                 })}
                 break;
             default:
-                console.log("Somthing goes wrong in setField");      
+                alert("Somthing goes wrong in setField");      
             break;
         }
     }    
