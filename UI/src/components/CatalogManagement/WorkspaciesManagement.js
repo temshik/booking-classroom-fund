@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
+import Select  from 'react-select'
 import Form from 'react-bootstrap/Form';
 import Loader from '../Loader/Loader';
 import { buildingOptions } from '../../docs/data.ts';
@@ -41,8 +42,12 @@ const WorkspaciesManagement = (props) => {
     },[role])
 
     useEffect(()=>{
-      if(category !== null)                  
-          setSelectedCategory(category)                       
+      if(category !== null) {                 
+        const mas = category.data?.map((category) => {
+          return {value: (category.id).toString(), label: category.name}
+        })
+        setSelectedCategory(mas)     
+      }                     
     },[category])
 
     useEffect(()=>{
@@ -151,9 +156,9 @@ const WorkspaciesManagement = (props) => {
                   {buildingOptions && buildingOptions.map((buildingOption)=>{
                     return <option key={buildingOption.id} value={buildingOption.value}>{buildingOption.value}</option>
                   })}</Form.Control>
-                  <Form.Control.Feedback type='invalid'>
-                      { errors.campusNumber }
-                  </Form.Control.Feedback>
+                <Form.Control.Feedback type='invalid'>
+                    { errors.campusNumber }
+                </Form.Control.Feedback>
             </Form.Group> 
             <Form.Group>
               <Form.Label>Workspace number</Form.Label> 
@@ -170,13 +175,12 @@ const WorkspaciesManagement = (props) => {
             </Form.Group>           
             <Form.Group>
               <Form.Label>Category</Form.Label>
-                <Form.Control as='select' 
-                  onChange={ e => setField('categoryId', e.target.value) }
-                  isInvalid={ !!errors.categoryId }>                         
-                  <option>Select category...</option>        
-                  {Array.isArray(selectedCategory) && selectedCategory.map((category) =>{
-                      return <option key={category.id} value={category.id}>{category.name}</option>
-                  })}</Form.Control>
+                <Select 
+                  required
+                  onChange={ e => setField('categoryId', e.value) }                  
+                  isInvalid={ !!errors.categoryId }
+                  options={selectedCategory}>                                                                                       
+                </Select>
                 <Form.Control.Feedback type='invalid'>
                     { errors.categoryId }
                 </Form.Control.Feedback>

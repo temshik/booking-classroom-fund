@@ -12,7 +12,7 @@ const CreateWorkspace = () => {
         "description": "Description...",
         "numberOfSeats": 0,
         "courseNumber": 1,
-        "specialEquipment": false,
+        "specialEquipment": true,
         "isAvailable": true
     }
     return (

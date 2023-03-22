@@ -45,7 +45,7 @@ const FilterPanel = ({
             </div>                                    
             <div className='lsItem'>  
                 <label>Room Capacity                    
-                    <input type="number" min={8} max={9999} style={{textAlign: 'right'}} className="lsItemInput" value={selectedRoomCapacity} onChange={selectRoomCapacity}/>
+                    <input type="number" min={1} max={9999} style={{textAlign: 'right'}} className="lsItemInput" value={selectedRoomCapacity} onChange={selectRoomCapacity}/>
                 </label>
             </div>
             <div className='lsItem'>  

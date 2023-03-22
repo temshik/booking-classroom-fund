@@ -14,7 +14,7 @@ const UpdateWorkspace = () => {
         "description": null,
         "numberOfSeats": null,
         "courseNumber": null,
-        "specialEquipment": false,
+        "specialEquipment": true,
         "isAvailable": true
     }
     const [form, setForm] = useState(location.state !== null ? location.state.value : item);   
