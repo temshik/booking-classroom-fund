@@ -15,3 +15,10 @@
     border: 2px solid black;
     border-radius: 15px;
 }
+
+
+.workspaceImage{
+    width: 60%;
+    display: flex;
+    object-fit: cover;
+}

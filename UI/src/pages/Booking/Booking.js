@@ -5,7 +5,7 @@ import {selectIsCategoryLoading, selectIsWorkspaceLoading,
         getCategory, getWorkspace,
         selectCat, selectWorkspace} from '../../redux/slice/catalogSlice';
 import {selectBookings, getBookingsByUser, getBookingsByWorkspace} from '../../redux/slice/bookingSlice';
-import {selectIsLoggedIn, selectEmail} from '../../redux/slice/authSlice'
+import {GetUserRoleByEmail, selectEmail, selectRole} from '../../redux/slice/authSlice'
 import Header from '../../components/Header/Header';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
@@ -33,9 +33,10 @@ const Booking = () => {
         "specialEquipment": false,
         "isAvailable": true
     }
-    const [form, setForm] = useState(location.state !== null ? location.state.value : item); 
-    //const [props, setProps] = useState(location.state !== null ? location.state.bookValue : null)
-    const dispatch = useDispatch();     
+    const [form, setForm] = useState(location.state !== null ? location.state.value : item);     
+    const dispatch = useDispatch();         
+    const role = useSelector(selectRole);
+    const [userRole, setUserRole] = useState('Teacher');    
     const bookings = useSelector(selectBookings);
     const isCategoryLoading = useSelector(selectIsCategoryLoading);
     const isWorkspaceLoading = useSelector(selectIsWorkspaceLoading);    
@@ -46,7 +47,8 @@ const Booking = () => {
     const email = (stateEmail!==null)? stateEmail : window.sessionStorage.getItem('email');
     
     useEffect(()=>{ 
-        console.log(form)      
+        console.log(form)     
+        getRole() 
         getData()
     },[]);
 
@@ -60,6 +62,17 @@ const Booking = () => {
             setTimeout(() => {setLoading(false)}, 500);
         else setLoading(true);
     },[isCategoryLoading,isWorkspaceLoading])
+
+    const getRole=()=>{
+        if(window.localStorage.getItem('accessToken') !== null){  
+            dispatch(GetUserRoleByEmail(email))            
+        }
+    }
+
+    useEffect(()=>{
+        if(role !== null)
+        setUserRole(role)
+    },[role])
 
     const getBookings = (id) => {
         if(window.localStorage.getItem('accessToken') !== null){   
@@ -128,7 +141,7 @@ const Booking = () => {
                 EndTime: addHours(addMinutes(new Date(day),30), 1),
                 RecurrenceRule: `FREQ=WEEKLY;INTERVAL=2;COUNT=${weeksRepeatNumber}`,
                 NumberOfWeek: `${item.dayOfWeek}`,                
-                //для учителей сделать//IsReadonly: true,
+                IsReadonly: userRole==='Teacher',
                 IsBlock: !(item.isWorkspaceAvailable),                                                                                                   
                 IsAllDay: false,                                                    
             }})
@@ -233,7 +246,7 @@ const Booking = () => {
             {loading && <Loader/>}           
             <Navbar/>
             <Header/>    
-            <BookingSelect props={element} bookValue={form} selectedDate={getMonday(currentDay)} selectData={getData}/>
+            <BookingSelect props={element} bookValue={form} role={userRole} selectedDate={getMonday(currentDay)} selectData={getData}/>
             <Footer/>
         </div>
     );

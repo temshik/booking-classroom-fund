@@ -5,6 +5,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Loader from '../Loader/Loader';
 import { buildingOptions } from '../../docs/data.ts';
+import image1 from '../../images/AccessDenied.jpg'
+import {GetUserRoleByEmail, selectRole, selectEmail} from '../../redux/slice/authSlice';
 import { selectIsWorkspaceCreated, selectIsWorkspaceUpdated,
   selectIsCategoryLoading, selectIsWorkspaceLoading, 
   getCategory, selectCat,
@@ -13,6 +15,10 @@ import './WorkspaciesManagement.scss';
 
 const WorkspaciesManagement = (props) => {
     const dispatch = useDispatch();
+    const stateEmail = useSelector(selectEmail);
+    const role = useSelector(selectRole);
+    const [userRole, setUserRole] = useState('Teacher');
+    const email = (stateEmail !== null)? stateEmail : window.sessionStorage.getItem('email');
     const navigate = useNavigate();
     const category = useSelector(selectCat);
     const isCategoryLoading = useSelector(selectIsCategoryLoading);
@@ -24,13 +30,19 @@ const WorkspaciesManagement = (props) => {
     const [errors, setErrors] = useState({})
     const [loading, setLoading] = useState(false);
     
-    useEffect(()=>{
-      getCategories();
+    useEffect(()=>{  
+      getRole();  
+      getCategories();      
     },[])
 
     useEffect(()=>{
+      if(role !== null)
+      setUserRole(role)
+    },[role])
+
+    useEffect(()=>{
       if(category !== null)                  
-          setSelectedCategory(category.data)                       
+          setSelectedCategory(category)                       
     },[category])
 
     useEffect(()=>{
@@ -47,6 +59,12 @@ const WorkspaciesManagement = (props) => {
     const getCategories = () => {
       if(window.localStorage.getItem('accessToken') !== null){    
         dispatch(getCategory());          
+      }
+    }
+
+    const getRole = () => {
+      if(window.localStorage.getItem('accessToken') !== null){  
+          dispatch(GetUserRoleByEmail(email))            
       }
     }
 
@@ -121,22 +139,9 @@ const WorkspaciesManagement = (props) => {
     return (        
         <div className='CreateWorkspace'>
         {loading && <Loader/>}   
-        <div className='Form'>        
+        {userRole!=='Teacher'? <div className='Form'>        
           <h1 style={{margin:'10px'}}>{props.managementTask}</h1>                    
           <Form style={{ width: '300px' }}>
-            {/* {props.useId && <Form.Group>
-              <Form.Label>Workspace Id</Form.Label> 
-              <Form.Control 
-                disabled = {props.disableId}
-                type='number' 
-                min={1}
-                defaultValue={form.id}
-                onChange={ e => setField('id', e.target.value) }
-                isInvalid={ !!errors.id }/>
-                <Form.Control.Feedback type='invalid'>
-                    { errors.id }
-                </Form.Control.Feedback>
-            </Form.Group> }   */}
             <Form.Group>
               <Form.Label>Campus number</Form.Label> 
                 <Form.Control as='select' 
@@ -233,7 +238,7 @@ const WorkspaciesManagement = (props) => {
             </Form.Group>
             <Button style={{margin:'10px'}} type='submit' onClick={handleSubmit}>Submit</Button>
           </Form>
-        </div>
+        </div> : <><img src={image1} alt="" className='workspaceImage'/></>}
     </div>
     )
 };

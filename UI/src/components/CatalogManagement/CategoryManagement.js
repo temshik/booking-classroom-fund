@@ -4,12 +4,18 @@ import {useNavigate} from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Loader from '../Loader/Loader';
+import image1 from '../../images/AccessDenied.jpg'
+import {GetUserRoleByEmail, selectRole, selectEmail} from '../../redux/slice/authSlice';
 import { selectIsCategoryCreated, selectIsCategoryUpdated, selectIsCategoryDeleted, selectIsCategoryLoading,
          getCategory, selectCat, selectCategory, updateCategory, createCategory, updatedCat, deleteCategory} from '../../redux/slice/catalogSlice';
 import './WorkspaciesManagement.scss';
 
 const CategoryManagement = (props) => {
     const dispatch = useDispatch();
+    const stateEmail = useSelector(selectEmail);
+    const role = useSelector(selectRole);
+    const [userRole, setUserRole] = useState('Teacher');
+    const email = (stateEmail !== null)? stateEmail : window.sessionStorage.getItem('email');
     const navigate = useNavigate();
     const category = useSelector(selectCat);
     const updatedCategory = useSelector(updatedCat);
@@ -23,16 +29,22 @@ const CategoryManagement = (props) => {
     const [errors, setErrors] = useState({})
     const [loading, setLoading] = useState(false);
     
-    useEffect(()=>{
-        if(props.managementTask === 'Update Category'){
-            getCategories();
-        }
+    useEffect(()=>{ 
+      getRole();
+      if(props.managementTask === 'Update Category'){      
+        getCategories();       
+      }       
     },[])
 
     useEffect(()=>{
       if(category !== null)                  
-          setSelectedCategory(category.data)                       
+          setSelectedCategory(category)                       
     },[category])
+
+    useEffect(()=>{
+      if(role !== null)
+      setUserRole(role)
+    },[role])
 
     useEffect(()=>{
       if(createdCategory)
@@ -50,6 +62,12 @@ const CategoryManagement = (props) => {
           setTimeout(() => {setLoading(false)}, 500);
       else setLoading(true);
     },[isCategoryLoading,isCategoryCreated, isCategoryUpdated, isCategoryDeleted])
+
+    const getRole = () => {
+      if(window.localStorage.getItem('accessToken') !== null){  
+          dispatch(GetUserRoleByEmail(email))            
+      }
+    }
 
     const getCategories = () => {
       if(window.localStorage.getItem('accessToken') !== null){    
@@ -135,7 +153,7 @@ const CategoryManagement = (props) => {
     return (        
         <div className='CreateWorkspace'>
         {loading && <Loader/>}   
-        <div className='Form'>        
+        { userRole!=='Teacher' ? <div className='Form'>        
           <h1 style={{margin:'10px'}}>{props.managementTask}</h1>                    
           <Form style={{ width: '300px' }}>        
             {props.managementTask === 'Update Category' && 
@@ -169,7 +187,7 @@ const CategoryManagement = (props) => {
                 <Button style={{margin:'10px'}} className='btn btn-danger' type='submit' onClick={handleDelete}>Delete</Button>
             }
           </Form>
-        </div>
+        </div> : <><img src={image1} alt="" className='workspaceImage'/></> }
     </div>
     )
 };

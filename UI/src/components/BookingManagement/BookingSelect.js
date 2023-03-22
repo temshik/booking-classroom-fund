@@ -39,7 +39,7 @@ const errorHandler = new ErrorHandler();
 const errorWorkspace = new WorkspaceHandler();
 const Email_Regex = "(?:[a-zA-Z0-9]+\.)+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$";
 
-const BookingSelect = ({props, bookValue, selectedDate, selectData}) => {
+const BookingSelect = ({props, bookValue, role, selectedDate, selectData}) => {
     let scheduleObj;
     let startObj;
     let endObj;
@@ -122,6 +122,9 @@ const BookingSelect = ({props, bookValue, selectedDate, selectData}) => {
     
 
     function onPopupOpen(args) {    
+        if (role==='Teacher'){
+            args.cancel = true;
+        }
         if (args.target && !args.target.classList.contains('e-appointment') && !isNullOrUndefined(titleObj)) {
             titleObj.focusIn();
         }    
@@ -166,9 +169,6 @@ const BookingSelect = ({props, bookValue, selectedDate, selectData}) => {
             let descriptionElement = args.element.querySelector('.e-schedule-form');
             let descriptionValidator = descriptionElement.ej2_instances[0];
             descriptionValidator.addRules('Description', { required: true, minLength: 8, maxLength: 8, min: 1});
-        }
-        if (args.type === 'QuickInfo'){
-            console.log('QuickInfo')
         }
     }
 
