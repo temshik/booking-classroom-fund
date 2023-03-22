@@ -159,12 +159,13 @@ const CategoryManagement = (props) => {
               <Form.Label>Category</Form.Label>
                 <Form.Control as='select' 
                   required
-                  onChange={ e => setField('categoryId', e.target.value) }
+                  onChange={ e => setField('categoryId', e.target.value) }                  
                   isInvalid={ !!errors.categoryId }> 
-                  <option>Select category...</option>                    
-                  {Array.isArray(selectedCategory) && selectedCategory.map((category) =>{
-                      return <option key={category.id} value={category.id}>{category.name}</option>
-                  })}</Form.Control>
+                  <option>Select category...</option>                     
+                  { selectedCategory.map((category) => {
+                    return <option key={category.id} value={category.id}>{category.name}</option>
+                  })}                
+                </Form.Control>
                 <Form.Control.Feedback type='invalid'>
                     { errors.categoryId }
                 </Form.Control.Feedback>
