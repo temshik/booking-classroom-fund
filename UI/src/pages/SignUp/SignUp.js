@@ -73,7 +73,6 @@ export default class SignUp extends React.Component{
         toast.success("Registration Successful...", {
           position: toast.POSITION.TOP_CENTER
         }); 
-        console.log(data);
         this.setState({Redirect: true});
         this.setState({Password: ''});
         this.setState({ConfirmPassword: ''});
@@ -92,9 +91,7 @@ export default class SignUp extends React.Component{
         this.setField(event.target.name, false, false); 
       }
     }
-    this.setState({[name]:value},
-      console.log('name', name, 'value', value)
-    );
+    this.setState({[name]:value});
   }
 
 	radioChangeHandler = (event) => {
@@ -190,13 +187,12 @@ export default class SignUp extends React.Component{
         })}
         break;
       default:
-        console.log("Somthing goes wrong in setField");
+        alert("Somthing goes wrong in setField");
         break;  
     }
   }
 
-render(){
-  console.log('SignUp_State: ', this.state)  
+render(){  
     return (     
       <div className="SignUp">
         {this.state.Redirect && (

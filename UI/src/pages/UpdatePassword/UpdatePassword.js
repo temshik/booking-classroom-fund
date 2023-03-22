@@ -49,9 +49,7 @@ export default class UpdatePassword extends React.Component {
       };
       authSevice.UpdatePassword(data).then((data) =>{
         if(data.status === 200)
-        {
-          console.log("Succesfuly reset password by: " + data.data.Email);   
-          console.log(data);    
+        {  
           store.dispatch(REMOVE_ACTIVE_USER());
           toast.success("Password successfuly updated", {
             position: toast.POSITION.TOP_CENTER
@@ -137,7 +135,7 @@ export default class UpdatePassword extends React.Component {
               })}
               break;
           default:
-              console.log("Somthing goes wrong in setField");      
+              alert("Somthing goes wrong in setField");      
               break;
       }
   }

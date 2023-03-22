@@ -107,8 +107,7 @@ const CategoryManagement = (props) => {
 
     const handleDelete = (e)=>{
         e.preventDefault()
-        if(window.localStorage.getItem('accessToken') !== null && name.categoryId){
-        console.log('a', name.categoryId)
+        if(window.localStorage.getItem('accessToken') !== null && name.categoryId){        
         if (window.confirm(`Are you sure you want to delete the category? When you delete a category, the associated audiences will be deleted automatically!!!`)) {               
             dispatch(deleteCategory(name.categoryId));             
         }
@@ -125,8 +124,7 @@ const CategoryManagement = (props) => {
         setErrors(newErrors)
       } else {
         // No errors! Put any logic here for the form submission!
-        if(window.localStorage.getItem('accessToken') !== null){ 
-            console.log(name.categoryId)
+        if(window.localStorage.getItem('accessToken') !== null){             
           if(props.managementTask === 'Update Category')     
           {          
             var data = {

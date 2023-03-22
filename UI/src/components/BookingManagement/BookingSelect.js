@@ -154,14 +154,6 @@ const BookingSelect = ({props, bookValue, role, selectedDate, selectData}) => {
             let locationValidator = locationElement.ej2_instances[0];
             locationValidator.addRules('Location', { required: true, min: 1, max: 999});
             //-------------------------------------------------------------------
-            // if (!isNullOrUndefined(document.getElementById("EventType_Error"))) {
-            //     document.getElementById("EventType_Error").style.display = "none";
-            //     document.getElementById("EventType_Error").style.left = "351px";
-            // }
-            // let eventTypeElement = args.element.querySelector('.e-schedule-form');
-            // let eventTypeValidator = eventTypeElement.ej2_instances[0];
-            // eventTypeValidator.addRules('EventType', {min: 1, max: 2});
-            //-------------------------------------------------------------------
             if (!isNullOrUndefined(document.getElementById("Description_Error"))) {
                 document.getElementById("Description_Error").style.display = "none";
                 document.getElementById("Description_Error").style.left = "351px";
@@ -170,35 +162,7 @@ const BookingSelect = ({props, bookValue, role, selectedDate, selectData}) => {
             let descriptionValidator = descriptionElement.ej2_instances[0];
             descriptionValidator.addRules('Description', { required: true, minLength: 8, maxLength: 8, min: 1});
         }
-    }
-
-    // function onPopupClose(args) {
-    //     if (args.type === 'Editor' && !isNullOrUndefined(args.data)) {
-    //         console.log("cc")
-    //         let subjectElement = args.element.querySelector('#Subject');
-    //         if (subjectElement) {
-    //             args.data.Subject = subjectElement.value;
-    //         }
-    //         let locationElement = args.element.querySelector('#Location');
-    //         if (locationElement) {
-    //             args.data.Location = locationElement.value;
-    //         }
-    //         let statusElement = args.element.querySelector('#EventType');
-    //         if (statusElement) {
-    //             args.data.EventType = statusElement.value;
-    //         }
-    //         // let startTimeElement = args.element.querySelector('#StartTime');
-    //         // if (startTimeElement) {
-    //         //     args.data.StartTime = startTimeElement.value;
-    //         // }        
-    //         // args.data.StartTime = startObj;       
-    //         // args.data.EndTime = endObj;                     
-    //         let descriptionElement = args.element.querySelector('#Description');
-    //         if (descriptionElement) {
-    //             args.data.Description = descriptionElement.value;
-    //         }
-    //     }
-    // }
+    }    
     
     function applyCategoryColor(args, currentView) {
         switch (args.data.CategoryId) {
@@ -227,14 +191,11 @@ const BookingSelect = ({props, bookValue, role, selectedDate, selectData}) => {
     }
 
     
-    function onEventRendered(args) {
-        console.log('Прогружает все элементы на стронице', args);
-        applyCategoryColor(args, scheduleObj.currentView);      
-        console.log({args})
+    function onEventRendered(args) {        
+        applyCategoryColor(args, scheduleObj.currentView);             
     }
 
-    function onActionBegin(args) {
-        console.log('action', args)
+    function onActionBegin(args) {        
         if (args.requestType === 'toolbarItemRendering') {            
             let exportItem = {
                 align: 'Center', showTextOn: 'Both', prefixIcon: 'e-icons e-export-excel',
@@ -247,8 +208,7 @@ const BookingSelect = ({props, bookValue, role, selectedDate, selectData}) => {
             args.items.push(exportItem);
             args.items.push(printItem)                        
         } 
-        if (args.requestType === 'eventRemove') {
-            console.log('eventRemoved', args)
+        if (args.requestType === 'eventRemove') {            
             var id;     
             args.data.forEach(element => {
                 id = element.Id          
@@ -274,18 +234,14 @@ const BookingSelect = ({props, bookValue, role, selectedDate, selectData}) => {
     }
 
     function onActionComplete(args) {        
-        if (args.requestType === 'eventCreated') {
-            console.log('eventCreated')       
-            getAxiosData(args).then((items)=>{
-                console.log(items)
+        if (args.requestType === 'eventCreated') {             
+            getAxiosData(args).then((items)=>{                
                 dispatch(createBooking(items))  
             })                                     
             //window.location.reload();  
         }       
-        if (args.requestType === 'eventChanged') {
-            console.log('eventChanged', args)
-            getAxiosData(args).then((items)=>{
-                console.log(items)
+        if (args.requestType === 'eventChanged') {            
+            getAxiosData(args).then((items)=>{                
                 dispatch(updateBooking(items))  
             })                                     
             //window.location.reload();

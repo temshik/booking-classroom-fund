@@ -7,7 +7,6 @@ import {faAngleUp,faAngleDown} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const Menu = () => {
-    console.log('url ',window.location.pathname)
     return (
         <div className={'menus'}>
             <ul className={'menu__list'}>

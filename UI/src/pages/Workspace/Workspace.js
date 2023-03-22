@@ -51,10 +51,8 @@ const Worksapce = () => {
     useEffect(()=>{        
         if(window.localStorage.getItem('accessToken') !== null){  
             dispatch(GetUserRoleByEmail(email))
-            dispatch(getCategory());  
-            console.log('cat0', cat) 
-            dispatch(getWorkspace({id})) 
-            console.log('disp', workspace)
+            dispatch(getCategory());              
+            dispatch(getWorkspace({id}))             
         }
     },[id])    
 
@@ -64,8 +62,7 @@ const Worksapce = () => {
     },[cat])
 
     useEffect(()=>{
-        if (workspace !== null)
-            console.log('workspace1',workspace)
+        if (workspace !== null)            
             setItem(workspace.data)
     },[workspace])
     
@@ -89,8 +86,7 @@ const Worksapce = () => {
         if (isFirstRender.current) {
             isFirstRender.current = false; // toggle flag after first render/mounting
             return;
-          }
-        //console.log('updatedItem changed', updatedItem)
+        }        
         dispatch(updateWorkspace(updatedItem))            
     },[updatedItem])
 
@@ -125,17 +121,8 @@ const Worksapce = () => {
 
     const handleUpdateChange=()=>{
         if(window.localStorage.getItem('accessToken') !== null){  
-            // if(item !== null) {
-            //     setItem({...item, isAvaliable: lock});
-            //     dispatch(updateWorkspace(item))
-            // }
-            
-            
-            console.log("item", updatedItem)         
             const lock = item.isAvailable;
-            setUpdatedItem({...item, isAvailable: !lock});
-            console.log("updateItem2",updatedItem)  
-            //dispatch(updateWorkspace(item))                  
+            setUpdatedItem({...item, isAvailable: !lock});                
         }
     }
 

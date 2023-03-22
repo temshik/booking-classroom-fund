@@ -8,7 +8,6 @@ import {faLocationDot, faUsers, faChalkboardUser, faPersonDotsFromLine, faDispla
 const SearchItem = ({item, userRole, categories}) => {
     const navigate = useNavigate();
     const {id,campusNumber, workspaceNumber,categoryId,description,numberOfSeats,courseNumber,isAvailable}=item
-    console.log('categorys ',categories)
 
     const truncate=(str)=>{
         return str.length > 20 ? str.substring(0, 100) + "..." : str;

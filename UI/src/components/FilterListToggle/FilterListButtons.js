@@ -5,8 +5,7 @@ const FilterListButtons = ({item, selectedValues, selectToggle, select}) =>
 {      
     const {id, name}=item;
 
-    const changeSelected=(value)=>{
-        console.log("value", value, 'selectedValues', selectedValues);
+    const changeSelected=(value)=>{        
         selectToggle(value);                
     }
 

@@ -11,7 +11,7 @@ import SearchItem from '../../components/SearchItem/SearchItem';
 import notFound from '../../images/NoResults.gif';
 import ReactPaginate from 'react-paginate';
 import { buildingOptions, colourOptions } from '../../docs/data.ts';
-import {courseList, categoryList, dataList} from "../../docs/fillterData";
+import {courseList} from "../../docs/fillterData";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import Loader from '../../components/Loader/Loader';
@@ -64,45 +64,35 @@ const Catalog = () => {
         })
     }
 
-    const handlePageClick=(data)=>{
-        console.log(data.selected+1);
+    const handlePageClick=(data)=>{        
         setCurrentPage(data.selected+1)
     }
 
     const handleSelectCategory=(value)=>{
-        console.log('Catalog SCategory value ', value)
-        console.log('Catalog SCategory ', selectedCategory)
         const newCategory = selectedCategory.map(category => {
             const {id, selected} = category;            
-            if(id === value) {
-                console.log('aa',id);                              
+            if(id === value) {                             
                 return{...category, selected: !category.selected};                                                          
             } else return category            
         })                      
         if (newCategory !== null)
         updateCategories(newCategory[value-1]);            
-        console.log('Catalog SCategory RETURN', selectedCategory)
     }
 
     const handleRoomCapacity=(event)=>{
-        console.log('handleRoomCapacity',event.target.value);
         setRoomCapacity(event.target.value);
     }
 
     const handleSelectCourse=(value)=>{
-        console.log('Catalog SCourse value ', value)
-        console.log('Catalog SCourse ', selectedCourse)
         const newSelectedCourse = selectedCourse.map(course => {
             if(course.id === value) {
                 return {...course, selected: !course.selected}
             } else return course
         })
         setSelectedCourse(newSelectedCourse)
-        console.log('Catalog SCourse RETURN', selectedCourse)
     }
 
     const handleChangeChecked=(id)=>{
-        console.log(id);
         const selectedBuildingsList = selectedBuildings;
         const changeSelectedBuildings = selectedBuildingsList.map((item) =>
             item.id === id ? { ...item, checked: !item.checked} : item
@@ -112,17 +102,14 @@ const Catalog = () => {
     }        
 
     const getWorkspacies = async () => {    
-        if(window.localStorage.getItem('accessToken') !== null){  
-            console.log(form)                                                  
-        dispatch(getWorkspacePaged({PageSize,CurrentPage,SortOn,SortDirection, form}));
-        console.log('disp', workspacies)
+        if(window.localStorage.getItem('accessToken') !== null){                                                
+            dispatch(getWorkspacePaged({PageSize,CurrentPage,SortOn,SortDirection, form}));
         }
     }
 
     const getCategories = () => {
         if(window.localStorage.getItem('accessToken') !== null){      
-        dispatch(getCategory());  
-        console.log('cat0', cat)        
+            dispatch(getCategory());       
         }
     }
 
@@ -134,13 +121,11 @@ const Catalog = () => {
 
     const updateCategories = (item) => {
         if(window.localStorage.getItem('accessToken') !== null){
-        dispatch(updateCategory(item));
-        console.log('cat1',cat);
+            dispatch(updateCategory(item));
         }
     }
 
     useEffect(() =>{    
-        console.log("form", form) 
         getRole();        
         getWorkspacies();
         getCategories();        

@@ -1,9 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from '../../utils/axios';
 import Configuration from "../../configurations/Configuration";
-import ErrorHandler from '../../modules/ErrorHandler';
-
-const errorHandler = new ErrorHandler();
 
 const initialState = {
     isCategoryLoading: false,
@@ -29,8 +26,7 @@ export const getCategory = createAsyncThunk(
     'catalog/getCategory',
     async () => {
         try {
-            const {data} = await axios.get(Configuration.GetCategories)
-            console.log("getcategor", data);            
+            const {data} = await axios.get(Configuration.GetCategories)                      
             return {data};
         } catch (error) {
             console.log(error)
@@ -42,8 +38,7 @@ export const getWorkspace = createAsyncThunk(
     'catalog/getWorkspace',
     async ({id}) => {
         try {
-            const {data} = await axios.get(Configuration.GetWorkspace+`/${id}`)
-            console.log("getWorkspace", data);            
+            const {data} = await axios.get(Configuration.GetWorkspace+`/${id}`)                        
             return {data};
         } catch (error) {
             console.log(error)
@@ -55,8 +50,7 @@ export const createWorkspace = createAsyncThunk(
     'catalog/createWorkspace',
     async (item) => {
         try {
-            const {data} = await axios.post(Configuration.CreateWorkspace,item)
-            console.log("createWorkspace", data);            
+            const {data} = await axios.post(Configuration.CreateWorkspace,item)                       
             return {data};
         } catch (error) {
             console.log(error)
@@ -68,8 +62,7 @@ export const updateWorkspace = createAsyncThunk(
     'catalog/updateWorkspace',
     async (item) => {
         try {
-            const {data} = await axios.put(Configuration.UpdateWorkspace,item)
-            console.log("updateWorkspace", data);            
+            const {data} = await axios.put(Configuration.UpdateWorkspace,item)                        
             return {data};
         } catch (error) {
             console.log(error)
@@ -81,8 +74,7 @@ export const deleteWorkspace = createAsyncThunk(
     'catalog/deleteWorkspace',
     async (item) => {
         try {
-            const {data} = await axios.delete(Configuration.DeleteWorkspace,{data:item})
-            console.log("deleteWorkspace", data);            
+            const {data} = await axios.delete(Configuration.DeleteWorkspace,{data:item})                       
             return {data};
         } catch (error) {
             console.log(error)
@@ -93,10 +85,8 @@ export const deleteWorkspace = createAsyncThunk(
 export const getWorkspacePaged = createAsyncThunk(
     'catalog/getWorkspacePaged',
     async ({PageSize,CurrentPage,SortOn,SortDirection, form}) => {
-        try {
-            console.log("getWorkspacePaged", form); 
-            const {data} = await axios.post(Configuration.GetWorkspaciesPaged+`?PageSize=${PageSize}&CurrentPage=${CurrentPage}&SortOn=${SortOn}&SortDirection=${SortDirection}`, form)
-            console.log("getWorkspacePaged", data);            
+        try {            
+            const {data} = await axios.post(Configuration.GetWorkspaciesPaged+`?PageSize=${PageSize}&CurrentPage=${CurrentPage}&SortOn=${SortOn}&SortDirection=${SortDirection}`, form)                       
             return {data};
         } catch (error) {
             console.log(error)
@@ -108,8 +98,7 @@ export const updateCategory = createAsyncThunk(
     'catalog/updateCategory',
     async (item) => {
         try {
-            const {data} = await axios.put(Configuration.UpdateCategory,item)
-            console.log("updateCategory", data);            
+            const {data} = await axios.put(Configuration.UpdateCategory,item)                    
             return {data};
         } catch (error) {
             console.log(error)
@@ -121,8 +110,7 @@ export const createCategory = createAsyncThunk(
     'catalog/createCategory',
     async (item) => {
         try {
-            const {data} = await axios.post(Configuration.CreateCategory,item)
-            console.log("crateCategory", data);            
+            const {data} = await axios.post(Configuration.CreateCategory,item)                     
             return {data};
         } catch (error) {
             console.log(error)
@@ -134,8 +122,7 @@ export const deleteCategory = createAsyncThunk(
     'catalog/deleteCategory',
     async (id) => {
         try {
-            const {data} = await axios.delete(Configuration.DeleteCategory+`/${id}`)
-            console.log("crateCategory", data);            
+            const {data} = await axios.delete(Configuration.DeleteCategory+`/${id}`)                    
             return {data};
         } catch (error) {
             console.log(error)
@@ -148,186 +135,156 @@ export const catalogSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: {
-        [getCategory.pending]: (state) => {
-            console.log('a')
+        [getCategory.pending]: (state) => {            
             state.isCategoryLoading = true            
             //state.status = null
             //state.errorMessage = null
         },
-        [getCategory.fulfilled]: (state, action) => {
-            console.log('b')
+        [getCategory.fulfilled]: (state, action) => {            
             state.isCategoryLoading = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
-            state.categories = (action.payload)
-            console.log("categories",state.categories)
+            state.categories = (action.payload)            
         },
-        [getCategory.rejected]: (state, action) => {
-            console.log('c')
+        [getCategory.rejected]: (state, action) => {            
             state.isCategoryLoading = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            
         },
         //----------------------------------------
-        [getWorkspacePaged.pending]: (state) => {
-            console.log('a')
+        [getWorkspacePaged.pending]: (state) => {            
             state.isWorkspaceLoading = true            
             //state.status = null
             //state.errorMessage = null
         },
-        [getWorkspacePaged.fulfilled]: (state, action) => {
-            console.log('b')
+        [getWorkspacePaged.fulfilled]: (state, action) => {            
             state.isWorkspaceLoading = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
             state.workspacies = (action.payload.data.workspaceDTOs)
-            state.totalPages = action.payload.data.totalPages
-            console.log("workspacies",state.workspacies)
+            state.totalPages = action.payload.data.totalPages            
         },
-        [getWorkspacePaged.rejected]: (state, action) => {
-            console.log('c')
+        [getWorkspacePaged.rejected]: (state, action) => {            
             state.isWorkspaceLoading = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            
         },      
         //----------------------------------------  
-        [getWorkspace.pending]: (state) => {
-            console.log('a')
+        [getWorkspace.pending]: (state) => {            
             state.isWorkspaceLoading = true            
             //state.status = null
             //state.errorMessage = null
         },
-        [getWorkspace.fulfilled]: (state, action) => {
-            console.log('b')
+        [getWorkspace.fulfilled]: (state, action) => {            
             state.isWorkspaceLoading = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
-            state.workspace = action.payload
-            console.log("workspace",state.workspace)
+            state.workspace = action.payload            
         },
-        [getWorkspace.rejected]: (state, action) => {
-            console.log('c')
+        [getWorkspace.rejected]: (state, action) => {            
             state.isWorkspaceLoading = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            
         },
         //----------------------------------------
-        [updateCategory.pending]: (state) => {
-            console.log('a')
+        [updateCategory.pending]: (state) => {            
             state.isCategoryUpdated = true            
             //state.status = null
             //state.errorMessage = null
         },
-        [updateCategory.fulfilled]: (state, action) => {
-            console.log('b')
+        [updateCategory.fulfilled]: (state, action) => {            
             state.isCategoryUpdated = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
             state.updatedCategoty = action.payload
         },
-        [updateCategory.rejected]: (state, action) => {
-            console.log('c')
+        [updateCategory.rejected]: (state, action) => {            
             state.isCategoryUpdated = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            
         },
-        [createCategory.pending]: (state) => {
-            console.log('a')
+        [createCategory.pending]: (state) => {            
             state.isCategoryCreated = true            
             //state.status = null
             //state.errorMessage = null
         },
-        [createCategory.fulfilled]: (state, action) => {
-            console.log('b')
+        [createCategory.fulfilled]: (state, action) => {            
             state.isCategoryCreated = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
             state.category = action.payload
         },
-        [createCategory.rejected]: (state, action) => {
-            console.log('c')
+        [createCategory.rejected]: (state, action) => {            
             state.isCategoryCreated = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            
         },
-        [deleteCategory.pending]: (state) => {
-            console.log('a')
+        [deleteCategory.pending]: (state) => {            
             state.isCategoryDeleted = true            
             //state.status = null
             //state.errorMessage = null
         },
-        [deleteCategory.fulfilled]: (state, action) => {
-            console.log('b')
+        [deleteCategory.fulfilled]: (state, action) => {            
             state.isCategoryDeleted = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
             state.category = action.payload
         },
-        [deleteCategory.rejected]: (state, action) => {
-            console.log('c')
+        [deleteCategory.rejected]: (state, action) => {            
             state.isCategoryDeleted = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            
         },
         //----------------------------------------
-        [updateWorkspace.pending]: (state) => {
-            console.log('a')
+        [updateWorkspace.pending]: (state) => {            
             state.isWorkspaceLoading = true            
             //state.status = null
             //state.errorMessage = null
         },
-        [updateWorkspace.fulfilled]: (state, action) => {
-            console.log('b')
+        [updateWorkspace.fulfilled]: (state, action) => {            
             state.isWorkspaceLoading = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
             state.updatedWorkspace = action.payload
             state.isWorkspaceUpdated = true
         },
-        [updateWorkspace.rejected]: (state, action) => {
-            console.log('c')
+        [updateWorkspace.rejected]: (state, action) => {            
             state.isWorkspaceLoading = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            
         },
         //----------------------------------------
-        [createWorkspace.pending]: (state) => {
-            console.log('a')
+        [createWorkspace.pending]: (state) => {            
             state.isWorkspaceLoading = true            
             //state.status = null
             //state.errorMessage = null
         },
-        [createWorkspace.fulfilled]: (state, action) => {
-            console.log('b')
+        [createWorkspace.fulfilled]: (state, action) => {            
             state.isWorkspaceLoading = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
             state.updatedWorkspace = action.payload
             state.isWorkspaceCreated = true
         },
-        [createWorkspace.rejected]: (state, action) => {
-            console.log('c')
+        [createWorkspace.rejected]: (state, action) => {            
             state.isWorkspaceLoading = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            
         },
         //----------------------------------------
-        [deleteWorkspace.pending]: (state) => {
-            console.log('a')
+        [deleteWorkspace.pending]: (state) => {            
             state.isWorkspaceLoading = true            
             //state.status = null
             //state.errorMessage = null
         },
-        [deleteWorkspace.fulfilled]: (state, action) => {
-            console.log('b')
+        [deleteWorkspace.fulfilled]: (state, action) => {            
             state.isWorkspaceLoading = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
             state.updatedWorkspace = action.payload
             state.isWorkspaceDeleted = action.payload !== null ? true : false
         },
-        [deleteWorkspace.rejected]: (state, action) => {
-            console.log('c')
+        [deleteWorkspace.rejected]: (state, action) => {            
             state.isWorkspaceLoading = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            

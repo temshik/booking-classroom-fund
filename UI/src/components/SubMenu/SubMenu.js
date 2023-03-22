@@ -1,7 +1,6 @@
 import React from 'react';
 import './SubMenu.scss'
 import SubSubMenu from "../SubSubMenu/SubSubMenu";
-import Menu from "../Menu/Menu";
 import {faAngleUp} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 

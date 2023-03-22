@@ -1,7 +1,7 @@
 import React, {createRef} from 'react';
 import { Navigate, Link } from "react-router-dom";
 import store from '../../redux/store';
-import {Authorize, SET_ACTIVE_USER, selectIsLoggedIn}  from '../../redux/slice/authSlice';
+import {SET_ACTIVE_USER}  from '../../redux/slice/authSlice';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import 'react-toastify/dist/ReactToastify.css';
@@ -46,14 +46,9 @@ export default class SignIn extends React.Component {
       RememberMe: this.state.Checked,
       ReturnUrl: "string"
     };
-    authSevice.SignIn(data).then((data) =>{
-      console.log(data.data);  
+    authSevice.SignIn(data).then((data) =>{       
       if(data.status === 200)
       { 
-        console.log(data.data.accessToken); 
-        console.log(data.data.refreshToken); 
-        console.log(data.data.tokenLifeTimeInMinutes); 
-
         store.dispatch(SET_ACTIVE_USER({          
           email: this.state.Email,
           accessToken: data.data.accessToken,
@@ -62,23 +57,10 @@ export default class SignIn extends React.Component {
           RememberMe: this.state.Checked,
           ReturnUrl: "string"          
         }))
-
-        //alert("Succesfuly Loged in");
         this.setState({Password: ''});
         this.setState({Redirect: true});     
       }
-    }).catch(errorHandler.httpErrorHandler) 
-               
-    // store.dispatch(Authorize(data)).then((data) => {              
-    //   store.dispatch(SET_ACTIVE_USER({          
-    //           email: this.state.Email,             
-    //           RememberMe: this.state.Checked,
-    //           ReturnUrl: "string"          
-    //         }))
-    //       console.log('data',data);
-    //   this.setState({Password: ''});
-    //   this.setState({Redirect: true});        
-    // }).catch((error => console.log(error)))
+    }).catch(errorHandler.httpErrorHandler)               
   }
 
   handleValues(event) {
@@ -146,7 +128,7 @@ export default class SignIn extends React.Component {
         })}      
         break;
       default:
-        console.log("Somthing goes wrong in setField");   
+        alert("Somthing goes wrong in setField");   
         break;
     }
   }

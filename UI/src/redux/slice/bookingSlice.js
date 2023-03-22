@@ -1,7 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from '../../utils/axios';
 import Configuration from "../../configurations/Configuration";
-import ErrorHandler from '../../modules/ErrorHandler';
 
 const initialState = {
     isBookingLoading: false,   
@@ -19,13 +18,11 @@ const initialState = {
 export const getBookingsByUser = createAsyncThunk(
     'booking/getBookingsByUser',
     async ({id}) => {
-        try {
-            console.log({id})
-            const {data} = await axios.get(Configuration.GetBookingsByUser+`/${id}`)
-            console.log("getBookings", data);            
+        try {            
+            const {data} = await axios.get(Configuration.GetBookingsByUser+`/${id}`)                       
             return {data};
-        } catch (error) {
-            console.log(error)
+        } catch (error) {    
+            console.log(error)        
         }
     }
 )
@@ -33,10 +30,8 @@ export const getBookingsByUser = createAsyncThunk(
 export const createBooking = createAsyncThunk(
     'booking/createBooking',
     async (item) =>{
-        try {           
-            console.log("createBooking", item); 
-            const {data} = await axios.post(Configuration.CreateBooking,item)
-            //console.log("createBooking", data);            
+        try {                       
+            const {data} = await axios.post(Configuration.CreateBooking,item)                       
             return {data};
         } catch (error) {
             console.log(error)
@@ -71,10 +66,8 @@ export const deleteBooking = createAsyncThunk(
 export const getBookingsByWorkspace = createAsyncThunk(
     'booking/getBookingsByWorkspace',
     async (id) => {
-        try {
-            console.log(id)
-            const {data} = await axios.put(Configuration.GetBookingsByWorkspace+`/${id}`)
-            console.log("getBookings", data);            
+        try {           
+            const {data} = await axios.put(Configuration.GetBookingsByWorkspace+`/${id}`)                       
             return {data};
         } catch (error) {
             console.log(error)
@@ -87,106 +80,86 @@ export const bookingSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: {
-        [getBookingsByUser.pending]: (state) => {
-            console.log('a')
+        [getBookingsByUser.pending]: (state) => {            
             state.isBookingLoading = true            
             //state.status = null
             //state.errorMessage = null
         },
-        [getBookingsByUser.fulfilled]: (state, action) => {
-            console.log('b')
+        [getBookingsByUser.fulfilled]: (state, action) => {            
             state.isBookingLoading = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
-            state.bookings = (action.payload)
-            console.log("bookings",state.bookings)
+            state.bookings = (action.payload)            
         },
-        [getBookingsByUser.rejected]: (state, action) => {
-            console.log('c')
+        [getBookingsByUser.rejected]: (state, action) => {            
             state.isBookingLoading = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            
         },
         //----------------------------------------
-        [getBookingsByWorkspace.pending]: (state) => {
-            console.log('a')
+        [getBookingsByWorkspace.pending]: (state) => {            
             state.isBookingLoading = true            
             //state.status = null
             //state.errorMessage = null
         },
-        [getBookingsByWorkspace.fulfilled]: (state, action) => {
-            console.log('b')
+        [getBookingsByWorkspace.fulfilled]: (state, action) => {            
             state.isBookingLoading = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
-            state.bookings = (action.payload)
-            console.log("bookings",state.bookings)
+            state.bookings = (action.payload)            
         },
-        [getBookingsByWorkspace.rejected]: (state, action) => {
-            console.log('c')
+        [getBookingsByWorkspace.rejected]: (state, action) => {            
             state.isBookingLoading = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            
         },
         //----------------------------------------
-        [createBooking.pending]: (state) => {
-            console.log('a')
+        [createBooking.pending]: (state) => {            
             state.isBookingCreated = true            
             //state.status = null
             //state.errorMessage = null
         },
-        [createBooking.fulfilled]: (state, action) => {
-            console.log('b')
+        [createBooking.fulfilled]: (state, action) => {            
             state.isBookingCreated = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
-            state.createdBookings = action.payload
-            console.log("bookings",state.createdBookings)
+            state.createdBookings = action.payload            
         },
-        [createBooking.rejected]: (state, action) => {
-            console.log('c')
+        [createBooking.rejected]: (state, action) => {            
             state.isBookingCreated = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            
         },
         //----------------------------------------
-        [updateBooking.pending]: (state) => {
-            console.log('a')
+        [updateBooking.pending]: (state) => {            
             state.isBookingUpdated = true            
             //state.status = null
             //state.errorMessage = null
         },
-        [updateBooking.fulfilled]: (state, action) => {
-            console.log('b')
+        [updateBooking.fulfilled]: (state, action) => {            
             state.isBookingUpdated = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
-            state.updatedBookings = action.payload
-            console.log("bookings",state.bookings)
+            state.updatedBookings = action.payload            
         },
-        [updateBooking.rejected]: (state, action) => {
-            console.log('c')
+        [updateBooking.rejected]: (state, action) => {            
             state.isBookingUpdated = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            
         },
         //----------------------------------------
-        [deleteBooking.pending]: (state) => {
-            console.log('a')
+        [deleteBooking.pending]: (state) => {            
             state.isBookingDeleted = true            
             //state.status = null
             //state.errorMessage = null
         },
-        [deleteBooking.fulfilled]: (state, action) => {
-            console.log('b')
+        [deleteBooking.fulfilled]: (state, action) => {            
             state.isBookingDeleted = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
-            state.deletedBookings = action.payload
-            console.log("bookings",state.deletedBookings)
+            state.deletedBookings = action.payload            
         },
-        [deleteBooking.rejected]: (state, action) => {
-            console.log('c')
+        [deleteBooking.rejected]: (state, action) => {            
             state.isBookingDeleted = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            

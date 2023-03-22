@@ -44,8 +44,6 @@ export default class ResetPassword extends React.Component {
       authSevice.ResetPassword(data).then((data) =>{
         if(data.status === 200)
         {
-          console.log("Succesfuly reset password by: " + data.data.Email);   
-          console.log(data);    
           store.dispatch(REMOVE_ACTIVE_USER());            
           toast.success("Password successfuly reset", {
             position: toast.POSITION.TOP_CENTER
@@ -67,9 +65,7 @@ export default class ResetPassword extends React.Component {
           this.setField(event.target.name, false, false); 
         }
       }
-      this.setState({[name]:value},
-        console.log('name', name, 'value', value)
-      );
+      this.setState({[name]:value});
     }
 
   handleBlur = (event) => {
@@ -121,7 +117,7 @@ export default class ResetPassword extends React.Component {
         })}
         break;
       default:
-        console.log("Somthing goes wrong in setField");      
+        alert("Somthing goes wrong in setField");      
         break;
     }
   }
