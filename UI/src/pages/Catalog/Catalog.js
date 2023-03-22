@@ -186,9 +186,9 @@ const Catalog = () => {
 
         //InputSearch
         if(inputSearch){
-            updatedList=updatedList.filter((item)=>
-                item.description.toLowerCase().search(inputSearch.toLocaleLowerCase().trim())!==-1);
-            //setField('description', inputSearch.toLocaleLowerCase());
+            // updatedList=updatedList.filter((item)=>
+            //     item.description.toLowerCase().search(inputSearch.toLocaleLowerCase().trim())!==-1);
+            setField('description', inputSearch.toLocaleLowerCase());
         }
 
         //SelectedCategoty        
@@ -203,7 +203,7 @@ const Catalog = () => {
 
         //RoomCapacity
         const newselectedRoomCapacity = roomCapacity
-        if(8<newselectedRoomCapacity<9999)
+        if(1<newselectedRoomCapacity<9999)
         {
             updatedList = updatedList.filter((item) => newselectedRoomCapacity <= (item.numberOfSeats));
             //setField('numberOfSeats', newselectedRoomCapacity)

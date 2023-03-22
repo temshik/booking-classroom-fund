@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {useNavigate} from 'react-router-dom';
+import Select  from 'react-select'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Loader from '../Loader/Loader';
@@ -37,8 +38,12 @@ const CategoryManagement = (props) => {
     },[])
 
     useEffect(()=>{
-      if(category !== null)                  
-          setSelectedCategory(category)                       
+      if(category !== null) {  
+          const mas = category.data?.map((category) => {
+            return {value: (category.id).toString(), label: category.name}
+          })
+          setSelectedCategory(mas)                 
+      }               
     },[category])
 
     useEffect(()=>{
@@ -157,15 +162,12 @@ const CategoryManagement = (props) => {
             {props.managementTask === 'Update Category' && 
             <Form.Group>
               <Form.Label>Category</Form.Label>
-                <Form.Control as='select' 
+                <Select 
                   required
-                  onChange={ e => setField('categoryId', e.target.value) }                  
-                  isInvalid={ !!errors.categoryId }> 
-                  <option>Select category...</option>                     
-                  { selectedCategory.map((category) => {
-                    return <option key={category.id} value={category.id}>{category.name}</option>
-                  })}                
-                </Form.Control>
+                  onChange={ e => setField('categoryId', e.value) }                  
+                  isInvalid={ !!errors.categoryId }
+                  options={selectedCategory}>                                                                                       
+                </Select>
                 <Form.Control.Feedback type='invalid'>
                     { errors.categoryId }
                 </Form.Control.Feedback>
