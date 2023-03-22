@@ -1,16 +1,13 @@
-version: '2.1'
-
-networks:
-  backend:
-  frontend:
+version: '3.4'
 
 services:
   ocelotapigateway:
     container_name: ocelotapigateway
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+     - identityservice.api
+     - catalogservice.api
+     - bookingservice.api
     ports:
-      - "5000:80"
-    networks:
-     - backend
-     - frontend
+      - "6000:80"

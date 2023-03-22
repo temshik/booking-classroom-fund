@@ -1,5 +1,5 @@
 using IdentityService.Api.AppDependenciesConfiguration;
-using Serilog;
+using IdentityService.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +23,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.Configure();
+
+app.UseExceptionHandlerMiddleware(app.Environment.EnvironmentName);
 
 DatabaseMigrator.MigrationInitialisation(app);
 

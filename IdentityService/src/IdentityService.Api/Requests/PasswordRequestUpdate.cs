@@ -6,11 +6,6 @@
     public class PasswordRequestUpdate
     {
         /// <summary>
-        /// The identifier of the user
-        /// </summary>
-        public string Id { get; set; }
-
-        /// <summary>
         /// The email of the user
         /// </summary>
         public string Email { get; set; }

@@ -25,18 +25,16 @@ namespace IdentityService.BusinessLogic.Services
         /// <summary>
         /// Delete the user
         /// </summary>
-        /// <param name="user">The user that we want to delete</param>
-        /// <returns>User info of user, which was deleted</returns>
-        Task<UserDTO> DeleteUserAsync(UserDTO user);
+        /// <param name="user">The user email that we want to delete</param>
+        /// <returns>Boolean value by result of the task</returns>
+        Task<bool> DeleteUserAsync(PasswordDTO user);
 
         /// <summary>
         /// Change password if user has forgotten it
         /// </summary>
         /// <param name="user">The user for whom we want to reset the password</param>
-        /// <param name="token">The token that will</param>
-        /// <param name="newPassword">User new password</param>
         /// <returns>Boolean value by result of the task</returns>
-        Task<bool> ResetUserPasswordAsync(UserDTO user, string token, string newPassword);
+        Task<bool> ResetUserPasswordAsync(PasswordDTO user);
 
         /// <summary>
         /// Changes the account's password
@@ -45,7 +43,7 @@ namespace IdentityService.BusinessLogic.Services
         /// <param name="oldPassword">The old password of the user</param>
         /// <param name="newPassword">The new password of the user</param>
         /// <returns>>Boolean value by result of the task</returns>
-        Task<bool> UpdateUserPasswordAsync(UserDTO user, string oldPassword, string newPassword);
+        Task<bool> UpdateUserPasswordAsync(PasswordDTO user);
 
         /// <summary>
         /// Updates user info
@@ -64,7 +62,29 @@ namespace IdentityService.BusinessLogic.Services
         /// <summary>
         /// Function to get the roles from the database.
         /// </summary>
-        /// <returns>A List of <see cref="RoleDTO"/>.</returns>
+        /// <returns>A List of <see cref="Role"/>.</returns>
         Task<List<Role>> GetRolesAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Function to get the role from the database.
+        /// </summary>
+        /// <returns>A <see cref="Role"/>.</returns>
+        Task<string> GetUserRoleByEmailAsync(string email, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get user by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns><see cref="User"/>.</returns>
+        Task<User> GetUserAsync(string id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get user by email.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns><see cref="User"/>.</returns>
+        Task<User> GetUserByEmailAsync(string email, CancellationToken cancellationToken);
     }
 }

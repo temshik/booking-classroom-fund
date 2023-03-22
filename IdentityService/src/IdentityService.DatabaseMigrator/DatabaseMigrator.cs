@@ -23,7 +23,7 @@ public class DatabaseMigrator
                 var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
                 var rolesManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
                 var context = serviceProvider.GetService<IdentityContext>();
-                context.Database.Migrate();                
+                context.Database.Migrate();
                 await SeedDatabaseServices.SeedData(context, userManager, rolesManager);
             }
             catch (Exception ex)

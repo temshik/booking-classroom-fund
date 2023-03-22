@@ -1,8 +1,7 @@
-version: '2.1'
+version: '3.4'
 
 services:
   ocelotapigateway:
-    container_name: ocelot-api-gateway
     image: ${DOCKER_REGISTRY-}ocelotapigateway
     build:
       context: ./..

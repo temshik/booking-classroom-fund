@@ -33,7 +33,8 @@ namespace IdentityService.Api.Profiles
 
             CreateMap<UserDTO, UserRequestUpdate>()
                     .ForMember(dest => dest.Email, src => src.MapFrom(src => src.Email))
-                    .ForMember(dest => dest.UserName, src => src.MapFrom(src => src.UserName))
+                    .ForMember(dest => dest.FirstName, src => src.MapFrom(src => src.FirstName))
+                    .ForMember(dest => dest.LastName, src => src.MapFrom(src => src.LastName))
                     .ReverseMap();
 
             CreateMap<UserDTO, UserRequestLogin>()

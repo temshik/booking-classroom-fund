@@ -14,17 +14,17 @@ namespace IdentityService.Api.Validators
         /// </summary>
         public UserRequestUpdateValidator()
         {
-            RuleFor(x => x.UserName)
+            RuleFor(x => x.FirstName)
+                .Cascade(CascadeMode.StopOnFirstFailure)
+                .MustNameBeValid();
+
+            RuleFor(x => x.LastName)
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .MustNameBeValid();
 
             RuleFor(x => x.Email)
                 .Cascade(CascadeMode.StopOnFirstFailure)
                 .MustEmailBeValid();
-
-            RuleFor(x => x.Password)
-                .Cascade(CascadeMode.StopOnFirstFailure)
-                .MustPasswordBeValid();
         }
     }
 }
