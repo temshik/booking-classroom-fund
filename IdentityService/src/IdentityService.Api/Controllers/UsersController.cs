@@ -4,6 +4,7 @@ using IdentityService.BusinessLogic.DTOs;
 using IdentityService.BusinessLogic.DTOs.SeedPrefilingsDatas;
 using IdentityService.BusinessLogic.Services;
 using IdentityService.DataAccess.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 

@@ -1,5 +1,6 @@
 ﻿using IdentityService.Api.Requests;
 using IdentityService.BusinessLogic.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityService.Api.Controllers
@@ -11,13 +12,13 @@ namespace IdentityService.Api.Controllers
     [Route("api/[controller]")]
     public class AuthorizationController : ControllerBase
     {
-        private readonly IAuthorizationService _authorization;
+        private readonly IAuthorizeService _authorization;
 
         /// <summary>
         /// Initialzez a new instance of the <see cref="AuthorizationController" /> class.
         /// </summary>
         /// <param name="authorization">Authorization service</param>
-        public AuthorizationController(IAuthorizationService authorization)
+        public AuthorizationController(IAuthorizeService authorization)
         {
             _authorization = authorization;
         }

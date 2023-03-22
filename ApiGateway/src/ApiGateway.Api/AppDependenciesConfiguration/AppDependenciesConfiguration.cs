@@ -15,7 +15,6 @@ namespace ApiGateway.AppDependenciesConfiguration
         public static WebApplicationBuilder ConfigureDependencies(this WebApplicationBuilder builder)
         {
             var configuration = builder.Configuration;
-            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             builder.Services.AddOcelot(configuration);
             builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
