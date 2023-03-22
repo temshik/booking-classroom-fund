@@ -167,7 +167,7 @@
         }
       ],
       "UpstreamPathTemplate": "/Users/{everything}",
-      "UpstreamHttpMethod": [ "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "PUT", "DELETE" , "POST"]
     },
     {
       "DownstreamPathTemplate": "/api/Users/UpdateUserClaims/{claims}",
