@@ -3,7 +3,7 @@ import {REMOVE_ACTIVE_USER} from '../redux/slice/authSlice'
 import AuthServices from '../services/AuthServices';
 
 const instance = axios.create({
-    baseURL: 'http://anydeals.norwayeast.cloudapp.azure.com:5000'
+    baseURL: 'http://localhost:5000'
 })
 
 const Refresh=()=>{
