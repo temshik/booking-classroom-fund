@@ -50,12 +50,25 @@ namespace BookingService.DataAccess.Repositories
         }
 
         /// <summary>
+        /// Function to check if external workspace identifier is already exists in our list of models
+        /// </summary>
+        /// <param name="externalWorkspaceId">The external identifier of workspace</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>A <see cref="Booking"/></returns>
+        /// <returns>Boolean result</returns>
+        public bool IsWorkspaceExists(int workspaceId)
+        {
+            return _bookings.AsNoTracking()
+                .Any(p => p.WorkspaceId == workspaceId);
+        }
+
+        /// <summary>
         /// Function to get a booking by id 
         /// </summary>
         /// <param name="id">The id of the booking</param>
         /// <param name="cancellationToken">Cancellatio token</param>
         /// <returns>A <see cref="Task"/> that contains <seealso cref="Booking"/></returns>
-        public Task<Booking> GetBookingAsync(int id, CancellationToken cancellationToken)
+        public Task<Booking?> GetBookingAsync(int id, CancellationToken cancellationToken)
         {
             return _bookings.AsNoTracking()
                 .FirstOrDefaultAsync(order => order.Id == id, cancellationToken);
@@ -67,9 +80,9 @@ namespace BookingService.DataAccess.Repositories
         /// <param name="workspaceId">The workspace identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        public Task<List<Booking>> GetBookingsAsync(List<int> workspaceId, CancellationToken cancellationToken)
+        public Task<List<Booking>> GetBookingsByWorkspacePagedAsync(int workspaceId, CancellationToken cancellationToken)
         {
-            return _bookings.Where(x => workspaceId.Contains(x.WorkspaceId))
+            return _bookings.Where(x => x.WorkspaceId == workspaceId)
                  .AsNoTracking()
                  .ToListAsync(cancellationToken);
         }
@@ -79,7 +92,7 @@ namespace BookingService.DataAccess.Repositories
         /// </summary>
         /// <param name="userId">The user identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        public Task<List<Booking>> GetBookingsPagedAsync(int userId, CancellationToken cancellationToken)
+        public Task<List<Booking>> GetBookingsByUserPagedAsync(int userId, CancellationToken cancellationToken)
         {
             return _bookings.Where(x => x.UserId == userId)
                  .AsNoTracking()
@@ -96,6 +109,26 @@ namespace BookingService.DataAccess.Repositories
             _bookings.Update(booking);
 
             _logger.LogInformation("Updated the booking");
+        }
+
+        /// <summary>
+        /// Bulk updates for updating workspaces in the database 
+        /// </summary>
+        /// <param name="workspaceId">The external identifier of workspace</param>
+        /// <param name="value">Boolean value</param>
+        public void ExecuteUpdatingBlockedWorkspaces(int workspaceId, bool value)
+        {
+            _bookings.Where(x => x.WorkspaceId == workspaceId)
+                .ExecuteUpdateAsync(s => s.SetProperty(b => b.IsWorkspaceAvailable, value));
+        }
+
+        /// <summary>
+        /// Bulk updates for deleting workspaces in the database 
+        /// </summary>
+        /// <param name="workspaceId">The external identifier of workspace</param>
+        public void ExecuteDeletingWorkspaces(int workspaceId)
+        {
+            _bookings.Where(x => x.WorkspaceId == workspaceId).ExecuteDeleteAsync();
         }
     }
 }

@@ -9,6 +9,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["src/BookingService.Api/BookingService.Api.csproj", "src/BookingService.Api/"]
 COPY ["src/BookingService.DatabaseMigrator/BookingService.DatabaseMigrator.csproj", "src/BookingService.DatabaseMigrator/"]
+COPY ["src/EventBus.Messages/EventBus.Messages.csproj", "src/EventBus.Messages/"]
 COPY ["src/BookingService.DataAccess/BookingService.DataAccess.csproj", "src/BookingService.DataAccess/"]
 COPY ["src/BookingService.BusinessLogic/BookingService.BusinessLogic.csproj", "src/BookingService.BusinessLogic/"]
 RUN dotnet restore "src/BookingService.Api/BookingService.Api.csproj"

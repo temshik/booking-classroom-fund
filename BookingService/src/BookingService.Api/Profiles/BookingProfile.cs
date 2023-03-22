@@ -2,13 +2,14 @@
 using BookingService.Api.Requests;
 using BookingService.BusinessLogic.DTOs;
 using BookingService.DataAccess.Models;
+using EventBus.Messages.Events;
 
 namespace BookingService.Api.Profiles
 {
     /// <summary>
     /// The booking mapping profile
     /// </summary>
-    public class BookingProfile : Profile 
+    public class BookingProfile : Profile
     {
         /// <summary>
         /// Initializes a new instance of <see cref="BookingProfile"/> class.
@@ -19,6 +20,7 @@ namespace BookingService.Api.Profiles
                 .ForMember(dest => dest.Id, src => src.MapFrom(x => x.Id))
                 .ForMember(dest => dest.UserId, src => src.MapFrom(x => x.UserId))
                 .ForMember(dest => dest.WorkspaceId, src => src.MapFrom(x => x.WorkspaceId))
+                .ForMember(dest => dest.IsWorkspaceAvailable, src => src.MapFrom(x => x.IsWorkspaceAvailable))
                 .ForMember(dest => dest.DayOfWeek, src => src.MapFrom(x => x.DayOfWeek))
                 .ForMember(dest => dest.StartBookingTime, src => src.MapFrom(x => x.StartBookingTime))
                 .ForMember(dest => dest.GroupNumber, src => src.MapFrom(x => x.GroupNumber))
@@ -27,9 +29,15 @@ namespace BookingService.Api.Profiles
             CreateMap<BookingRequest, BookingDTO>()
                 .ForMember(dest => dest.UserId, src => src.MapFrom(x => x.UserId))
                 .ForMember(dest => dest.WorkspaceId, src => src.MapFrom(x => x.WorkspaceId))
+                .ForMember(dest => dest.IsWorkspaceAvailable, src => src.MapFrom(x => x.IsWorkspaceAvailable))
                 .ForMember(dest => dest.DayOfWeek, src => src.MapFrom(x => x.DayOfWeek))
                 .ForMember(dest => dest.StartBookingTime, src => src.MapFrom(x => x.StartBookingTime))
                 .ForMember(dest => dest.GroupNumber, src => src.MapFrom(x => x.GroupNumber))
+                .ReverseMap();
+
+            CreateMap<WorkspaceUpdatedEvent, BookingDTO>()
+                .ForMember(dest => dest.WorkspaceId, src => src.MapFrom(x => x.WorkspaceId))
+                //.ForMember(dest => dest.IsWorkspaceAvailable, src => src.MapFrom(x => x.IsAvailable))
                 .ReverseMap();
         }
     }
