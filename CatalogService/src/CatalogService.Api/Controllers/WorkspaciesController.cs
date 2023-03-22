@@ -2,6 +2,7 @@
 using CatalogService.Api.Requests;
 using CatalogService.BusinessLogic.DTOs;
 using CatalogService.BusinessLogic.Services;
+using CatalogService.DataAccess.Pagination;
 using EventBus.Messages.Events;
 using EventBus.Messages.Events.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -43,7 +44,7 @@ namespace CatalogService.Api.Controllers
         /// <returns>Desired workspace.</returns>
         [Route("[action]/{id}")]
         [HttpGet]
-        [Authorize(Roles = "Dispacher, Employee")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetWorkspaces(int id, CancellationToken cancellationToken)
@@ -59,19 +60,42 @@ namespace CatalogService.Api.Controllers
         }
 
         /// <summary>
-        /// Get a specific workspace data.
+        /// Get a specific workspace by the workspace number & campus number.
         /// </summary>
-        /// <param name="number">Course number.</param>
+        /// <param name="campusNumber">campus number.</param>
+        /// <param name="workspaceNumber">workspace number.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Desired workspace.</returns>
-        [Route("[action]/{number}")]
+        [Route("[action]/{campusNumber}/{workspaceNumber}")]
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get(string number, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetWorkspacesByLocation(int campusNumber, int workspaceNumber, CancellationToken cancellationToken)
         {
-            var list = _service.GetWorkspaciesByCourseNumberAsync(number, cancellationToken);
+            var list = await _service.GetWorkspaceByLocationAsync(campusNumber, workspaceNumber, cancellationToken);
+
+            if (list == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(list);
+        }
+
+        /// <summary>
+        /// Get paged workspace data.
+        /// </summary>        
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>Desired workspace.</returns>
+        [Route("[action]")]
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetWorkspaciesPaged([FromQuery] PagedQueryBase query, [FromBody] WorkspaceRequestCreate workspaceRequest, CancellationToken cancellationToken)
+        {
+            var list = await _service.GetWorkspaciesPagedAsync(query, _mapper.Map<WorkspaceDTO>(workspaceRequest), cancellationToken);            
 
             if (list == null)
             {

@@ -1,4 +1,5 @@
 ﻿using CatalogService.DataAccess.Models;
+using CatalogService.DataAccess.Pagination;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -66,19 +67,80 @@ namespace CatalogService.DataAccess.Repositories
         }
 
         /// <summary>
+        /// Function to get a workspace from the database
+        /// </summary>
+        /// <param name="campusNumber">The workspace campus number that we want to get.</param>
+        /// <param name="workspaceNumber">The workspace number that we want to get.</param>
+        /// <returns>Task</returns>
+        public Task<Workspace> GetWorkspaceByLocationAsync(int campusNumber, int workspaceNumber, CancellationToken cancellationToken)
+        {
+            var result = _workspaces
+                .Include(x => x.Category)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.CampusNumber == campusNumber && x.WorkspaceNumber == workspaceNumber, cancellationToken);
+
+            _logger.LogInformation("Get the workspace from the database");
+
+            return result;
+        }
+
+        /// <summary>
         /// Function to get a workspace by the course number
         /// </summary>
         /// <param name="number">The number of the course</param>
         /// <returns>list of workspaceies</returns>
-        public Task<List<Workspace>> GetWorkspaciesByCourseNumberAsync(string number, CancellationToken cancellationToken)
+        public async Task<PagedList<Workspace>> GetWorkspaciesPagedAsync(PagedQueryBase query, Workspace workspace, CancellationToken cancellationToken)
         {
-            var result = _workspaces
-                .Where(x => x.CourseNumber.ToString() == number)
-                .ToListAsync(cancellationToken);
+            /*result = await _workspaces.
+                    Include(x => x.Category)
+                    .AsNoTracking()
+                    .Sort(query.SortOn, query.SortDirection)
+                    .ToPagedListAsync(query);
 
             _logger.LogInformation("Get the workspace from the database by course number");
 
-            return result;
+            return result;*/
+
+            try
+            {
+                var result = _workspaces.Include(x => x.Category).AsNoTracking();
+
+                if (workspace.CampusNumber > 0)
+                {
+                    result = result.Where(x => x.CampusNumber == workspace.CampusNumber);
+                }
+                if (workspace.WorkspaceNumber > 0)
+                {
+                    result = result.Where(x => x.WorkspaceNumber == workspace.WorkspaceNumber);
+                }
+                if (workspace.CategoryId > 0)
+                {
+                    result = result.Where(p => p.CategoryId == workspace.CategoryId);
+                }
+                if (workspace.Description != "string")
+                {
+                    result = result.Where(p => p.Description.Contains(workspace.Description));
+                }
+                if (workspace.NumberOfSeats > 0)
+                {
+                    result = result.Where(x => x.NumberOfSeats == workspace.NumberOfSeats);
+                }
+                if (workspace.CourseNumber > 0)
+                {
+                    result = result.Where(x => x.CourseNumber == workspace.CourseNumber);
+                }
+
+                result = result.Where(x => x.SpecialEquipment == workspace.SpecialEquipment &&
+                                           x.IsAvailable == workspace.IsAvailable);                
+
+                return await result.Sort(query.SortOn, query.SortDirection).ToPagedListAsync(query);
+                
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong in the {nameof(GetWorkspaciesPagedAsync)} action {ex}");
+                return new PagedList<Workspace>(new List<Workspace>(), 0, 0, 0);
+            }
         }
 
         /// <summary>

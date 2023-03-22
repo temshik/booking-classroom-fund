@@ -3,9 +3,10 @@ using CatalogService.BusinessLogic.DTOs;
 using CatalogService.BusinessLogic.Exceptions;
 using CatalogService.BusinessLogic.Services.SyncDataService.Http;
 using CatalogService.DataAccess.Models;
+using CatalogService.DataAccess.Pagination;
 using CatalogService.DataAccess.Repositories;
-using IdentityService.BusinessLogic.Exceptions;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace CatalogService.BusinessLogic.Services
 {
@@ -72,6 +73,30 @@ namespace CatalogService.BusinessLogic.Services
             if (list == null)
             {
                 _logger.LogError("Workspace dosen't exist");
+
+                throw new NotFoundException("The workspace was not found");
+            }
+
+            var listDTO = _mapper.Map<WorkspaceDTO>(list);
+
+            return listDTO;
+        }
+
+        /// <summary>
+        /// Function to get a workspace from the database.
+        /// </summary>
+        /// <param name="campusNumber">The workspace campus number that we want to get.</param>
+        /// <param name="workspaceNumber">The workspace number that we want to get.</param>
+        /// <returns>Task</returns>
+        public async Task<WorkspaceDTO> GetWorkspaceByLocationAsync(int campusNumber, int workspaceNumber, CancellationToken cancellationToken)
+        {
+            var list = await _repository.GetWorkspaceByLocationAsync(campusNumber, workspaceNumber, cancellationToken);
+
+            if (list == null)
+            {
+                _logger.LogError("Workspace dosen't exist");
+
+                throw new NotFoundException("The workspace was not found");
             }
 
             var listDTO = _mapper.Map<WorkspaceDTO>(list);
@@ -109,24 +134,34 @@ namespace CatalogService.BusinessLogic.Services
         }
 
         /// <summary>
-        /// Function to get a workspace by the course number.
+        /// Function to get a workspace paged.
         /// </summary>
         /// <param name="number">The number of the course.</param>
-        /// <returns>A List of <see cref="WorkspaceDTO"/>.</returns>
-        public async Task<List<WorkspaceDTO>> GetWorkspaciesByCourseNumberAsync(string number, CancellationToken cancellationToken)
+        /// <returns>A PagedList of <see cref="WorkspaceDTO"/>.</returns>
+        public async Task<PagedWorkspaceDTO> GetWorkspaciesPagedAsync(PagedQueryBase query, WorkspaceDTO workspace, CancellationToken cancellationToken)
         {
-            var list = _repository.GetWorkspaciesByCourseNumberAsync(number, cancellationToken);
-
-            if (list == null)
+            try
             {
-                _logger.LogError("Such course number dosen't exist");
+                var workspaceMapped = _mapper.Map<Workspace>(workspace);
+                var list = await _repository.GetWorkspaciesPagedAsync(query, workspaceMapped, cancellationToken);
+                var mapWorkspaces = _mapper.Map<List<WorkspaceDTO>>(list);
+                var workspacesDTO = new PagedList<WorkspaceDTO>(mapWorkspaces, list.TotalCount, list.CurrentPage, list.PageSize);
+                var pagedWorkspaceDTO = new PagedWorkspaceDTO(workspacesDTO, list.TotalPages);
 
-                throw new NotFoundException("The workspace was not found");
+                if (list == null)
+                {
+                    _logger.LogError("Such course number dosen't exist");
+
+                    throw new NotFoundException("The workspace was not found");
+                }
+               
+                return pagedWorkspaceDTO;
             }
-
-            var listDTO = _mapper.Map<List<WorkspaceDTO>>(list);
-
-            return listDTO;
+            catch(Exception ex)
+            {
+                _logger.LogError($"Non correct values in the {nameof(GetWorkspaciesPagedAsync)} action {ex}");
+                return null;
+            }
         }
 
         /// <summary>

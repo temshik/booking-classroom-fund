@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CatalogService.DataAccess.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20221121174930_CatalogInintialize")]
+    [Migration("20230221232527_CatalogInintialize")]
     partial class CatalogInintialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,7 @@ namespace CatalogService.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("SpecialEquipment")
+                    b.Property<bool>("Selected")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -69,6 +69,9 @@ namespace CatalogService.DataAccess.Migrations
 
                     b.Property<long>("NumberOfSeats")
                         .HasColumnType("bigint");
+
+                    b.Property<bool>("SpecialEquipment")
+                        .HasColumnType("bit");
 
                     b.Property<long>("WorkspaceNumber")
                         .HasColumnType("bigint");

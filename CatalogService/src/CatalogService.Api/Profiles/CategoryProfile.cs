@@ -17,17 +17,17 @@ namespace CatalogService.Api.Profiles
         {
             CreateMap<CategoryDTO, Category>()
                 .ForMember(dest => dest.Name, src => src.MapFrom(x => x.Name))
-                .ForMember(dest => dest.SpecialEquipment, src => src.MapFrom(x => x.SpecialEquipment))
+                .ForMember(dest => dest.Selected, src => src.MapFrom(x => x.Selected))
                 .ReverseMap();
 
             CreateMap<CategoryRequestCreate, CategoryDTO>()
                 .ForMember(dest => dest.Name, src => src.MapFrom(x => x.Name))
-                .ForMember(dest => dest.SpecialEquipment, src => src.MapFrom(x => x.SpecialEquipment))
+                .ForMember(dest => dest.Selected, src => src.MapFrom(x => x.Selected))
                 .ReverseMap();
 
             CreateMap<CategoryRequestUpdate, CategoryDTO>()
                 .ForMember(dest => dest.Name, src => src.MapFrom(x => x.Name))
-                .ForMember(dest => dest.SpecialEquipment, src => src.MapFrom(x => x.SpecialEquipment))
+                .ForMember(dest => dest.Selected, src => src.MapFrom(x => x.Selected))
                 .ReverseMap();
         }
     }

@@ -1,4 +1,5 @@
 using CatalogService.Api.AppDependenciesConfiguration;
+using CatalogService.Api.Extensions;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,10 +18,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI();    
 }
 
 app.Configure();
+
+app.UseExceptionHandlerMiddleware(app.Environment.EnvironmentName);
 
 DatabaseMigrator.MigrationInitialisation(app);
 
