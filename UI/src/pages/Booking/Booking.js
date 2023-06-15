@@ -43,7 +43,14 @@ const Booking = () => {
     const stateEmail = useSelector(selectEmail)
     const email = (stateEmail!==null)? stateEmail : window.sessionStorage.getItem('email');
     
-    useEffect(()=>{              
+    useEffect(()=>{   
+            for (const a of document.querySelectorAll("div")) {
+                if (a.textContent.includes("The included Syncfusion license key is invalid. Claim your free account")) 
+                {
+                    //console.log(a.textContent)
+                    a.style.display='none';
+                }
+            }           
         getRole() 
         getData()
     },[]);

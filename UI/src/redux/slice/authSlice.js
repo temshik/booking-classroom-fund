@@ -119,11 +119,11 @@ const authSlice = createSlice({
             const authSevice = new AuthServices();
             const data = {refreshToken: window.localStorage.getItem('refreshToken')}
             authSevice.RefreshToken(data).then((data)=>{                                    
-                console.log(JSON.stringify(data.data.accessToken)); 
+                //console.log(JSON.stringify(data.data.accessToken)); 
                 window.localStorage.setItem('accessToken',data.data.accessToken);
-                console.log(JSON.stringify(data.data.refreshToken)); 
+                //console.log(JSON.stringify(data.data.refreshToken)); 
                 window.localStorage.setItem('refreshToken',data.data.refreshToken);
-                console.log(JSON.stringify(data.data.tokenLifeTimeInMinutes)); 
+                //console.log(JSON.stringify(data.data.tokenLifeTimeInMinutes)); 
                 window.localStorage.setItem('tokenLifeTimeInMinutes',data.data.tokenLifeTimeInMinutes);                
             }).catch((error)=>{
                 console.log("Refresh",error);
@@ -132,21 +132,21 @@ const authSlice = createSlice({
     },
     extraReducers: {
         [GetUserRoleByEmail.pending]: (state) => {
-            console.log('a')
+            //console.log('a')
             state.isRoleLoading = true            
             //state.status = null
             //state.errorMessage = null
         },
         [GetUserRoleByEmail.fulfilled]: (state, action) => {
-            console.log('b')
+            //console.log('b')
             state.isRoleLoading = false            
             //state.status = action.payload.status
             //state.errorMessage = action.payload.errors
             state.role = action.payload
-            console.log("categories",state.role)
+            //console.log("categories",state.role)
         },
         [GetUserRoleByEmail.rejected]: (state, action) => {
-            console.log('c')
+            //console.log('c')
             state.isRoleLoading = false            
             state.status = action.payload.status
             state.errorMessage = action.payload.errors            

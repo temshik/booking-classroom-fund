@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { ScheduleComponent, Day, WorkWeek, Month, Agenda, Inject, ViewsDirective, ViewDirective} from '@syncfusion/ej2-react-schedule';
+import { ScheduleComponent, Day, WorkWeek, Month, Agenda, Inject, ViewsDirective, ViewDirective, ExcelExport, Print} from '@syncfusion/ej2-react-schedule';
 import {Browser, L10n, isNullOrUndefined, Internationalization} from '@syncfusion/ej2-base';
 import { Query, Predicate } from '@syncfusion/ej2-data';
 import UpdateBooking from "./UpdateBooking";
@@ -35,12 +35,13 @@ L10n.load({
     }
 })
 
+const ExcelJS = require('exceljs');
 const errorHandler = new ErrorHandler();
 const errorWorkspace = new WorkspaceHandler();
 const Email_Regex = "(?:[a-zA-Z0-9]+\.)+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$";
 
 const BookingSelect = ({props, bookValue, role, selectedDate, selectData}) => {
-    let scheduleObj;
+    let scheduleObj = useRef(null);
     let startObj;
     let endObj;
     let eventTypeObj;
@@ -65,7 +66,7 @@ const BookingSelect = ({props, bookValue, role, selectedDate, selectData}) => {
 
     useEffect(()=>{
         if(updaedBooking !== null || creactedBooking !== null)
-            selectData();
+            selectData();            
     },[updaedBooking, creactedBooking])
 
     function template(props) {
@@ -164,7 +165,7 @@ const BookingSelect = ({props, bookValue, role, selectedDate, selectData}) => {
         }
     }    
     
-    function applyCategoryColor(args, currentView) {
+    function applyCategoryColor(args, currentView) {        
         switch (args.data.CategoryId) {
             case '1':
                 args.element.style.backgroundColor = '#3f51b5'; 
@@ -191,11 +192,11 @@ const BookingSelect = ({props, bookValue, role, selectedDate, selectData}) => {
     }
 
     
-    function onEventRendered(args) {        
+    function onEventRendered(args) {       
         applyCategoryColor(args, scheduleObj.currentView);             
     }
 
-    function onActionBegin(args) {        
+    function onActionBegin(args) {    
         if (args.requestType === 'toolbarItemRendering') {            
             let exportItem = {
                 align: 'Center', showTextOn: 'Both', prefixIcon: 'e-icons e-export-excel',
@@ -218,19 +219,58 @@ const BookingSelect = ({props, bookValue, role, selectedDate, selectData}) => {
     }     
 
     function onPrintClick() {
-        
+        scheduleObj.current.print();
     }
 
-    function onExportClick() {
-        const exportFields = [
-            { name: 'Id', text: 'Id' },
-            { name: 'Subject', text: 'Summary' },
-            { name: 'StartTime', text: 'Start Date' },
-            { name: 'EndTime', text: 'End Date' },
-            { name: 'Location', text: 'Place' }
-        ];
-        const exportValues = { fieldsInfo: exportFields };
-        scheduleObj.exportToExcel(exportValues);
+    function onExportClick(props) {        
+        const exportFields = [         
+            { name: 'FirstName', text: 'First Name' },
+            { name: 'LastName', text: 'Last Name' },
+            { name: 'UserName', text: 'User Name' },   
+            { name: 'Subject', text: 'Email' },
+            { name: 'StartTime', text: 'Start' },
+            { name: 'EndTime', text: 'End' },
+            { name: 'CampusNumber', text: 'Campus number' },
+            { name: 'Location', text: 'Workspace number' },
+            { name: 'Description', text: 'Group number' },
+            { name: 'NumberOfWeek', text: 'Week number' },
+        ];        
+
+        const exportValues = { fileName: "Timetable", fieldsInfo: exportFields };
+        scheduleObj.current.exportToExcel(exportValues);
+        // const workbook = new ExcelJS.Workbook();
+        // const sheet = workbook.addWorksheet("My Sheet");
+        // //sheet.properties.defaultRowHeight = 80;
+
+        // sheet.columns = [
+        //     {
+        //         header: "Id",
+        //         key: 'id',
+        //         width: 10
+        //     },
+        //     {
+        //         header: "Subject",
+        //         key: 'subject',
+        //         width: 10
+        //     },
+        // ];
+
+        // sheet.addRow({
+        //     id: exportValues.Id,
+        //     subject: exportValues.Subject
+        // })
+
+        // workbook.xlsx.writeBuffer().then(data => {
+        //     const blob = new Blob([data], {
+        //         type: "application/vnd.openxmlformats-officedocument.spreadsheet.sheet",
+        //     });
+        //     const url = window.URL.createObjectURL(blob);
+        //     const anchor = document.createElement('a');
+        //     anchor.href = url;
+        //     anchor.download = 'download.xlsx';
+        //     anchor.click();
+        //     window.URL.revokeObjectURL(url);
+        // })
     }
 
     function onActionComplete(args) {        
@@ -287,7 +327,7 @@ const BookingSelect = ({props, bookValue, role, selectedDate, selectData}) => {
             //для учителей сделать
             popupOpen={onPopupOpen}
             //popupClose={onPopupClose}
-            ref={schedule => scheduleObj = schedule}          
+            ref={scheduleObj}          
             editorTemplate={editorTemplate.bind(this)}
             actionBegin={onActionBegin.bind(this)} 
             eventRendered={onEventRendered.bind(this)}
@@ -296,7 +336,7 @@ const BookingSelect = ({props, bookValue, role, selectedDate, selectData}) => {
             quickInfoTemplates={{ header: headerTemplate.bind(this),
                                   content: contentTemplate.bind(this),
                                   footer: footerTemplate.bind(this)}}    
-            eventSettings={{ dataSource: props ,
+            eventSettings={{ dataSource: props,
                              enableTooltip: true,
                              tooltipTemplate: template.bind(this)}}>
             <ViewsDirective>
@@ -304,7 +344,7 @@ const BookingSelect = ({props, bookValue, role, selectedDate, selectData}) => {
                 <ViewDirective option='Month' showWeekend={true}/>
                 <ViewDirective option='Agenda' eventTemplate={agendaTemplate.bind(this)}/>
             </ViewsDirective>            
-            <Inject services={[Day, WorkWeek, Month, Agenda]}/>
+            <Inject services={[Day, WorkWeek, Month, Agenda, ExcelExport, Print]}/>
         </ScheduleComponent>         
     </div>);
 };

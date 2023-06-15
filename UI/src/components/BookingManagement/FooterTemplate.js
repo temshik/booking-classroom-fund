@@ -6,38 +6,38 @@ const FooterTemplate = ({props,scheduleObj,titleObj,notesObj,eventTypeObj}) => {
         const quickPopup = closest(e.target, '.e-quick-popup-wrapper');
         const getSlotData = () => {
             const addObj = {};
-            addObj.Id = scheduleObj.getEventMaxID();
+            addObj.Id = scheduleObj.current.getEventMaxID();
             addObj.Subject = isNullOrUndefined(titleObj) ? 'Add title' : titleObj;
-            addObj.StartTime = new Date(scheduleObj.activeCellsData.startTime);
-            addObj.EndTime = new Date(scheduleObj.activeCellsData.endTime);
-            addObj.IsAllDay = scheduleObj.activeCellsData.isAllDay;
+            addObj.StartTime = new Date(scheduleObj.current.activeCellsData.startTime);
+            addObj.EndTime = new Date(scheduleObj.current.activeCellsData.endTime);
+            addObj.IsAllDay = scheduleObj.current.activeCellsData.isAllDay;
             addObj.Description = isNullOrUndefined(notesObj) ? 'Add notes' : notesObj;
             addObj.RoomId = eventTypeObj;
             return addObj;
         };
         if (e.target.id === 'add') {
             const addObj = getSlotData();
-            scheduleObj.addEvent(addObj);
+            scheduleObj.current.addEvent(addObj);
         }
         else if (e.target.id === 'delete') {
-            const eventDetails = scheduleObj.activeEventData.event;
+            const eventDetails = scheduleObj.current.activeEventData.event;
             let currentAction = 'Delete';
             if (eventDetails.RecurrenceRule) {
                 currentAction = 'DeleteSeries';
             }
-            scheduleObj.deleteEvent(eventDetails, currentAction);
+            scheduleObj.current.deleteEvent(eventDetails, currentAction);
         }
         else {
             const isCellPopup = quickPopup.firstElementChild.classList.contains('e-cell-popup');
-            const eventDetails = isCellPopup ? getSlotData() :
-                scheduleObj.activeEventData.event;
+            const eventDetails = isCellPopup ? getSlotData() : 
+                scheduleObj.current.activeEventData.event;
             let currentAction = isCellPopup ? 'Add' : 'Save';
             if (eventDetails.RecurrenceRule) {
                 currentAction = 'EditSeries';
             }
-            scheduleObj.openEditor(eventDetails, currentAction, true);            
+            scheduleObj.current.openEditor(eventDetails, currentAction, true);            
         }
-        scheduleObj.closeQuickInfoPopup();
+        scheduleObj.current.closeQuickInfoPopup();
     }
 
     return (<div className="quick-info-footer">
